@@ -23,7 +23,7 @@ jobs:
       - run: flutter pub cache repair
       
       
-      - run: flutter build web --base-href "/${{ github.event.repository.name }}/"
+      - run: flutter build web --base-href "/${{ github.event.repository.name }}/" --release
       - run: pwd
       - run: cd ./build/web
       - run: echo "mindong.uk" > ./build/web/CNAME
