@@ -41,6 +41,9 @@ jobs:
       - run: git commit -m "Automatic update"
       - run: git push origin HEAD:gh-pages --force
       
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
