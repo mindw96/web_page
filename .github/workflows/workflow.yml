@@ -19,7 +19,7 @@ jobs:
       - run: flutter build web --base-href "/${{ github.event.repository.name }}/"
       - run: pwd
       - run: cd ./build/web
-      - run: echo "mindong.uk" > ./build/web/CMAKE
+      - run: echo "mindong.uk" > ./build/web/CNAME
       - run: git init
           
       - run: git config --global user.email mindw96@naver.com
