@@ -37,6 +37,12 @@ jobs:
       - run: git commit -m "Automatic update"
       - run: git push origin HEAD:update-pages --force
       
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+      
 #       - run: git remote remove origin
 #       - run: git remote add origin https://github.com/mindw96/web_page.git 
 #       - run: git checkout -b update-pages
