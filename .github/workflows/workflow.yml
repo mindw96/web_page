@@ -24,7 +24,8 @@ jobs:
       - run: git config --global user.email mindw96@naver.com
       - run: git config --global user.name mindw96
       - run: git status
-
+      
+      - run: git remote remove origin
       - run: git remote add origin https://github.com/mindw96/web_page.git 
       - run: git checkout -b update-pages
       - run: git add --all
