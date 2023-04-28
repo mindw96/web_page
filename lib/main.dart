@@ -13,9 +13,17 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
           body: Center(
-        child: Text(
-          "Hi, I'm Dongwook Min",
-          style: TextStyle(fontSize: 56.0),
+        child: Column(
+          children: [
+            Text(
+              "Hi, I'm Dongwook Min",
+              style: TextStyle(fontSize: 56.0),
+            ),
+            Text(
+              'This page was made with Flutter!',
+              style: TextStyle(fontSize: 28.0),
+            )
+          ],
         ),
       )),
     );
