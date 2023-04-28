@@ -15,7 +15,12 @@ jobs:
         with:
           channel: 'stable'
       - run: flutter config --enable-web
+      
+      - run: flutter clean 
+      
       - run: flutter pub get
+      
+      
       - run: flutter build web --base-href "/${{ github.event.repository.name }}/"
       - run: pwd
       - run: cd ./build/web
