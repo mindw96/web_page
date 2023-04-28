@@ -19,7 +19,7 @@ jobs:
       - run: flutter build web
       - run: pwd
       - run: | 
-          cd web_page/build/web
+          cd ./build/web
           git init
           
           git config --global user.email mindw96@naver.com
