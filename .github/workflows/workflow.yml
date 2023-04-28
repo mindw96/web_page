@@ -20,6 +20,8 @@ jobs:
       
       - run: flutter pub get
       
+      - run: flutter pub cache repair
+      
       
       - run: flutter build web --base-href "/${{ github.event.repository.name }}/"
       - run: pwd
