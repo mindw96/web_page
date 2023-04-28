@@ -16,7 +16,7 @@ jobs:
           channel: 'stable'
       - run: flutter config --enable-web
       - run: flutter pub get
-      - run: flutter build web --base-href "/${{ web_page }}/"
+      - run: flutter build web --base-href "/${web_page}/"
       - run: pwd
       - run: cd ./build/web
       - run: git init
