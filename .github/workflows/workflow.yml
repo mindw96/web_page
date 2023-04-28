@@ -2,7 +2,7 @@ name: Flutter Web
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   build:
     name: Build Web
@@ -30,7 +30,7 @@ jobs:
           git status
           # 5. change your repository
           git remote add origin https://github.com/mindw96/web_page.git 
-          git checkout -b gh-pages
+          git checkout -b update-pages
           git add --all
           git commit -m "update"
-          git push origin gh-pages -f
+          git push origin update-pages -f
