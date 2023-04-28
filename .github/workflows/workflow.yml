@@ -15,16 +15,16 @@ jobs:
         with:
           channel: 'stable'
           
-      - run: flutter channel stable
-      - run: flutter upgrade
+#       - run: flutter channel stable
+#       - run: flutter upgrade
       
       - run: flutter config --enable-web
       
-      - run: flutter clean 
+#       - run: flutter clean 
       
       - run: flutter pub get
       
-      - run: flutter pub cache repair
+#       - run: flutter pub cache repair
       
       
       - run: flutter build web --base-href "/${{ github.event.repository.name }}/" --release
@@ -40,6 +40,12 @@ jobs:
       - run: git --work-tree build/web add --all
       - run: git commit -m "Automatic update"
       - run: git push origin HEAD:gh-pages --force
+      
+      - name: Upload Web Build Files
+        uses: actions/upload-artifact@v2
+        with:
+          name: web-release
+          path: ./build/web
       
   deploy:
     name: Deploy Web Build
