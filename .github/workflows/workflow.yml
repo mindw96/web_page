@@ -17,9 +17,8 @@ jobs:
       - run: flutter config --enable-web
       - run: flutter pub get
       - run: flutter build web
-        # 1. change path which exist lib/main.dart
-        # working-directory: ./web_page
-      - run: |
+      - run: pwd
+      - run: | 
           cd web_page/build/web
           git init
           
