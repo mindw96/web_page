@@ -21,14 +21,12 @@ jobs:
         # 1. change path which exist lib/main.dart
         working-directory: ./web_page
       - run: |
-          # 2. change path to [existed lib/main.dart path]/build/web
-<<<<<<< HEAD
+      
+         # 2. change path to [existed lib/main.dart path]/build/web
           cd web_page/build/web
-=======
-          cd ./build/web
->>>>>>> 2779b3c39bd23de3c550f81643300fee45e9c96f
           git init
-           # 3. change your email
+          
+         # 3. change your email
           git config --global user.email mindw96@naver.com
           # 4. change your name
           git config --global user.name mindw96
@@ -38,8 +36,5 @@ jobs:
           git checkout -b update-pages
           git add --all
           git commit -m "update"
-<<<<<<< HEAD
           git push origin update-pages -f
-=======
-          git push origin update-pages -f
->>>>>>> 2779b3c39bd23de3c550f81643300fee45e9c96f
+
