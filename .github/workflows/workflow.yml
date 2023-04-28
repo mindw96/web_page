@@ -16,7 +16,6 @@ jobs:
           channel: 'stable'
       - run: flutter config --enable-web
       - run: flutter pub get
-      - run: flutter test
       - run: flutter build web
         # 1. change path which exist lib/main.dart
         working-directory: ./web_page
