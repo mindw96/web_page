@@ -18,17 +18,15 @@ jobs:
       - run: flutter pub get
       - run: flutter build web
       - run: pwd
-      - run: | 
-          cd ./build/web
-          git init
+      - run: cd ./build/web
+      - run: git init
           
-          git config --global user.email mindw96@naver.com
-          git config --global user.name mindw96
-          git status
+      - run: git config --global user.email mindw96@naver.com
+      - run: git config --global user.name mindw96
+      - run: git status
 
-          git remote add origin https://github.com/mindw96/web_page.git 
-          git checkout -b update-pages
-          git add --all
-          git commit -m "update"
-          git push origin update-pages -f
-
+      - run: git remote add origin https://github.com/mindw96/web_page.git 
+      - run: git checkout -b update-pages
+      - run: git add --all
+      - run: git commit -m "update"
+      - run: git push origin update-pages -f
