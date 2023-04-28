@@ -19,7 +19,7 @@ jobs:
       - run: flutter test
       - run: flutter build web
         # 1. change path which exist lib/main.dart
-        working-directory: ./web_page
+        working-directory: ./
       - run: |
           # 2. change path to [existed lib/main.dart path]/build/web
           cd web_page/build/web
