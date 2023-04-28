@@ -15,6 +15,9 @@ class MyApp extends StatelessWidget {
           body: Center(
         child: Column(
           children: [
+            SizedBox(
+              height: 50.0,
+            ),
             Text(
               "Hi, I'm Dongwook Min",
               style: TextStyle(fontSize: 56.0),
