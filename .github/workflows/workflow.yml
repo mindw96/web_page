@@ -18,19 +18,19 @@ jobs:
       - run: flutter pub get
       - run: flutter build web --release
         # 1. change path which exist lib/main.dart
-        working-directory: ./example_macos
+        working-directory: ./web_page
       - run: |
           # 2. change path to [existed lib/main.dart path]/build/web
-          cd example_macos/build/web
+          cd web_page/build/web
           git init
            # 3. change your email
-          git config --global user.email rlawjdxo1212@naver.com
+          git config --global user.email mindw96@naver.com
           # 4. change your name
-          git config --global user.name origogi
+          git config --global user.name mindw96
           git status
           # 5. change your repository
           git remote add origin https://github.com/mindw96/web_page.git 
-          git checkout -b gh-pages
+          git checkout -b update-pages
           git add --all
           git commit -m "update"
-          git push origin gh-pages -f
+          git push origin update-pages -f
