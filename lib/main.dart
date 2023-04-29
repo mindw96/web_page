@@ -1,34 +1,19 @@
 import 'package:flutter/material.dart';
+import 'chat_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ChatApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+class ChatApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-          body: Center(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 50.0,
-            ),
-            Text(
-              "Hi, I'm Dongwook Min",
-              style: TextStyle(fontSize: 56.0),
-            ),
-            Text(
-              'This page was made with Flutter!',
-              style: TextStyle(fontSize: 28.0),
-            )
-          ],
-        ),
-      )),
+      title: 'ChatGPT Flutter App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: ChatScreen(),
     );
   }
 }
