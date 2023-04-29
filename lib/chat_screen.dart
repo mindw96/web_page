@@ -32,7 +32,7 @@ class _ChatScreenState extends State<ChatScreen> {
         },
         {'role': 'user', 'content': message},
       ],
-      "temperature": 1,
+      "temperature": 0.5,
     };
 
     var response = await http.post(
@@ -112,7 +112,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 padding: const EdgeInsets.all(10.0),
                                 child: Text(
                                   messages[index],
-                                  textAlign: TextAlign.end,
+                                  textAlign: TextAlign.start,
                                 ),
                               ),
                             ),
@@ -126,7 +126,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   top: 10, bottom: 0, left: 10, right: 10),
                               child: Text(
                                 'You',
-                                textAlign: TextAlign.start,
+                                textAlign: TextAlign.end,
                               ),
                             ),
                             Container(
