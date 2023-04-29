@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class ChatScreen extends StatefulWidget {
@@ -13,7 +12,7 @@ class _ChatScreenState extends State<ChatScreen> {
   TextEditingController textController = TextEditingController();
 
   Future<String> sendMessage(String message) async {
-    String api = dotenv.env['OPENAI_API'].toString();
+    String api = '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';
     String endpoint = 'https://api.openai.com/v1/chat/completions';
 
     Map<String, String> headers = {
@@ -27,8 +26,7 @@ class _ChatScreenState extends State<ChatScreen> {
       'messages': [
         {
           'role': 'system',
-          'content':
-              'You are name is Dongwook and your 28 age and you are man and you are very kind',
+          'content': 'You are very kind, intelligent, and perceptive.',
         },
         {'role': 'user', 'content': message},
       ],

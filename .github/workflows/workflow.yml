@@ -15,9 +15,9 @@ jobs:
         with:
           channel: 'stable'
           
-      - run: mkdir assets
-      - run: echo "OPENAI_API='${{secrets.OPENAI_KEY}}'" > ./assets/.env
-      - run: cat ./assets/.env
+      # - run: mkdir assets
+      # - run: echo "OPENAI_API='${{secrets.OPENAI_KEY}}'" > ./assets/.env
+      # - run: cat ./assets/.env
 
       - run: flutter config --enable-web
       
@@ -27,8 +27,8 @@ jobs:
       - run: pwd
       - run: cd ./build/web
       - run: echo "mindong.uk" > ./build/web/CNAME
-      - run: echo "OPENAI_API='${{secrets.OPENAI_KEY}}'" > ./assets/.env
-      - run: cat ./assets/.env
+      # - run: echo "OPENAI_API='${{secrets.OPENAI_KEY}}'" > ./assets/.env
+      # - run: cat ./assets/.env
       - run: git init
           
       - run: git config --global user.email mindw96@naver.com
