@@ -17,6 +17,7 @@ jobs:
           
       - run: mkdir assets
       - run: echo "OPENAI_API='${{secrets.OPENAI_KEY}}'" > ./assets/.env
+      - run: cat ./assets/.env
 
       - run: flutter config --enable-web
       
