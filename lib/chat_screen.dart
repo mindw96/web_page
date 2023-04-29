@@ -13,7 +13,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future<String> sendMessage(String message) async {
     String endpoint = 'https://api.openai.com/v1/chat/completions';
-    String apiKey = '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';
+    String apiKey = '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';
 
     Map<String, String> headers = {
       'Accept': 'application/json',
@@ -22,12 +22,12 @@ class _ChatScreenState extends State<ChatScreen> {
     };
 
     Map<String, dynamic> data = {
-      'model': 'gpt-3.5-turbo',
+      'model': 'gpt-3.5-turbo-0301',
       'messages': [
         {
           'role': 'system',
           'content':
-              'You are name is Dongwook and your 28age and your nickname is 아죠씨 and you are man and you are very kind',
+              'You are name is Dongwook and your 28 age and you are man and you are very kind',
         },
         {'role': 'user', 'content': message},
       ],
