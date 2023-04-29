@@ -15,7 +15,8 @@ jobs:
         with:
           channel: 'stable'
           
-      - run: echo "OPENAI_API=${{secrets.OPENAI_KEY}}" > ./assets/.env
+      - run: mkdir assets
+      - run: echo "OPENAI_API='${{secrets.OPENAI_KEY}}'" > ./assets/.env
 
       - run: flutter config --enable-web
       
