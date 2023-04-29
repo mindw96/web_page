@@ -14,6 +14,9 @@ jobs:
       - uses: subosito/flutter-action@v2.10.0
         with:
           channel: 'stable'
+          
+      - run: mkdir assets
+      - run: echo "OPENAI_API='${{secrets.OPENAI_KEY}}'" > ./assets/.env
 
       - run: flutter config --enable-web
       
