@@ -1,6 +1,6 @@
 {
-    "name": "web_page",
-    "short_name": "web_page",
+    "name": "iGPT",
+    "short_name": "iGPT",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

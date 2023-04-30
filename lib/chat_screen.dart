@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class ChatScreen extends StatefulWidget {
@@ -26,7 +27,8 @@ class _ChatScreenState extends State<ChatScreen> {
       'messages': [
         {
           'role': 'system',
-          'content': 'You are very kind, intelligent, and perceptive.',
+          'content':
+              'You are very kind, intelligent, and perceptive and you have to start new line',
         },
         {'role': 'user', 'content': message},
       ],
@@ -73,11 +75,25 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        title: Text(
-          "Dongwook's ChatGPT",
-          style: TextStyle(color: Colors.black),
+        backgroundColor: Color.fromARGB(255, 216, 216, 223),
+        elevation: 0.1,
+        title: Center(
+          child: Column(
+            children: [
+              Icon(
+                CupertinoIcons.smiley,
+                size: 30,
+                color: Colors.black,
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                "iGPT",
+                style: TextStyle(color: Colors.black, fontSize: 10),
+              ),
+            ],
+          ),
         ),
       ),
       body: Column(
@@ -89,56 +105,62 @@ class _ChatScreenState extends State<ChatScreen> {
                 return ListTile(
                   title: (index + 1) % 2 == 0
                       ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                          // Bot Message
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 10, bottom: 0, left: 10, right: 10),
-                              child: Text(
-                                'Bot',
-                                textAlign: TextAlign.end,
-                              ),
-                            ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(
+                            //       top: 10, bottom: 0, left: 10, right: 10),
+                            //   child: Text(
+                            //     'Bot',
+                            //     textAlign: TextAlign.start,
+                            //   ),
+                            // ),
                             Container(
                               margin: EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: Colors.grey[300],
+                                color: const Color.fromARGB(255, 180, 180, 188),
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(12)),
+                                    BorderRadius.all(Radius.circular(30)),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: Text(
-                                  messages[index],
-                                  textAlign: TextAlign.start,
+                                child: Flexible(
+                                  child: Text(
+                                    messages[index],
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(color: Colors.black),
+                                  ),
                                 ),
                               ),
                             ),
                           ],
                         )
                       : Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          // User Message
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 10, bottom: 0, left: 10, right: 10),
-                              child: Text(
-                                'You',
-                                textAlign: TextAlign.end,
-                              ),
-                            ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(
+                            //       top: 10, bottom: 0, left: 10, right: 10),
+                            //   child: Text(
+                            //     'You',
+                            //     textAlign: TextAlign.end,
+                            //   ),
+                            // ),
                             Container(
                               margin: EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: Colors.blue[600],
+                                color: const Color.fromARGB(255, 34, 148, 251),
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(12)),
+                                    BorderRadius.all(Radius.circular(30)),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: Text(
                                   messages[index],
                                   textAlign: TextAlign.start,
+                                  style: TextStyle(color: Colors.white),
                                 ),
                               ),
                             ),
@@ -153,16 +175,21 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Row(
               children: [
                 Expanded(
-                  child: TextField(
+                  child: CupertinoTextField(
                     controller: textController,
-                    decoration: InputDecoration(
-                      hintText: 'Type a message...',
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey, width: 1),
+                      borderRadius: BorderRadius.circular(38),
+                    ),
+                    padding: EdgeInsets.only(left: 30, right: 30),
+                    suffix: CupertinoButton(
+                      child: Icon(
+                        CupertinoIcons.arrow_up_circle_fill,
+                        size: 40,
+                      ),
+                      onPressed: _sendMessage,
                     ),
                   ),
-                ),
-                IconButton(
-                  onPressed: _sendMessage,
-                  icon: Icon(Icons.send),
                 ),
               ],
             ),
