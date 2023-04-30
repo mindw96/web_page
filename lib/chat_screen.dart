@@ -117,6 +117,10 @@ class _ChatScreenState extends State<ChatScreen> {
                             //   ),
                             // ),
                             Container(
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.7,
+                              ),
                               margin: EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                 color: const Color.fromARGB(255, 180, 180, 188),
@@ -124,13 +128,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                     BorderRadius.all(Radius.circular(30)),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Flexible(
-                                  child: Text(
-                                    messages[index],
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(color: Colors.black),
-                                  ),
+                                padding: const EdgeInsets.only(
+                                    top: 8, bottom: 10, left: 20, right: 20),
+                                child: Text(
+                                  messages[index],
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(color: Colors.black),
                                 ),
                               ),
                             ),
@@ -149,6 +152,10 @@ class _ChatScreenState extends State<ChatScreen> {
                             //   ),
                             // ),
                             Container(
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.7,
+                              ),
                               margin: EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                 color: const Color.fromARGB(255, 34, 148, 251),
@@ -156,7 +163,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                     BorderRadius.all(Radius.circular(30)),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.all(10.0),
+                                padding: const EdgeInsets.only(
+                                    top: 8, bottom: 10, left: 20, right: 20),
                                 child: Text(
                                   messages[index],
                                   textAlign: TextAlign.start,
