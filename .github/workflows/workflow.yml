@@ -14,10 +14,6 @@ jobs:
       - uses: subosito/flutter-action@v2.10.0
         with:
           channel: 'stable'
-          
-      # - run: mkdir assets
-      # - run: echo "OPENAI_API='${{secrets.OPENAI_KEY}}'" > ./assets/.env
-      # - run: cat ./assets/.env
 
       - run: flutter config --enable-web
       
@@ -27,10 +23,8 @@ jobs:
       - run: pwd
       - run: cd ./build/web
       - run: echo "mindong.uk" > ./build/web/CNAME
-      # - run: echo "OPENAI_API='${{secrets.OPENAI_KEY}}'" > ./assets/.env
-      # - run: cat ./assets/.env
-      - run: git init
-          
+
+      - run: git init       
       - run: git config --global user.email mindw96@naver.com
       - run: git config --global user.name mindw96
       - run: git status
@@ -38,4 +32,3 @@ jobs:
       - run: git --work-tree build/web add --all
       - run: git commit -m "Automatic update"
       - run: git push origin HEAD:gh-pages --force
-      #
