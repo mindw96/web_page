@@ -27,8 +27,7 @@ class _ChatScreenState extends State<ChatScreen> {
       'messages': [
         {
           'role': 'system',
-          'content':
-              'You are very kind, intelligent, and perceptive and you have to start new line',
+          'content': 'You are very kind, intelligent, and perceptive',
         },
         {'role': 'user', 'content': message},
       ],
@@ -96,113 +95,150 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: messages.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  title: (index + 1) % 2 == 0
-                      ? Column(
-                          // Bot Message
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Padding(
-                            //   padding: const EdgeInsets.only(
-                            //       top: 10, bottom: 0, left: 10, right: 10),
-                            //   child: Text(
-                            //     'Bot',
-                            //     textAlign: TextAlign.start,
-                            //   ),
-                            // ),
-                            Container(
-                              constraints: BoxConstraints(
-                                maxWidth:
-                                    MediaQuery.of(context).size.width * 0.7,
-                              ),
-                              margin: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 180, 180, 188),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30)),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 8, bottom: 10, left: 20, right: 20),
-                                child: Text(
-                                  messages[index],
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(color: Colors.black),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: messages.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    title: (index + 1) % 2 == 0
+                        ? Column(
+                            // Bot Message
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Padding(
+                              //   padding: const EdgeInsets.only(
+                              //       top: 10, bottom: 0, left: 10, right: 10),
+                              //   child: Text(
+                              //     'Bot',
+                              //     textAlign: TextAlign.start,
+                              //     style: TextStyle(fontSize: 10),
+                              //   ),
+                              // ),
+                              Container(
+                                constraints: BoxConstraints(
+                                  maxWidth:
+                                      MediaQuery.of(context).size.width * 0.7,
+                                ),
+                                margin: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color:
+                                      const Color.fromARGB(255, 180, 180, 188),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30)),
+                                ),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(20, 8, 20, 10),
+                                  child: Text(
+                                    messages[index],
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 15),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        )
-                      : Column(
-                          // User Message
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            // Padding(
-                            //   padding: const EdgeInsets.only(
-                            //       top: 10, bottom: 0, left: 10, right: 10),
-                            //   child: Text(
-                            //     'You',
-                            //     textAlign: TextAlign.end,
-                            //   ),
-                            // ),
-                            Container(
-                              constraints: BoxConstraints(
-                                maxWidth:
-                                    MediaQuery.of(context).size.width * 0.7,
-                              ),
-                              margin: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 34, 148, 251),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30)),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 8, bottom: 10, left: 20, right: 20),
-                                child: Text(
-                                  messages[index],
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(color: Colors.white),
+                            ],
+                          )
+                        : Column(
+                            // User Message
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              // Padding(
+                              //   padding: const EdgeInsets.only(
+                              //       top: 10, bottom: 0, left: 10, right: 10),
+                              //   child: Text(
+                              //     'You',
+                              //     textAlign: TextAlign.end,
+                              //     style: TextStyle(fontSize: 10),
+                              //   ),
+                              // ),
+                              Container(
+                                constraints: BoxConstraints(
+                                  maxWidth:
+                                      MediaQuery.of(context).size.width * 0.7,
+                                ),
+                                margin: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color:
+                                      const Color.fromARGB(255, 34, 148, 251),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30)),
+                                ),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(20, 8, 20, 10),
+                                  child: Text(
+                                    messages[index],
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 15),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                );
-              },
+                            ],
+                          ),
+                  );
+                },
+              ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: CupertinoTextField(
-                    controller: textController,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey, width: 1),
-                      borderRadius: BorderRadius.circular(38),
-                    ),
-                    padding: EdgeInsets.only(left: 30, right: 30),
-                    suffix: CupertinoButton(
-                      child: Icon(
-                        CupertinoIcons.arrow_up_circle_fill,
-                        size: 40,
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              // child: CupertinoTextField(
+              //   controller: textController,
+              //   decoration: BoxDecoration(
+              //     border: Border.all(color: Colors.grey, width: 1),
+              //     borderRadius: BorderRadius.circular(38),
+              //   ),
+              //   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 1),
+              //   placeholder: '내용을 입력하세요',
+              //   suffix: CupertinoButton(
+              //     child: Icon(
+              //       CupertinoIcons.arrow_up_circle_fill,
+              //       size: 40,
+              //     ),
+              //     onPressed: _sendMessage,
+              //   ),
+              // ),
+              child: Container(
+                height: 45,
+                child: TextField(
+                  controller: textController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(38),
                       ),
-                      onPressed: _sendMessage,
-                    ),
-                  ),
+                      suffixIcon: Align(
+                        widthFactor: 1.0,
+                        heightFactor: 0,
+                        child: CupertinoButton(
+                          child: Icon(
+                            CupertinoIcons.arrow_up_circle_fill,
+                            size: 30,
+                          ),
+                          onPressed: _sendMessage,
+                        ),
+                      ),
+                      hintText: '내용을 입력하세요',
+                      isDense: false,
+                      contentPadding: EdgeInsets.fromLTRB(30, 1, 19, 1),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(38),
+                      )),
+                  maxLines: 10,
+                  minLines: 1,
+                  // textInputAction: TextInputAction.go,
+                  // onSubmitted: (value) {
+                  //   textController.text = value;
+                  // },
                 ),
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
