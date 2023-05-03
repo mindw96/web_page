@@ -24,14 +24,19 @@ class _ChatScreenState extends State<ChatScreen> {
 
     Map<String, dynamic> data = {
       'model': 'gpt-3.5-turbo-0301',
+      //'model': 'code-davinci-002',
       'messages': [
         {
           'role': 'system',
           'content': 'You are very kind, intelligent, and perceptive',
         },
+        {
+          'role': 'system',
+          'content': 'you are assistant for koreans',
+        },
         {'role': 'user', 'content': message},
       ],
-      "temperature": 0.5,
+      "temperature": 0.1,
     };
 
     var response = await http.post(
@@ -208,26 +213,24 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: TextField(
                   controller: textController,
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(38),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(38),
+                    ),
+                    suffixIcon: CupertinoButton(
+                      child: Icon(
+                        CupertinoIcons.arrow_up_circle_fill,
+                        size: 30,
                       ),
-                      suffixIcon: Align(
-                        widthFactor: 1.0,
-                        heightFactor: 0,
-                        child: CupertinoButton(
-                          child: Icon(
-                            CupertinoIcons.arrow_up_circle_fill,
-                            size: 30,
-                          ),
-                          onPressed: _sendMessage,
-                        ),
-                      ),
-                      hintText: '내용을 입력하세요',
-                      isDense: false,
-                      contentPadding: EdgeInsets.fromLTRB(30, 1, 19, 1),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(38),
-                      )),
+                      padding: EdgeInsets.only(right: 20),
+                      onPressed: _sendMessage,
+                    ),
+                    hintText: '내용을 입력하세요',
+                    isDense: false,
+                    contentPadding: EdgeInsets.fromLTRB(30, 1, 1, 1),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(38),
+                    ),
+                  ),
                   maxLines: 10,
                   minLines: 1,
                   // textInputAction: TextInputAction.go,
