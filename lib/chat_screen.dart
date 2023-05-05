@@ -98,7 +98,7 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 216, 216, 223),
         elevation: 0.1,
-        title: const Center(
+        title: Center(
           child: Column(
             children: [
               Icon(
