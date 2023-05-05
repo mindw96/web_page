@@ -38,6 +38,8 @@ dependencies:
   http: ^0.13.5
   cp949_codec: ^1.0.0
   flutter_dotenv: ^5.0.2
+  flutter_spinkit: ^5.2.0
+  chat_bubbles: ^1.4.1
 
 dev_dependencies:
   flutter_test:

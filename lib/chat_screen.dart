@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
+import 'package:chat_bubbles/chat_bubbles.dart';
 
 class ChatScreen extends StatefulWidget {
   @override
@@ -36,7 +38,7 @@ class _ChatScreenState extends State<ChatScreen> {
         },
         {'role': 'user', 'content': message},
       ],
-      "temperature": 0.1,
+      "temperature": 0.3,
     };
 
     var response = await http.post(
@@ -56,32 +58,47 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  void _sendMessage() async {
+  Future _sendMessage() async {
     String userMessage = textController.text.trim();
     if (userMessage.isNotEmpty) {
       setState(() {
-        messages.add('$userMessage');
+        messages.add(userMessage);
         textController.clear();
       });
 
       try {
         String response = await sendMessage(userMessage);
         setState(() {
-          messages.add('$response');
+          messages.add(response);
         });
+        return response;
       } catch (e) {
-        print('Error: $e');
+        messages.add('API가 유요하지 않습니다.');
       }
     }
+    _needScroll = true;
+  }
+
+  final ScrollController _scrollController = ScrollController();
+
+  bool _needScroll = false;
+
+  _scrollToBottom() {
+    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_needScroll) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+      _needScroll = false;
+    }
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 216, 216, 223),
+        backgroundColor: const Color.fromARGB(255, 216, 216, 223),
         elevation: 0.1,
-        title: Center(
+        title: const Center(
           child: Column(
             children: [
               Icon(
@@ -106,6 +123,8 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Expanded(
               child: ListView.builder(
+                shrinkWrap: true,
+                controller: _scrollController,
                 itemCount: messages.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
@@ -114,74 +133,37 @@ class _ChatScreenState extends State<ChatScreen> {
                             // Bot Message
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // Padding(
-                              //   padding: const EdgeInsets.only(
-                              //       top: 10, bottom: 0, left: 10, right: 10),
-                              //   child: Text(
-                              //     'Bot',
-                              //     textAlign: TextAlign.start,
-                              //     style: TextStyle(fontSize: 10),
-                              //   ),
-                              // ),
                               Container(
                                 constraints: BoxConstraints(
                                   maxWidth:
                                       MediaQuery.of(context).size.width * 0.7,
                                 ),
-                                margin: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
+                                child: BubbleSpecialThree(
+                                  text: messages[index],
                                   color:
                                       const Color.fromARGB(255, 180, 180, 188),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(30)),
+                                  tail: true,
+                                  isSender: false,
                                 ),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(20, 8, 20, 10),
-                                  child: Text(
-                                    messages[index],
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 15),
-                                  ),
-                                ),
-                              ),
+                              )
                             ],
                           )
                         : Column(
                             // User Message
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              // Padding(
-                              //   padding: const EdgeInsets.only(
-                              //       top: 10, bottom: 0, left: 10, right: 10),
-                              //   child: Text(
-                              //     'You',
-                              //     textAlign: TextAlign.end,
-                              //     style: TextStyle(fontSize: 10),
-                              //   ),
-                              // ),
                               Container(
                                 constraints: BoxConstraints(
                                   maxWidth:
                                       MediaQuery.of(context).size.width * 0.7,
                                 ),
-                                margin: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
+                                child: BubbleSpecialThree(
+                                  text: messages[index],
                                   color:
                                       const Color.fromARGB(255, 34, 148, 251),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(30)),
-                                ),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(20, 8, 20, 10),
-                                  child: Text(
-                                    messages[index],
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 15),
-                                  ),
+                                  tail: true,
+                                  textStyle: const TextStyle(
+                                      color: Colors.white, fontSize: 15),
                                 ),
                               ),
                             ],
@@ -191,24 +173,8 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
-              // child: CupertinoTextField(
-              //   controller: textController,
-              //   decoration: BoxDecoration(
-              //     border: Border.all(color: Colors.grey, width: 1),
-              //     borderRadius: BorderRadius.circular(38),
-              //   ),
-              //   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 1),
-              //   placeholder: '내용을 입력하세요',
-              //   suffix: CupertinoButton(
-              //     child: Icon(
-              //       CupertinoIcons.arrow_up_circle_fill,
-              //       size: 40,
-              //     ),
-              //     onPressed: _sendMessage,
-              //   ),
-              // ),
-              child: Container(
+              padding: const EdgeInsets.fromLTRB(8.0, 1.0, 8.0, 20.0),
+              child: SizedBox(
                 height: 45,
                 child: TextField(
                   controller: textController,
@@ -217,26 +183,22 @@ class _ChatScreenState extends State<ChatScreen> {
                       borderRadius: BorderRadius.circular(38),
                     ),
                     suffixIcon: CupertinoButton(
-                      child: Icon(
+                      padding: const EdgeInsets.only(right: 10),
+                      onPressed: _sendMessage,
+                      child: const Icon(
                         CupertinoIcons.arrow_up_circle_fill,
                         size: 30,
                       ),
-                      padding: EdgeInsets.only(right: 20),
-                      onPressed: _sendMessage,
                     ),
                     hintText: '내용을 입력하세요',
                     isDense: false,
-                    contentPadding: EdgeInsets.fromLTRB(30, 1, 1, 1),
+                    contentPadding: const EdgeInsets.fromLTRB(30, 1, 1, 1),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(38),
                     ),
                   ),
                   maxLines: 10,
                   minLines: 1,
-                  // textInputAction: TextInputAction.go,
-                  // onSubmitted: (value) {
-                  //   textController.text = value;
-                  // },
                 ),
               ),
             ),
