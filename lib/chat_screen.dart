@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -115,12 +116,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                           padding:
                                               const EdgeInsets.only(left: 10),
                                           child: Container(
-                                            constraints: BoxConstraints(
-                                              maxWidth: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.2,
-                                            ),
+                                            constraints:
+                                                BoxConstraints(maxWidth: 50.0),
                                             margin: const EdgeInsets.all(10),
                                             decoration: const BoxDecoration(
                                               color: Color.fromARGB(
