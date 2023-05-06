@@ -36,7 +36,7 @@ class MessageService extends ChangeNotifier {
         },
         {'role': 'user', 'content': message},
       ],
-      "temperature": 0.3,
+      "temperature": 0.7,
     };
 
     var response = await http.post(
@@ -56,13 +56,13 @@ class MessageService extends ChangeNotifier {
     }
   }
 
-  enterRespone(String message) {
-    messageList.add(message);
+  clearMessageList() {
+    messageList.clear();
     notifyListeners();
   }
 
-  clearMessageList() {
-    messageList.clear();
+  deleteLast() {
+    messageList.removeLast();
     notifyListeners();
   }
 }

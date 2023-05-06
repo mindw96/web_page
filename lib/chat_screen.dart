@@ -75,31 +75,80 @@ class _ChatScreenState extends State<ChatScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
                       title: (index + 1) % 2 == 0
-                          ? FutureBuilder(
-                              future: messageService.getRespone(userMessage),
-                              builder: (context, snapshot) {
-                                List<Widget> children;
-                                if (snapshot.hasData) {
-                                  children = <Widget>[
-                                    Container(
-                                      constraints: BoxConstraints(
-                                        maxWidth:
-                                            MediaQuery.of(context).size.width *
+                          ? messageList[index] == ''
+                              ? FutureBuilder(
+                                  future:
+                                      messageService.getRespone(userMessage),
+                                  builder: (context, snapshot) {
+                                    List<Widget> children;
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      messageList.removeLast();
+                                      messageService.enterMessage(
+                                          snapshot.data.toString());
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback(
+                                              (_) => _scrollToBottom());
+                                      children = <Widget>[
+                                        Container(
+                                          constraints: BoxConstraints(
+                                            maxWidth: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
                                                 0.7,
-                                      ),
-                                      child: BubbleSpecialThree(
-                                        text: messageList[index],
-                                        color: const Color.fromARGB(
-                                            255, 180, 180, 188),
-                                        tail: true,
-                                        isSender: false,
-                                        textStyle: const TextStyle(
-                                            color: Colors.black, fontSize: 15),
-                                      ),
-                                    ),
-                                  ];
-                                } else {
-                                  children = <Widget>[
+                                          ),
+                                          child: BubbleSpecialThree(
+                                            text: messageList[index],
+                                            color: const Color.fromARGB(
+                                                255, 180, 180, 188),
+                                            tail: true,
+                                            isSender: false,
+                                            textStyle: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 15),
+                                          ),
+                                        ),
+                                      ];
+                                    } else {
+                                      children = <Widget>[
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 10),
+                                          child: Container(
+                                            constraints: BoxConstraints(
+                                              maxWidth: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.2,
+                                            ),
+                                            margin: const EdgeInsets.all(10),
+                                            decoration: const BoxDecoration(
+                                              color: Color.fromARGB(
+                                                  255, 180, 180, 188),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(12)),
+                                            ),
+                                            child: const Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: SpinKitThreeBounce(
+                                                color: Colors.black,
+                                                size: 15.0,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ];
+                                    }
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: children,
+                                    );
+                                  },
+                                )
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
                                     Padding(
                                       padding: const EdgeInsets.only(left: 10),
                                       child: Container(
@@ -107,32 +156,22 @@ class _ChatScreenState extends State<ChatScreen> {
                                           maxWidth: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              0.2,
+                                              0.7,
                                         ),
-                                        margin: const EdgeInsets.all(10),
-                                        decoration: const BoxDecoration(
-                                          color: Color.fromARGB(
+                                        child: BubbleSpecialThree(
+                                          text: messageList[index],
+                                          color: const Color.fromARGB(
                                               255, 180, 180, 188),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(12)),
-                                        ),
-                                        child: const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: SpinKitThreeBounce(
-                                            color: Colors.black,
-                                            size: 15.0,
-                                          ),
+                                          tail: true,
+                                          isSender: false,
+                                          textStyle: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15),
                                         ),
                                       ),
                                     ),
-                                  ];
-                                }
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: children,
-                                );
-                              },
-                            )
+                                  ],
+                                )
                           : Column(
                               // User Message
                               crossAxisAlignment: CrossAxisAlignment.end,
@@ -177,12 +216,12 @@ class _ChatScreenState extends State<ChatScreen> {
                           WidgetsBinding.instance
                               .addPostFrameCallback((_) => _scrollToBottom());
 
-                          String respone =
-                              await messageService.getRespone(userMessage);
+                          // String respone =
+                          //     await messageService.getRespone(userMessage);
 
-                          messageService.enterRespone(respone);
-                          WidgetsBinding.instance
-                              .addPostFrameCallback((_) => _scrollToBottom());
+                          messageService.enterMessage('');
+                          // WidgetsBinding.instance
+                          //     .addPostFrameCallback((_) => _scrollToBottom());
                         },
                         child: const Icon(
                           CupertinoIcons.arrow_up_circle_fill,
