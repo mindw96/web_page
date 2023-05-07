@@ -25,20 +25,43 @@ class MessageService extends ChangeNotifier {
     Map<String, dynamic> data = {
       'model': 'gpt-3.5-turbo-0301',
       //'model': 'code-davinci-002',
-      'messages': [
-        {
-          'role': 'system',
-          'content': 'You are very kind, intelligent, and perceptive',
-        },
-        {
-          'role': 'system',
-          'content': 'you are assistant for koreans',
-        },
-        {'role': 'user', 'content': message},
-      ],
+      // 'messages': [
+      //   {
+      //     'role': 'system',
+      //     'content': 'You are very kind, intelligent, and perceptive',
+      //   },
+      //   {
+      //     'role': 'system',
+      //     'content':
+      //         'you are assistant for koreans, so you have to replay only korean',
+      //   },
+      // ],
       "temperature": 0.7,
     };
-
+    List messages = [
+      {
+        'role': 'system',
+        'content': 'You are very kind, intelligent, and perceptive',
+      },
+      {
+        'role': 'system',
+        'content':
+            'you are assistant for koreans, so you have to reply only korean',
+      },
+    ];
+    if (messageList.length >= 3) {
+      for (int i = 0; i < messageList.length; i++) {
+        if ((i + 1) % 2 != 0) {
+          messages.add({'role': 'user', 'content': messageList[i]});
+        } else {
+          messages.add({'role': 'assistant', 'content': messageList[i]});
+        }
+      }
+      messages.add({'role': 'user', 'content': message});
+    } else {
+      messages.add({'role': 'user', 'content': message});
+    }
+    data['messages'] = messages;
     var response = await http.post(
       Uri.parse(endpoint),
       headers: headers,
