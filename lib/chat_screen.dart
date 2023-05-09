@@ -1,9 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:http/http.dart' as http;
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:i_gpt/chat_message.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +15,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final ScrollController _scrollController = ScrollController();
 
   bool _needScroll = false;
+  bool _isiGPT = true;
   String userMessage = '';
 
   _scrollToBottom() {
@@ -35,6 +33,7 @@ class _ChatScreenState extends State<ChatScreen> {
       List<String> messageList = messageService.messageList;
       return Scaffold(
         appBar: AppBar(
+          toolbarHeight: 50.0,
           backgroundColor: const Color.fromARGB(255, 216, 216, 223),
           elevation: 0.1,
           title: Center(
@@ -74,24 +73,84 @@ class _ChatScreenState extends State<ChatScreen> {
                   controller: _scrollController,
                   itemCount: messageList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      title: (index + 1) % 2 == 0
-                          ? messageList[index] == ''
-                              ? FutureBuilder(
-                                  future:
-                                      messageService.getRespone(userMessage),
-                                  builder: (context, snapshot) {
-                                    List<Widget> children;
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.done) {
-                                      messageList.removeLast();
-                                      messageService.enterMessage(
-                                          snapshot.data.toString());
-                                      WidgetsBinding.instance
-                                          .addPostFrameCallback(
-                                              (_) => _scrollToBottom());
-                                      children = <Widget>[
-                                        Container(
+                    return SelectionArea(
+                      child: ListTile(
+                        title: (index + 1) % 2 == 0
+                            ? messageList[index] == ''
+                                ? FutureBuilder(
+                                    future:
+                                        messageService.getRespone(userMessage),
+                                    builder: (context, snapshot) {
+                                      List<Widget> children;
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.done) {
+                                        messageList.removeLast();
+                                        messageService.enterMessage(
+                                            snapshot.data.toString());
+                                        WidgetsBinding.instance
+                                            .addPostFrameCallback(
+                                                (_) => _scrollToBottom());
+                                        children = <Widget>[
+                                          Container(
+                                            constraints: BoxConstraints(
+                                              maxWidth: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.7,
+                                            ),
+                                            child: BubbleSpecialThree(
+                                              text: messageList[index],
+                                              color: const Color.fromARGB(
+                                                  255, 180, 180, 188),
+                                              tail: true,
+                                              isSender: false,
+                                              textStyle: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 15),
+                                            ),
+                                          ),
+                                        ];
+                                      } else {
+                                        children = <Widget>[
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: Container(
+                                              constraints: BoxConstraints(
+                                                  maxWidth: 50.0),
+                                              margin: const EdgeInsets.all(10),
+                                              decoration: const BoxDecoration(
+                                                color: Color.fromARGB(
+                                                    255, 180, 180, 188),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(12)),
+                                              ),
+                                              child: const Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: SpinKitThreeBounce(
+                                                  color: Colors.black,
+                                                  size: 15.0,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ];
+                                      }
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: children,
+                                      );
+                                    },
+                                  )
+                                : Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10),
+                                        child: Container(
                                           constraints: BoxConstraints(
                                             maxWidth: MediaQuery.of(context)
                                                     .size
@@ -109,86 +168,31 @@ class _ChatScreenState extends State<ChatScreen> {
                                                 fontSize: 15),
                                           ),
                                         ),
-                                      ];
-                                    } else {
-                                      children = <Widget>[
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 10),
-                                          child: Container(
-                                            constraints:
-                                                BoxConstraints(maxWidth: 50.0),
-                                            margin: const EdgeInsets.all(10),
-                                            decoration: const BoxDecoration(
-                                              color: Color.fromARGB(
-                                                  255, 180, 180, 188),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(12)),
-                                            ),
-                                            child: const Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: SpinKitThreeBounce(
-                                                color: Colors.black,
-                                                size: 15.0,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ];
-                                    }
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: children,
-                                    );
-                                  },
-                                )
-                              : Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 10),
-                                      child: Container(
-                                        constraints: BoxConstraints(
-                                          maxWidth: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.7,
-                                        ),
-                                        child: BubbleSpecialThree(
-                                          text: messageList[index],
-                                          color: const Color.fromARGB(
-                                              255, 180, 180, 188),
-                                          tail: true,
-                                          isSender: false,
-                                          textStyle: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 15),
-                                        ),
                                       ),
+                                    ],
+                                  )
+                            : Column(
+                                // User Message
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Container(
+                                    constraints: BoxConstraints(
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.7,
                                     ),
-                                  ],
-                                )
-                          : Column(
-                              // User Message
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Container(
-                                  constraints: BoxConstraints(
-                                    maxWidth:
-                                        MediaQuery.of(context).size.width * 0.7,
+                                    child: BubbleSpecialThree(
+                                      text: messageList[index],
+                                      color: const Color.fromARGB(
+                                          255, 34, 148, 251),
+                                      tail: true,
+                                      textStyle: const TextStyle(
+                                          color: Colors.white, fontSize: 15),
+                                    ),
                                   ),
-                                  child: BubbleSpecialThree(
-                                    text: messageList[index],
-                                    color:
-                                        const Color.fromARGB(255, 34, 148, 251),
-                                    tail: true,
-                                    textStyle: const TextStyle(
-                                        color: Colors.white, fontSize: 15),
-                                  ),
-                                ),
-                              ],
-                            ),
+                                ],
+                              ),
+                      ),
                     );
                   },
                 ),

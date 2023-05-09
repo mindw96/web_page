@@ -25,17 +25,6 @@ class MessageService extends ChangeNotifier {
     Map<String, dynamic> data = {
       'model': 'gpt-3.5-turbo-0301',
       //'model': 'code-davinci-002',
-      // 'messages': [
-      //   {
-      //     'role': 'system',
-      //     'content': 'You are very kind, intelligent, and perceptive',
-      //   },
-      //   {
-      //     'role': 'system',
-      //     'content':
-      //         'you are assistant for koreans, so you have to replay only korean',
-      //   },
-      // ],
       "temperature": 0.7,
     };
     List messages = [
