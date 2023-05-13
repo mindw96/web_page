@@ -70,7 +70,7 @@ class BotList extends StatelessWidget {
                     style: TextStyle(fontSize: 20.0),
                   ),
                   subtitle: Text(
-                    '이미지를 생성해주는 AI 입니다.',
+                    '영어로 번역해서 이미지를 생성해주는 AI 입니다.',
                     style: TextStyle(fontSize: 13.0),
                   ),
                   onTap: () {

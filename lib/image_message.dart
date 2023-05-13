@@ -27,6 +27,10 @@ class ImageService extends ChangeNotifier {
           'content': 'You are a translator who converts Korean into English.',
         },
         {
+          'role': 'system',
+          'content': 'You have to reply only transrate result.',
+        },
+        {
           'role': 'user',
           'content': "translate this sentences to english '$message'"
         },
@@ -66,7 +70,9 @@ class ImageService extends ChangeNotifier {
       'prompt': message,
       //'model': 'code-davinci-002',
       "n": 1,
+      // "size": "256x256"
       "size": "512x512"
+      // "size": "1024x1024"
     };
 
     var response = await http.post(

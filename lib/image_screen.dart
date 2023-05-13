@@ -16,6 +16,7 @@ class _ImageScreenState extends State<ImageScreen> {
 
   bool _needScroll = false;
   String userMessage = '';
+  List<String> transList = [];
 
   _scrollToBottom() {
     _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
@@ -30,6 +31,7 @@ class _ImageScreenState extends State<ImageScreen> {
 
     return Consumer<ImageService>(builder: (context, imageService, child) {
       List<String> messageList = imageService.messageList;
+
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -45,17 +47,9 @@ class _ImageScreenState extends State<ImageScreen> {
           title: Center(
             child: Column(
               children: [
-                Icon(
-                  CupertinoIcons.smiley,
-                  size: 30,
-                  color: Colors.black,
-                ),
-                SizedBox(
-                  height: 5,
-                ),
                 Text(
                   "iDall-E",
-                  style: TextStyle(color: Colors.black, fontSize: 10),
+                  style: TextStyle(color: Colors.black, fontSize: 20),
                 ),
               ],
             ),
@@ -64,6 +58,7 @@ class _ImageScreenState extends State<ImageScreen> {
             IconButton(
                 onPressed: () {
                   imageService.clearMessageList();
+                  transList.clear();
                 },
                 icon: Icon(
                   Icons.refresh,
@@ -96,20 +91,49 @@ class _ImageScreenState extends State<ImageScreen> {
                                         messageList.removeLast();
                                         imageService.enterMessage(
                                             snapshot.data.toString());
+                                        transList.add('');
                                         WidgetsBinding.instance
                                             .addPostFrameCallback(
                                                 (_) => _scrollToBottom());
                                         children = <Widget>[
-                                          Container(
-                                            constraints: BoxConstraints(
-                                              maxWidth: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.7,
-                                            ),
-                                            child: Image.network(
-                                              snapshot.data.toString(),
-                                            ),
+                                          Column(
+                                            children: [
+                                              Container(
+                                                constraints: BoxConstraints(
+                                                  maxWidth:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.7,
+                                                ),
+                                                child: Image.network(
+                                                  snapshot.data.toString(),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10),
+                                                child: Container(
+                                                  constraints: BoxConstraints(
+                                                    maxWidth:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.7,
+                                                  ),
+                                                  child: BubbleSpecialThree(
+                                                    text: transList[index - 1],
+                                                    color: const Color.fromARGB(
+                                                        255, 180, 180, 188),
+                                                    tail: true,
+                                                    isSender: false,
+                                                    textStyle: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 15),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ];
                                       } else {
@@ -163,6 +187,28 @@ class _ImageScreenState extends State<ImageScreen> {
                                               Image.network(messageList[index]),
                                         ),
                                       ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10),
+                                        child: Container(
+                                          constraints: BoxConstraints(
+                                            maxWidth: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.7,
+                                          ),
+                                          child: BubbleSpecialThree(
+                                            text: transList[index - 1],
+                                            color: const Color.fromARGB(
+                                                255, 180, 180, 188),
+                                            tail: true,
+                                            isSender: false,
+                                            textStyle: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 15),
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   )
                             : Column(
@@ -209,10 +255,11 @@ class _ImageScreenState extends State<ImageScreen> {
                           textController.clear();
 
                           imageService.enterMessage(userMessage);
-                          print(userMessage);
+
                           userMessage =
                               await imageService.translate(userMessage);
-                          print(userMessage);
+                          transList.add(userMessage);
+
                           WidgetsBinding.instance
                               .addPostFrameCallback((_) => _scrollToBottom());
 
