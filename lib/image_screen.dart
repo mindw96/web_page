@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
-import 'package:i_gpt/chat_message.dart';
+import 'package:i_gpt/image_message.dart';
 import 'package:provider/provider.dart';
 
-class ChatScreen extends StatefulWidget {
+class ImageScreen extends StatefulWidget {
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  _ImageScreenState createState() => _ImageScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ImageScreenState extends State<ImageScreen> {
   TextEditingController textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
@@ -28,8 +28,8 @@ class _ChatScreenState extends State<ChatScreen> {
       _needScroll = false;
     }
 
-    return Consumer<MessageService>(builder: (context, messageService, child) {
-      List<String> messageList = messageService.messageList;
+    return Consumer<ImageService>(builder: (context, imageService, child) {
+      List<String> messageList = imageService.messageList;
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -54,7 +54,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   height: 5,
                 ),
                 Text(
-                  "iGPT",
+                  "iDall-E",
                   style: TextStyle(color: Colors.black, fontSize: 10),
                 ),
               ],
@@ -63,7 +63,7 @@ class _ChatScreenState extends State<ChatScreen> {
           actions: [
             IconButton(
                 onPressed: () {
-                  messageService.clearMessageList();
+                  imageService.clearMessageList();
                 },
                 icon: Icon(
                   Icons.refresh,
@@ -88,13 +88,13 @@ class _ChatScreenState extends State<ChatScreen> {
                             ? messageList[index] == ''
                                 ? FutureBuilder(
                                     future:
-                                        messageService.getRespone(userMessage),
+                                        imageService.getRespone(userMessage),
                                     builder: (context, snapshot) {
                                       List<Widget> children;
                                       if (snapshot.connectionState ==
                                           ConnectionState.done) {
                                         messageList.removeLast();
-                                        messageService.enterMessage(
+                                        imageService.enterMessage(
                                             snapshot.data.toString());
                                         WidgetsBinding.instance
                                             .addPostFrameCallback(
@@ -107,15 +107,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                                       .width *
                                                   0.7,
                                             ),
-                                            child: BubbleSpecialThree(
-                                              text: messageList[index],
-                                              color: const Color.fromARGB(
-                                                  255, 180, 180, 188),
-                                              tail: true,
-                                              isSender: false,
-                                              textStyle: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 15),
+                                            child: Image.network(
+                                              snapshot.data.toString(),
                                             ),
                                           ),
                                         ];
@@ -166,16 +159,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                                     .width *
                                                 0.7,
                                           ),
-                                          child: BubbleSpecialThree(
-                                            text: messageList[index],
-                                            color: const Color.fromARGB(
-                                                255, 180, 180, 188),
-                                            tail: true,
-                                            isSender: false,
-                                            textStyle: const TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 15),
-                                          ),
+                                          child:
+                                              Image.network(messageList[index]),
                                         ),
                                       ),
                                     ],
@@ -223,11 +208,11 @@ class _ChatScreenState extends State<ChatScreen> {
                           userMessage = textController.text.trim();
                           textController.clear();
 
-                          messageService.enterMessage(userMessage);
+                          imageService.enterMessage(userMessage);
                           WidgetsBinding.instance
                               .addPostFrameCallback((_) => _scrollToBottom());
 
-                          messageService.enterMessage('');
+                          imageService.enterMessage('');
                         },
                         child: const Icon(
                           CupertinoIcons.arrow_up_circle_fill,

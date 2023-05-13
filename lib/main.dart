@@ -1,13 +1,15 @@
+import 'package:i_gpt/bot_list.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'chat_screen.dart';
 import 'chat_message.dart';
+import 'image_message.dart';
 
 Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => MessageService()),
+        ChangeNotifierProvider(create: ((context) => ImageService())),
       ],
       child: ChatApp(),
     ),
@@ -22,7 +24,7 @@ class ChatApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ChatScreen(),
+      home: BotList(),
     );
   }
 }
