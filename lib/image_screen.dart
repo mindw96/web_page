@@ -209,6 +209,10 @@ class _ImageScreenState extends State<ImageScreen> {
                           textController.clear();
 
                           imageService.enterMessage(userMessage);
+                          print(userMessage);
+                          userMessage =
+                              await imageService.translate(userMessage);
+                          print(userMessage);
                           WidgetsBinding.instance
                               .addPostFrameCallback((_) => _scrollToBottom());
 
