@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
-import 'package:i_gpt/image_message.dart';
+import 'package:i_gpt/code_message.dart';
 import 'package:provider/provider.dart';
 
-class ImageScreen extends StatefulWidget {
+class CodeScreen extends StatefulWidget {
   @override
-  _ImageScreenState createState() => _ImageScreenState();
+  _CodeScreenState createState() => _CodeScreenState();
 }
 
-class _ImageScreenState extends State<ImageScreen> {
+class _CodeScreenState extends State<CodeScreen> {
   TextEditingController textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
@@ -28,10 +29,8 @@ class _ImageScreenState extends State<ImageScreen> {
       _needScroll = false;
     }
 
-    return Consumer<ImageService>(builder: (context, imageService, child) {
-      List<String> messageList = imageService.messageList;
-      List<String> transList = imageService.transList;
-
+    return Consumer<CodeService>(builder: (context, codeService, child) {
+      List<String> messageList = codeService.messageList;
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -47,9 +46,17 @@ class _ImageScreenState extends State<ImageScreen> {
           title: Center(
             child: Column(
               children: [
+                Icon(
+                  CupertinoIcons.smiley,
+                  size: 30,
+                  color: Colors.black,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
                 Text(
-                  "iDall-E",
-                  style: TextStyle(color: Colors.black, fontSize: 20),
+                  "iGPT",
+                  style: TextStyle(color: Colors.black, fontSize: 10),
                 ),
               ],
             ),
@@ -57,8 +64,7 @@ class _ImageScreenState extends State<ImageScreen> {
           actions: [
             IconButton(
                 onPressed: () {
-                  imageService.clearMessageList();
-                  imageService.clearTransList();
+                  codeService.clearMessageList();
                 },
                 icon: Icon(
                   Icons.refresh,
@@ -82,58 +88,40 @@ class _ImageScreenState extends State<ImageScreen> {
                         title: (index + 1) % 2 == 0
                             ? messageList[index] == ''
                                 ? FutureBuilder(
-                                    future:
-                                        imageService.getRespone(userMessage),
+                                    future: codeService.getRespone(userMessage),
                                     builder: (context, snapshot) {
                                       List<Widget> children;
                                       if (snapshot.connectionState ==
                                           ConnectionState.done) {
                                         messageList.removeLast();
-                                        imageService.enterMessage(
+                                        codeService.enterMessage(
                                             snapshot.data.toString());
-                                        transList.add('');
                                         WidgetsBinding.instance
                                             .addPostFrameCallback(
                                                 (_) => _scrollToBottom());
                                         children = <Widget>[
-                                          Column(
-                                            children: [
-                                              Container(
-                                                constraints: BoxConstraints(
-                                                  maxWidth:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .width *
-                                                          0.7,
-                                                ),
-                                                child: Image.network(
-                                                  snapshot.data.toString(),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 10),
-                                                child: Container(
-                                                  constraints: BoxConstraints(
-                                                    maxWidth:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.7,
-                                                  ),
-                                                  child: BubbleSpecialThree(
-                                                    text: transList[index - 1],
-                                                    color: const Color.fromARGB(
-                                                        255, 180, 180, 188),
-                                                    tail: true,
-                                                    isSender: false,
-                                                    textStyle: const TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 15),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
+                                          Container(
+                                            constraints: BoxConstraints(
+                                              maxWidth: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.7,
+                                            ),
+                                            // child: Markdown(
+                                            //   selectable: true,
+                                            //   data: messageList[index],
+                                            // ),
+
+                                            child: BubbleSpecialThree(
+                                              text: messageList[index],
+                                              color: const Color.fromARGB(
+                                                  255, 180, 180, 188),
+                                              tail: true,
+                                              isSender: false,
+                                              textStyle: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 15),
+                                            ),
                                           ),
                                         ];
                                       } else {
@@ -183,22 +171,13 @@ class _ImageScreenState extends State<ImageScreen> {
                                                     .width *
                                                 0.7,
                                           ),
-                                          child:
-                                              Image.network(messageList[index]),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10),
-                                        child: Container(
-                                          constraints: BoxConstraints(
-                                            maxWidth: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.7,
-                                          ),
+                                          // child: Markdown(
+                                          //   selectable: true,
+                                          //   data: messageList[index],
+                                          // ),
+
                                           child: BubbleSpecialThree(
-                                            text: transList[index - 1],
+                                            text: messageList[index],
                                             color: const Color.fromARGB(
                                                 255, 180, 180, 188),
                                             tail: true,
@@ -254,17 +233,11 @@ class _ImageScreenState extends State<ImageScreen> {
                           userMessage = textController.text.trim();
                           textController.clear();
 
-                          imageService.enterMessage(userMessage);
-                          imageService.enterTrans(userMessage);
-
-                          userMessage =
-                              await imageService.translate(userMessage);
-                          transList.add(userMessage);
-
+                          codeService.enterMessage(userMessage);
                           WidgetsBinding.instance
                               .addPostFrameCallback((_) => _scrollToBottom());
 
-                          imageService.enterMessage('');
+                          codeService.enterMessage('');
                         },
                         child: const Icon(
                           CupertinoIcons.arrow_up_circle_fill,

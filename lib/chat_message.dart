@@ -72,9 +72,4 @@ class MessageService extends ChangeNotifier {
     messageList.clear();
     notifyListeners();
   }
-
-  deleteLast() {
-    messageList.removeLast();
-    notifyListeners();
-  }
 }

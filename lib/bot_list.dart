@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:i_gpt/chat_screen.dart';
+import 'package:i_gpt/code_screen.dart';
 import 'package:i_gpt/image_screen.dart';
 
 class BotList extends StatelessWidget {
@@ -78,6 +79,28 @@ class BotList extends StatelessWidget {
                       context,
                       CupertinoPageRoute(
                         builder: (_) => ImageScreen(),
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.person_2_sharp,
+                    size: 30.0,
+                  ),
+                  title: Text(
+                    'Code Helper',
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                  subtitle: Text(
+                    '코드를 작성해주는 AI 입니다.',
+                    style: TextStyle(fontSize: 13.0),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (_) => CodeScreen(),
                       ),
                     );
                   },

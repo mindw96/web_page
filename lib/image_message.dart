@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 class ImageService extends ChangeNotifier {
   List<String> messageList = [];
+  List<String> transList = [];
 
   String api = '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';
   String endpoint = 'https://api.openai.com/v1/images/generations';
@@ -24,7 +25,7 @@ class ImageService extends ChangeNotifier {
       "messages": [
         {
           'role': 'system',
-          'content': 'You are a translator who converts Korean into English.',
+          'content': 'You are a translator who converts Korean to English.',
         },
         {
           'role': 'system',
@@ -57,6 +58,12 @@ class ImageService extends ChangeNotifier {
   enterMessage(String message) {
     String userMessage = message;
     messageList.add(userMessage);
+    notifyListeners();
+  }
+
+  enterTrans(String message) {
+    String transMessage = message;
+    transList.add(transMessage);
     notifyListeners();
   }
 
@@ -93,6 +100,11 @@ class ImageService extends ChangeNotifier {
 
   clearMessageList() {
     messageList.clear();
+    notifyListeners();
+  }
+
+  clearTransList() {
+    transList.clear();
     notifyListeners();
   }
 }

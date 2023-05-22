@@ -1,4 +1,5 @@
 import 'package:i_gpt/bot_list.dart';
+import 'package:i_gpt/code_message.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'chat_message.dart';
@@ -9,7 +10,8 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => MessageService()),
-        ChangeNotifierProvider(create: ((context) => ImageService())),
+        ChangeNotifierProvider(create: (context) => ImageService()),
+        ChangeNotifierProvider(create: (context) => CodeService()),
       ],
       child: ChatApp(),
     ),
