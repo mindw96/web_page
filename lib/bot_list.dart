@@ -14,7 +14,7 @@ class BotList extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         shape: Border(
-          bottom: BorderSide(color: Colors.grey, width: 0.3),
+          bottom: BorderSide(color: Colors.grey, width: 0.1),
         ),
         elevation: 0.0,
         title: Text(

@@ -86,12 +86,14 @@ class _ImageScreenState extends State<ImageScreen> {
                                         imageService.getRespone(userMessage),
                                     builder: (context, snapshot) {
                                       List<Widget> children;
+                                      print(transList);
+                                      print(messageList);
                                       if (snapshot.connectionState ==
                                           ConnectionState.done) {
-                                        messageList.removeLast();
+                                        print(snapshot.data.toString());
+                                        imageService.deleteLast();
                                         imageService.enterMessage(
                                             snapshot.data.toString());
-                                        transList.add('');
                                         WidgetsBinding.instance
                                             .addPostFrameCallback(
                                                 (_) => _scrollToBottom());
@@ -122,7 +124,7 @@ class _ImageScreenState extends State<ImageScreen> {
                                                             0.7,
                                                   ),
                                                   child: BubbleSpecialThree(
-                                                    text: transList[index - 1],
+                                                    text: transList[index],
                                                     color: const Color.fromARGB(
                                                         255, 180, 180, 188),
                                                     tail: true,
@@ -198,7 +200,7 @@ class _ImageScreenState extends State<ImageScreen> {
                                                 0.7,
                                           ),
                                           child: BubbleSpecialThree(
-                                            text: transList[index - 1],
+                                            text: transList[index],
                                             color: const Color.fromARGB(
                                                 255, 180, 180, 188),
                                             tail: true,
@@ -259,7 +261,7 @@ class _ImageScreenState extends State<ImageScreen> {
 
                           userMessage =
                               await imageService.translate(userMessage);
-                          transList.add(userMessage);
+                          imageService.enterTrans(userMessage);
 
                           WidgetsBinding.instance
                               .addPostFrameCallback((_) => _scrollToBottom());

@@ -107,4 +107,9 @@ class ImageService extends ChangeNotifier {
     transList.clear();
     notifyListeners();
   }
+
+  deleteLast() {
+    messageList.removeLast();
+    notifyListeners();
+  }
 }
