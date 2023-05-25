@@ -86,11 +86,8 @@ class _ImageScreenState extends State<ImageScreen> {
                                         imageService.getRespone(userMessage),
                                     builder: (context, snapshot) {
                                       List<Widget> children;
-                                      print(transList);
-                                      print(messageList);
                                       if (snapshot.connectionState ==
                                           ConnectionState.done) {
-                                        print(snapshot.data.toString());
                                         imageService.deleteLast();
                                         imageService.enterMessage(
                                             snapshot.data.toString());
