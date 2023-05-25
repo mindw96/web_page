@@ -10,39 +10,76 @@ class BotList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        shape: Border(
+          bottom: BorderSide(color: Colors.grey, width: 0.3),
+        ),
         elevation: 0.0,
         title: Text(
-          'Bot List',
+          'AI ChatBot',
           style: TextStyle(
-            color: Colors.black,
+            color: Color.fromARGB(255, 29, 78, 137),
             fontSize: 40.0,
           ),
         ),
         actions: [
           IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.person_add_alt_1_sharp,
-                color: Colors.black,
-              ))
+            onPressed: () {
+              showDialog(
+                context: context,
+                barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    content: Text('추후 업데이트 예정 입니다.'),
+                    insetPadding: const EdgeInsets.fromLTRB(0, 80, 0, 80),
+                    actions: [
+                      TextButton(
+                        child: const Text('확인'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            icon: Icon(
+              Icons.person_add_alt_1_sharp,
+              color: Colors.black,
+            ),
+          )
         ],
       ),
       body: Column(
         children: [
           ListTile(
-            leading: Icon(Icons.person_2_sharp),
-            title: Text('User'),
+            leading: Icon(
+              Icons.person_2_sharp,
+              size: 30.0,
+            ),
+            title: Text(
+              'User',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20.0,
+              ),
+            ),
           ),
-          Divider(),
+          Divider(
+            indent: 30.0,
+            endIndent: 30.0,
+          ),
           Expanded(
             child: ListView(
               children: [
                 ListTile(
-                  leading: Icon(
-                    Icons.person_2_sharp,
-                    size: 30.0,
+                  leading: Image.asset(
+                    'assets/images/ChatGPT_logo.png',
+                    width: 40,
+                    height: 40,
                   ),
                   title: Text(
                     'iGPT',
@@ -62,9 +99,10 @@ class BotList extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  leading: Icon(
-                    Icons.person_2_sharp,
-                    size: 30.0,
+                  leading: Image.asset(
+                    'assets/images/ChatGPT_logo.png',
+                    width: 40,
+                    height: 40,
                   ),
                   title: Text(
                     'iDall-E',
@@ -84,9 +122,10 @@ class BotList extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  leading: Icon(
-                    Icons.person_2_sharp,
-                    size: 30.0,
+                  leading: Image.asset(
+                    'assets/images/ChatGPT_logo.png',
+                    width: 40,
+                    height: 40,
                   ),
                   title: Text(
                     'Code Helper',

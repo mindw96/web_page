@@ -45,17 +45,9 @@ class _ChatScreenState extends State<ChatScreen> {
           title: Center(
             child: Column(
               children: [
-                Icon(
-                  CupertinoIcons.smiley,
-                  size: 30,
-                  color: Colors.black,
-                ),
-                SizedBox(
-                  height: 5,
-                ),
                 Text(
                   "iGPT",
-                  style: TextStyle(color: Colors.black, fontSize: 10),
+                  style: TextStyle(color: Colors.black, fontSize: 20),
                 ),
               ],
             ),
