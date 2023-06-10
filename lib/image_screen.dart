@@ -47,23 +47,32 @@ class _ImageScreenState extends State<ImageScreen> {
           title: Center(
             child: Column(
               children: [
-                Text(
-                  "iDall-E",
-                  style: TextStyle(color: Colors.black, fontSize: 20),
-                ),
+                RichText(
+                  text: TextSpan(
+                    text: 'Dall-E',
+                    style: TextStyle(fontSize: 24),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: ' Korean Ver.',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
           actions: [
             IconButton(
-                onPressed: () {
-                  imageService.clearMessageList();
-                  imageService.clearTransList();
-                },
-                icon: Icon(
-                  Icons.refresh,
-                  color: Colors.white,
-                ))
+              onPressed: () {
+                imageService.clearMessageList();
+                imageService.clearTransList();
+              },
+              icon: Icon(
+                Icons.refresh,
+                color: Colors.white,
+              ),
+            )
           ],
         ),
         // appBar: iAppBar(),

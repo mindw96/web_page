@@ -6,8 +6,6 @@ on:
 jobs:
   build:
     name: Build Web
-    env:
-      apiKey: '${{secrets.OPENAI_KEY}}'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

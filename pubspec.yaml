@@ -42,6 +42,9 @@ dependencies:
   chat_bubbles: ^1.4.1
   provider: ^6.0.5
   flutter_markdown: ^0.6.14
+  currency_text_input_formatter: ^2.1.10
+  dynamic_color: ^1.6.5
+  awesome_bottom_bar: ^1.2.2
 
 dev_dependencies:
   flutter_test:

@@ -1,17 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:i_gpt/chat_screen.dart';
-import 'package:i_gpt/code_screen.dart';
-import 'package:i_gpt/image_screen.dart';
 
-class BotList extends StatefulWidget {
-  const BotList({super.key});
+import 'chat_screen.dart';
+import 'code_screen.dart';
+import 'image_screen.dart';
 
+class ChatList extends StatefulWidget {
   @override
-  State<BotList> createState() => _BotListState();
+  State<ChatList> createState() => _ChatListState();
 }
 
-class _BotListState extends State<BotList> {
+class _ChatListState extends State<ChatList> {
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,60 +20,15 @@ class _BotListState extends State<BotList> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         title: Text(
-          'AI ChatBot',
+          '채팅',
           style: TextStyle(
-            color: Color.fromARGB(255, 29, 78, 137),
+            color: Colors.black,
             fontSize: 48.0,
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    content: Text('추후 업데이트 예정 입니다.'),
-                    insetPadding: const EdgeInsets.fromLTRB(0, 80, 0, 80),
-                    actions: [
-                      TextButton(
-                        child: const Text('확인'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-            icon: Icon(
-              Icons.person_add_alt_1_sharp,
-              color: Colors.black,
-            ),
-          )
-        ],
       ),
       body: Column(
         children: [
-          ListTile(
-            leading: Icon(
-              Icons.person,
-              size: 30.0,
-            ),
-            title: Text(
-              'User',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20.0,
-              ),
-            ),
-          ),
-          Divider(
-            indent: 30.0,
-            endIndent: 30.0,
-          ),
           Expanded(
             child: ListView(
               children: [
