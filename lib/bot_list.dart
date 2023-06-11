@@ -14,17 +14,32 @@ class BotList extends StatefulWidget {
 class _BotListState extends State<BotList> {
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    Color selectedColor = Theme.of(context).primaryColor;
+    ThemeData lightTheme = ThemeData(
+      colorSchemeSeed: selectedColor,
+      brightness: Brightness.light,
+    );
+    ThemeData darkTheme = ThemeData(
+      colorSchemeSeed: selectedColor,
+      brightness: Brightness.dark,
+    );
+
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
+        toolbarHeight: 44.0,
+        centerTitle: false,
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         title: Text(
-          'AI ChatBot',
-          style: TextStyle(
-            color: Color.fromARGB(255, 29, 78, 137),
-            fontSize: 48.0,
-          ),
+          'Bots',
+          style: textTheme.displaySmall!
+              .copyWith(color: lightTheme.colorScheme.primary),
+          // style: TextStyle(
+          //   color: Color.fromARGB(255, 29, 78, 137),
+          //   fontSize: 48.0,
+          // ),
         ),
         actions: [
           IconButton(
@@ -78,6 +93,7 @@ class _BotListState extends State<BotList> {
             child: ListView(
               children: [
                 ListTile(
+                  shape: Theme.of(context).listTileTheme.shape,
                   leading: Image.asset(
                     'assets/images/ChatGPT_logo.png',
                     width: 40,
@@ -86,24 +102,20 @@ class _BotListState extends State<BotList> {
                   title: RichText(
                     text: TextSpan(
                       text: 'Chat GPT',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                      ),
+                      style: textTheme.bodyLarge!,
                       children: <TextSpan>[
                         TextSpan(
                           text: ' Korean Ver.',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                          ),
+                          style: textTheme.bodySmall!.copyWith(
+                              color: lightTheme.colorScheme.onSurface),
                         ),
                       ],
                     ),
                   ),
                   subtitle: Text(
                     '한국어로 대답하는 ChatGPT 입니다.',
-                    style: TextStyle(fontSize: 12.0),
+                    style: textTheme.bodyMedium!
+                        .copyWith(color: lightTheme.colorScheme.surfaceVariant),
                   ),
                   onTap: () {
                     Navigator.push(

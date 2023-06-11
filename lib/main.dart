@@ -49,22 +49,25 @@ class _HomePageState extends State<HomePage> {
         BotList(),
         ChatList(),
       ].elementAt(bottomNavIndex),
-      bottomNavigationBar: BottomBarDefault(
-        items: [
-          TabItem(
-            icon: Icons.home,
-          ),
-          TabItem(
-            icon: Icons.chat_bubble_outline,
-          ),
-        ],
-        backgroundColor: Colors.transparent,
-        color: Colors.black,
-        colorSelected: Colors.blue,
-        indexSelected: bottomNavIndex,
-        onTap: (index) => setState(() {
-          bottomNavIndex = index;
-        }),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 34.0),
+        child: BottomBarDefault(
+          items: [
+            TabItem(
+              icon: Icons.home,
+            ),
+            TabItem(
+              icon: Icons.chat_bubble_outline,
+            ),
+          ],
+          backgroundColor: Colors.transparent,
+          color: Colors.black,
+          colorSelected: Colors.blue,
+          indexSelected: bottomNavIndex,
+          onTap: (index) => setState(() {
+            bottomNavIndex = index;
+          }),
+        ),
       ),
     );
   }

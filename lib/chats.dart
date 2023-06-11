@@ -14,17 +14,27 @@ class _ChatListState extends State<ChatList> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    Color selectedColor = Theme.of(context).primaryColor;
+    ThemeData lightTheme = ThemeData(
+      colorSchemeSeed: selectedColor,
+      brightness: Brightness.light,
+    );
+    ThemeData darkTheme = ThemeData(
+      colorSchemeSeed: selectedColor,
+      brightness: Brightness.dark,
+    );
+
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
+        centerTitle: false,
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         title: Text(
           '채팅',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 48.0,
-          ),
+          style: textTheme.displaySmall!
+              .copyWith(color: lightTheme.colorScheme.primary),
         ),
       ),
       body: Column(
@@ -41,24 +51,20 @@ class _ChatListState extends State<ChatList> {
                   title: RichText(
                     text: TextSpan(
                       text: 'Chat GPT',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                      ),
+                      style: textTheme.bodyMedium!,
                       children: <TextSpan>[
                         TextSpan(
                           text: ' Korean Ver.',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                          ),
+                          style: textTheme.bodySmall!.copyWith(
+                              color: lightTheme.colorScheme.onSurface),
                         ),
                       ],
                     ),
                   ),
                   subtitle: Text(
-                    '한국어로 대답하는 ChatGPT 입니다.',
-                    style: TextStyle(fontSize: 12.0),
+                    '대화 내용 요약 들어갈 곳',
+                    style: textTheme.bodyLarge!.copyWith(
+                        color: lightTheme.colorScheme.onPrimaryContainer),
                   ),
                   onTap: () {
                     Navigator.push(
