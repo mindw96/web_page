@@ -4,15 +4,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
-import 'package:Mimir/chat_message.dart';
+import 'package:Mimir/gpt4_message.dart';
 import 'package:provider/provider.dart';
 
-class ChatScreen extends StatefulWidget {
+class GPT4Screen extends StatefulWidget {
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenState extends State<GPT4Screen> {
   TextEditingController textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
@@ -30,7 +30,7 @@ class _ChatScreenState extends State<ChatScreen> {
       _needScroll = false;
     }
 
-    return Consumer<MessageService>(
+    return Consumer<GPT4MessageService>(
       builder: (context, messageService, child) {
         List<String> messageList = messageService.messageList;
         return Scaffold(
@@ -54,7 +54,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: [
                   RichText(
                     text: TextSpan(
-                      text: 'Chat GPT',
+                      text: 'GPT 4',
                       style: TextStyle(
                         fontSize: 24,
                         color: Colors.black,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
-import 'package:i_gpt/image_message.dart';
+import 'package:Mimir/image_message.dart';
 import 'package:provider/provider.dart';
 
 class ImageScreen extends StatefulWidget {

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
-import 'package:i_gpt/code_message.dart';
+import 'package:Mimir/code_message.dart';
 import 'package:provider/provider.dart';
 
 class CodeScreen extends StatefulWidget {

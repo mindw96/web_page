@@ -1,6 +1,7 @@
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
-import 'package:i_gpt/bot_list.dart';
-import 'package:i_gpt/code_message.dart';
+import 'package:Mimir/bot_list.dart';
+import 'package:Mimir/code_message.dart';
+import 'package:Mimir/gpt4_message.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'chat_message.dart';
@@ -14,6 +15,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (context) => MessageService()),
         ChangeNotifierProvider(create: (context) => ImageService()),
         ChangeNotifierProvider(create: (context) => CodeService()),
+        ChangeNotifierProvider(create: (context) => GPT4MessageService()),
       ],
       child: ChatApp(),
     ),
@@ -24,7 +26,7 @@ class ChatApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ChatGPT Flutter App',
+      title: 'Mimir',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

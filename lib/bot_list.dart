@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:i_gpt/chat_screen.dart';
-import 'package:i_gpt/code_screen.dart';
-import 'package:i_gpt/image_screen.dart';
+import 'package:Mimir/chat_screen.dart';
+import 'package:Mimir/code_screen.dart';
+import 'package:Mimir/gpt4_screen.dart';
+import 'package:Mimir/image_screen.dart';
 
 class BotList extends StatefulWidget {
   const BotList({super.key});
@@ -33,7 +34,7 @@ class _BotListState extends State<BotList> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         title: Text(
-          'Bots',
+          'Mimir',
           style: textTheme.displaySmall!
               .copyWith(color: lightTheme.colorScheme.primary),
           // style: TextStyle(
@@ -182,6 +183,29 @@ class _BotListState extends State<BotList> {
                       context,
                       CupertinoPageRoute(
                         builder: (_) => CodeScreen(),
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Image.asset(
+                    'assets/images/ChatGPT_logo.png',
+                    width: 40,
+                    height: 40,
+                  ),
+                  title: Text(
+                    'ChatGPT 4',
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                  subtitle: Text(
+                    'ChatGPT 4 입니다.',
+                    style: TextStyle(fontSize: 12.0),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (_) => GPT4Screen(),
                       ),
                     );
                   },
