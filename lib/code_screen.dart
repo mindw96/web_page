@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:Mimir/code_message.dart';
@@ -38,12 +37,15 @@ class _CodeScreenState extends State<CodeScreen> {
           centerTitle: true,
           toolbarHeight: 50.0,
           backgroundColor: Colors.transparent,
-          elevation: 0.1,
+          elevation: 0,
           leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(Icons.arrow_back_sharp)),
+              icon: Icon(
+                Icons.arrow_back_sharp,
+                color: Colors.black,
+              )),
           title: Center(
             child: Column(
               children: [

@@ -39,12 +39,15 @@ class _ImageScreenState extends State<ImageScreen> {
           centerTitle: true,
           toolbarHeight: 50.0,
           backgroundColor: Colors.transparent,
-          elevation: 0.1,
+          elevation: 0,
           leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(Icons.arrow_back_sharp)),
+              icon: Icon(
+                Icons.arrow_back_sharp,
+                color: Colors.black,
+              )),
           title: Center(
             child: Column(
               children: [
