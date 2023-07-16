@@ -1,4 +1,3 @@
-import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:Mimir/bot_list.dart';
 import 'package:Mimir/code_message.dart';
 import 'package:Mimir/gpt4_message.dart';
@@ -43,32 +42,36 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var bottomNavIndex = 0;
+  int currentPageIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: [
         BotList(),
         ChatList(),
-      ].elementAt(bottomNavIndex),
+      ].elementAt(currentPageIndex),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(bottom: 34.0),
-        child: BottomBarDefault(
-          items: [
-            TabItem(
-              icon: Icons.home,
+        padding: const EdgeInsets.only(bottom: 0.0),
+        child: NavigationBar(
+          backgroundColor: Colors.white,
+          onDestinationSelected: (int index) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          },
+          selectedIndex: currentPageIndex,
+          destinations: const <Widget>[
+            NavigationDestination(
+              icon: Icon(Icons.assignment_ind_outlined),
+              selectedIcon: Icon(Icons.assignment_ind_rounded),
+              label: '',
             ),
-            TabItem(
-              icon: Icons.chat_bubble_outline,
+            NavigationDestination(
+              icon: Icon(Icons.chat_bubble_outline_rounded),
+              selectedIcon: Icon(Icons.chat_bubble_rounded),
+              label: '',
             ),
           ],
-          backgroundColor: Colors.transparent,
-          color: Colors.black,
-          colorSelected: Colors.blue,
-          indexSelected: bottomNavIndex,
-          onTap: (index) => setState(() {
-            bottomNavIndex = index;
-          }),
         ),
       ),
     );

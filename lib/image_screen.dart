@@ -23,6 +23,7 @@ class _ImageScreenState extends State<ImageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     if (_needScroll) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
       _needScroll = false;
@@ -37,7 +38,7 @@ class _ImageScreenState extends State<ImageScreen> {
         appBar: AppBar(
           centerTitle: true,
           toolbarHeight: 50.0,
-          backgroundColor: const Color.fromARGB(255, 216, 216, 223),
+          backgroundColor: Colors.transparent,
           elevation: 0.1,
           leading: IconButton(
               onPressed: () {
@@ -50,11 +51,11 @@ class _ImageScreenState extends State<ImageScreen> {
                 RichText(
                   text: TextSpan(
                     text: 'Dall-E',
-                    style: TextStyle(fontSize: 24),
+                    style: textTheme.bodyLarge!,
                     children: <TextSpan>[
                       TextSpan(
                         text: ' Korean Ver.',
-                        style: TextStyle(fontSize: 14),
+                        style: textTheme.bodySmall!,
                       ),
                     ],
                   ),
@@ -70,7 +71,7 @@ class _ImageScreenState extends State<ImageScreen> {
               },
               icon: Icon(
                 Icons.refresh,
-                color: Colors.white,
+                color: Colors.black,
               ),
             )
           ],

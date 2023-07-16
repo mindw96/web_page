@@ -25,6 +25,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     if (_needScroll) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
       _needScroll = false;
@@ -38,7 +39,7 @@ class _ChatScreenState extends State<ChatScreen> {
           appBar: AppBar(
             centerTitle: true,
             toolbarHeight: 50.0,
-            backgroundColor: const Color.fromARGB(255, 216, 216, 223),
+            backgroundColor: Colors.transparent,
             elevation: 0,
             leading: IconButton(
               onPressed: () {
@@ -55,17 +56,11 @@ class _ChatScreenState extends State<ChatScreen> {
                   RichText(
                     text: TextSpan(
                       text: 'Chat GPT',
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.black,
-                      ),
+                      style: textTheme.bodyLarge!,
                       children: <TextSpan>[
                         TextSpan(
                           text: ' Korean Ver.',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                          ),
+                          style: textTheme.bodySmall!,
                         ),
                       ],
                     ),

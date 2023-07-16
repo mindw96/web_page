@@ -24,6 +24,7 @@ class _CodeScreenState extends State<CodeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     if (_needScroll) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
       _needScroll = false;
@@ -36,7 +37,7 @@ class _CodeScreenState extends State<CodeScreen> {
         appBar: AppBar(
           centerTitle: true,
           toolbarHeight: 50.0,
-          backgroundColor: const Color.fromARGB(255, 216, 216, 223),
+          backgroundColor: Colors.transparent,
           elevation: 0.1,
           leading: IconButton(
               onPressed: () {
@@ -48,10 +49,7 @@ class _CodeScreenState extends State<CodeScreen> {
               children: [
                 Text(
                   "Code Helper",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                  ),
+                  style: textTheme.bodyLarge!,
                 ),
               ],
             ),
@@ -63,7 +61,7 @@ class _CodeScreenState extends State<CodeScreen> {
                 },
                 icon: Icon(
                   Icons.refresh,
-                  color: Colors.white,
+                  color: Colors.black,
                 ))
           ],
         ),

@@ -28,49 +28,49 @@ class _BotListState extends State<BotList> {
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
-      appBar: AppBar(
-        toolbarHeight: 44.0,
-        centerTitle: false,
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        title: Text(
-          'Mimir',
-          style: textTheme.displaySmall!
-              .copyWith(color: lightTheme.colorScheme.primary),
-          // style: TextStyle(
-          //   color: Color.fromARGB(255, 29, 78, 137),
-          //   fontSize: 48.0,
-          // ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    content: Text('추후 업데이트 예정 입니다.'),
-                    insetPadding: const EdgeInsets.fromLTRB(0, 80, 0, 80),
-                    actions: [
-                      TextButton(
-                        child: const Text('확인'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-            icon: Icon(
-              Icons.person_add_alt_1_sharp,
-              color: Colors.black,
-            ),
-          )
-        ],
-      ),
+      // appBar: AppBar(
+      //   toolbarHeight: 44.0,
+      //   centerTitle: false,
+      //   backgroundColor: Colors.transparent,
+      //   elevation: 0.0,
+      //   title: Text(
+      //     'Mimir',
+      //     style: textTheme.displaySmall!
+      //         .copyWith(color: lightTheme.colorScheme.primary),
+      //     // style: TextStyle(
+      //     //   color: Color.fromARGB(255, 29, 78, 137),
+      //     //   fontSize: 48.0,
+      //     // ),
+      //   ),
+      //   actions: [
+      //     IconButton(
+      //       onPressed: () {
+      //         showDialog(
+      //           context: context,
+      //           barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부
+      //           builder: (BuildContext context) {
+      //             return AlertDialog(
+      //               content: Text('추후 업데이트 예정 입니다.'),
+      //               insetPadding: const EdgeInsets.fromLTRB(0, 80, 0, 80),
+      //               actions: [
+      //                 TextButton(
+      //                   child: const Text('확인'),
+      //                   onPressed: () {
+      //                     Navigator.of(context).pop();
+      //                   },
+      //                 ),
+      //               ],
+      //             );
+      //           },
+      //         );
+      //       },
+      //       icon: Icon(
+      //         Icons.person_add_alt_1_sharp,
+      //         color: Colors.black,
+      //       ),
+      //     )
+      //   ],
+      // ),
       body: Column(
         children: [
           ListTile(
@@ -115,8 +115,8 @@ class _BotListState extends State<BotList> {
                   ),
                   subtitle: Text(
                     '한국어로 대답하는 ChatGPT 입니다.',
-                    style: textTheme.bodyMedium!
-                        .copyWith(color: lightTheme.colorScheme.surfaceVariant),
+                    style: textTheme.bodySmall!
+                        .copyWith(color: lightTheme.disabledColor),
                   ),
                   onTap: () {
                     Navigator.push(
@@ -136,24 +136,20 @@ class _BotListState extends State<BotList> {
                   title: RichText(
                     text: TextSpan(
                       text: 'Dall-E',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                      ),
+                      style: textTheme.bodyLarge!,
                       children: <TextSpan>[
                         TextSpan(
                           text: ' Korean Ver.',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                          ),
+                          style: textTheme.bodySmall!.copyWith(
+                              color: lightTheme.colorScheme.onSurface),
                         ),
                       ],
                     ),
                   ),
                   subtitle: Text(
                     '영어로 번역해서 이미지를 생성해주는 AI 입니다.',
-                    style: TextStyle(fontSize: 12.0),
+                    style: textTheme.bodySmall!
+                        .copyWith(color: lightTheme.disabledColor),
                   ),
                   onTap: () {
                     Navigator.push(
@@ -172,11 +168,12 @@ class _BotListState extends State<BotList> {
                   ),
                   title: Text(
                     'Code Helper',
-                    style: TextStyle(fontSize: 20.0),
+                    style: textTheme.bodyLarge!,
                   ),
                   subtitle: Text(
                     '코드를 작성해주는 AI 입니다.',
-                    style: TextStyle(fontSize: 12.0),
+                    style: textTheme.bodySmall!
+                        .copyWith(color: lightTheme.disabledColor),
                   ),
                   onTap: () {
                     Navigator.push(
@@ -193,13 +190,23 @@ class _BotListState extends State<BotList> {
                     width: 40,
                     height: 40,
                   ),
-                  title: Text(
-                    'ChatGPT 4',
-                    style: TextStyle(fontSize: 20.0),
+                  title: RichText(
+                    text: TextSpan(
+                      text: 'GPT 4',
+                      style: textTheme.bodyLarge!,
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: ' Korean Ver.',
+                          style: textTheme.bodySmall!.copyWith(
+                              color: lightTheme.colorScheme.onSurface),
+                        ),
+                      ],
+                    ),
                   ),
                   subtitle: Text(
                     'ChatGPT 4 입니다.',
-                    style: TextStyle(fontSize: 12.0),
+                    style: textTheme.bodySmall!
+                        .copyWith(color: lightTheme.disabledColor),
                   ),
                   onTap: () {
                     Navigator.push(
