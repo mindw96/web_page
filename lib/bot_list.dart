@@ -1,9 +1,12 @@
+import 'package:Mimir/image_ori_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Mimir/chat_screen.dart';
 import 'package:Mimir/code_screen.dart';
 import 'package:Mimir/gpt4_screen.dart';
+import 'package:Mimir/gpt4_ori_screen.dart';
 import 'package:Mimir/image_screen.dart';
+import 'package:Mimir/image_ori_screen.dart';
 
 class BotList extends StatefulWidget {
   const BotList({super.key});
@@ -213,6 +216,52 @@ class _BotListState extends State<BotList> {
                       context,
                       CupertinoPageRoute(
                         builder: (_) => GPT4Screen(),
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Image.asset(
+                    'assets/images/ChatGPT_logo.png',
+                    width: 40,
+                    height: 40,
+                  ),
+                  title: Text(
+                    'GPT 4',
+                  ),
+                  subtitle: Text(
+                    'ChatGPT 4 입니다.',
+                    style: textTheme.bodySmall!
+                        .copyWith(color: lightTheme.disabledColor),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (_) => GPT4OriScreen(),
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Image.asset(
+                    'assets/images/ChatGPT_logo.png',
+                    width: 40,
+                    height: 40,
+                  ),
+                  title: Text(
+                    'DALL E 3',
+                  ),
+                  subtitle: Text(
+                    'DALL E 3 입니다.',
+                    style: textTheme.bodySmall!
+                        .copyWith(color: lightTheme.disabledColor),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (_) => ImageScreenOri(),
                       ),
                     );
                   },

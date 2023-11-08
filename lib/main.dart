@@ -1,11 +1,13 @@
 import 'package:Mimir/bot_list.dart';
 import 'package:Mimir/code_message.dart';
 import 'package:Mimir/gpt4_message.dart';
+import 'package:Mimir/gpt4_ori_message.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'chat_message.dart';
 import 'chats.dart';
 import 'image_message.dart';
+import 'image_ori_message.dart';
 
 Future<void> main() async {
   runApp(
@@ -13,8 +15,10 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => MessageService()),
         ChangeNotifierProvider(create: (context) => ImageService()),
+        ChangeNotifierProvider(create: (context) => ImageServiceOri()),
         ChangeNotifierProvider(create: (context) => CodeService()),
         ChangeNotifierProvider(create: (context) => GPT4MessageService()),
+        ChangeNotifierProvider(create: (context) => GPT4OriMessageService()),
       ],
       child: ChatApp(),
     ),

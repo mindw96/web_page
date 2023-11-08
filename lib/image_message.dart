@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:logging/logging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,15 +15,15 @@ class ImageService extends ChangeNotifier {
 
   Future<String> translate(String message) async {
     Map<String, String> trans_headers = {
-      'Accept': 'application/json',
+      // 'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization':
           'Bearer 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',
     };
 
     Map<String, dynamic> trans_data = {
-      'model': 'gpt-3.5-turbo',
-      "temperature": 0.2,
+      'model': 'gpt-3.5-turbo-1106',
+      "temperature": 0,
       "messages": [
         {
           'role': 'system',
@@ -75,11 +77,11 @@ class ImageService extends ChangeNotifier {
 
     Map<String, dynamic> data = {
       'prompt': message,
-      //'model': 'code-davinci-002',
+      'model': 'dall-e-3',
       "n": 1,
       // "size": "256x256"
-      "size": "512x512"
-      // "size": "1024x1024"
+      // "size": "512x512"
+      "size": "1024x1024"
     };
 
     var response = await http.post(
@@ -87,13 +89,16 @@ class ImageService extends ChangeNotifier {
       headers: headers,
       body: jsonEncode(data),
     );
-
+    print(response.statusCode);
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonResponse =
           jsonDecode(utf8.decode(response.bodyBytes));
+      print(jsonResponse);
       String reply = jsonResponse['data'][0]['url'].toString();
+      print(reply);
       return reply;
     } else {
+      print('fail');
       throw Exception('API request failed');
     }
   }

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class GPT4MessageService extends ChangeNotifier {
+class GPT4OriMessageService extends ChangeNotifier {
   List<String> messageList = [];
 
   String api = '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';
@@ -23,18 +23,13 @@ class GPT4MessageService extends ChangeNotifier {
     };
 
     Map<String, dynamic> data = {
-      'model': 'gpt-4',
+      'model': 'gpt-4-1106-preview',
       "temperature": 0.7,
     };
     List messages = [
       {
         'role': 'system',
         'content': 'You are very kind, intelligent, and perceptive',
-      },
-      {
-        'role': 'system',
-        'content':
-            'You are assistant for koreans, so you have to reply only korean',
       },
     ];
     if (messageList.length >= 3) {
