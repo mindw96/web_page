@@ -27,7 +27,8 @@ class ImageServiceOri extends ChangeNotifier {
       "n": 1,
       // "size": "256x256"
       // "size": "512x512"
-      "size": "1024x1024"
+      "size": "1024x1024",
+      "quality": "hd",
     };
 
     var response = await http.post(

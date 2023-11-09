@@ -116,6 +116,11 @@ class _ImageScreenState extends State<ImageScreenOri> {
                                                               .size
                                                               .width *
                                                           0.7,
+                                                  maxHeight:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.7,
                                                 ),
                                                 child: Image.network(
                                                   snapshot.data.toString(),
