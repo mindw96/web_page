@@ -32,7 +32,7 @@ class _ChatListState extends State<ChatList> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         title: Text(
-          '채팅',
+          '',
           style: textTheme.displaySmall!
               .copyWith(color: lightTheme.colorScheme.primary),
         ),

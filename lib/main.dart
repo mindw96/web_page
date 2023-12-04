@@ -68,12 +68,12 @@ class _HomePageState extends State<HomePage> {
             NavigationDestination(
               icon: Icon(Icons.assignment_ind_outlined),
               selectedIcon: Icon(Icons.assignment_ind_rounded),
-              label: '',
+              label: 'Bot List',
             ),
             NavigationDestination(
               icon: Icon(Icons.chat_bubble_outline_rounded),
               selectedIcon: Icon(Icons.chat_bubble_rounded),
-              label: '',
+              label: 'Chat',
             ),
           ],
         ),

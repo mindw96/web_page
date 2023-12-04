@@ -1,4 +1,3 @@
-import 'package:Mimir/image_ori_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Mimir/chat_screen.dart';
@@ -207,7 +206,7 @@ class _BotListState extends State<BotList> {
                     ),
                   ),
                   subtitle: Text(
-                    'ChatGPT 4 입니다.',
+                    '한국어로 대답하는 ChatGPT 4 입니다.',
                     style: textTheme.bodySmall!
                         .copyWith(color: lightTheme.disabledColor),
                   ),
