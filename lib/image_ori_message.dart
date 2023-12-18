@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 class ImageServiceOri extends ChangeNotifier {
   List<String> messageList = [];
 
-  String api = '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';
+  String api = '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';
   String endpoint = 'https://api.openai.com/v1/images/generations';
 
   enterMessage(String message) {
@@ -28,6 +28,7 @@ class ImageServiceOri extends ChangeNotifier {
       // "size": "256x256"
       // "size": "512x512"
       "size": "1024x1024",
+      "style": "natural",
       "quality": "hd",
     };
 
@@ -36,13 +37,14 @@ class ImageServiceOri extends ChangeNotifier {
       headers: headers,
       body: jsonEncode(data),
     );
+    print(response.statusCode);
 
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonResponse =
           jsonDecode(utf8.decode(response.bodyBytes));
 
       String reply = jsonResponse['data'][0]['url'].toString();
-
+      print(reply);
       return reply;
     } else {
       throw Exception('API request failed');

@@ -1,8 +1,9 @@
+import 'package:Mimir/image_message.dart';
+import 'package:Mimir/image_ori_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
-import 'package:Mimir/image_message.dart';
 import 'package:provider/provider.dart';
 
 class ImageScreenOri extends StatefulWidget {
@@ -29,9 +30,9 @@ class _ImageScreenState extends State<ImageScreenOri> {
       _needScroll = false;
     }
 
-    return Consumer<ImageService>(builder: (context, imageService, child) {
-      List<String> messageList = imageService.messageList;
-      List<String> transList = imageService.transList;
+    return Consumer<ImageServiceOri>(
+        builder: (context, imageServiceOri, child) {
+      List<String> messageList = imageServiceOri.messageList;
 
       return Scaffold(
         backgroundColor: Colors.white,
@@ -69,7 +70,7 @@ class _ImageScreenState extends State<ImageScreenOri> {
           actions: [
             IconButton(
               onPressed: () {
-                imageService.clearMessageList();
+                imageServiceOri.clearMessageList();
               },
               icon: Icon(
                 Icons.refresh,
@@ -95,13 +96,13 @@ class _ImageScreenState extends State<ImageScreenOri> {
                             ? messageList[index] == ''
                                 ? FutureBuilder(
                                     future:
-                                        imageService.getRespone(userMessage),
+                                        imageServiceOri.getRespone(userMessage),
                                     builder: (context, snapshot) {
                                       List<Widget> children;
                                       if (snapshot.connectionState ==
                                           ConnectionState.done) {
-                                        imageService.deleteLast();
-                                        imageService.enterMessage(
+                                        imageServiceOri.deleteLast();
+                                        imageServiceOri.enterMessage(
                                             snapshot.data.toString());
                                         WidgetsBinding.instance
                                             .addPostFrameCallback(
@@ -225,12 +226,12 @@ class _ImageScreenState extends State<ImageScreenOri> {
                           userMessage = textController.text.trim();
                           textController.clear();
 
-                          imageService.enterMessage(userMessage);
+                          imageServiceOri.enterMessage(userMessage);
 
                           WidgetsBinding.instance
                               .addPostFrameCallback((_) => _scrollToBottom());
 
-                          imageService.enterMessage('');
+                          imageServiceOri.enterMessage('');
                         },
                         child: const Icon(
                           CupertinoIcons.arrow_up_circle_fill,
