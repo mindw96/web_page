@@ -220,6 +220,7 @@ class _ChatScreenState extends State<GPT4OriScreen> {
                     color: Colors.white,
                     height: 45,
                     child: TextField(
+                      keyboardType: TextInputType.text,
                       controller: textController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
