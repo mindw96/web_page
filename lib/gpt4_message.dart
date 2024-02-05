@@ -23,7 +23,7 @@ class GPT4MessageService extends ChangeNotifier {
     };
 
     Map<String, dynamic> data = {
-      'model': 'gpt-4',
+      'model': 'gpt-4-0125-preview',
       "temperature": 0.7,
     };
     List messages = [
