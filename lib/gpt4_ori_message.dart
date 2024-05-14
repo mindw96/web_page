@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 class GPT4OriMessageService extends ChangeNotifier {
   List<String> messageList = [];
 
-  String api = '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';
+  String api = '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';
   String endpoint = 'https://api.openai.com/v1/chat/completions';
 
   enterMessage(String message) {
@@ -23,7 +23,7 @@ class GPT4OriMessageService extends ChangeNotifier {
     };
 
     Map<String, dynamic> data = {
-      'model': 'gpt-4-0125-preview',
+      'model': 'gpt-4o',
       "temperature": 0.7,
     };
     List messages = [
@@ -50,7 +50,7 @@ class GPT4OriMessageService extends ChangeNotifier {
       headers: headers,
       body: jsonEncode(data),
     );
-
+    print(response.statusCode);
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonResponse =
           jsonDecode(utf8.decode(response.bodyBytes));

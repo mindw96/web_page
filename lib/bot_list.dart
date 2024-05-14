@@ -226,10 +226,10 @@ class _BotListState extends State<BotList> {
                     height: 40,
                   ),
                   title: Text(
-                    'GPT 4',
+                    'GPT 4o',
                   ),
                   subtitle: Text(
-                    'ChatGPT 4 입니다.',
+                    'ChatGPT 4o 입니다.',
                     style: textTheme.bodySmall!
                         .copyWith(color: lightTheme.disabledColor),
                   ),
