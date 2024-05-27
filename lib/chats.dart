@@ -1,9 +1,8 @@
+import 'package:Mimir/gpt4_ori_screen.dart';
+import 'package:Mimir/image_ori_screen.dart';
+import 'package:Mimir/solar_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'chat_screen.dart';
-import 'code_screen.dart';
-import 'image_screen.dart';
 
 class ChatList extends StatefulWidget {
   @override
@@ -52,17 +51,10 @@ class _ChatListState extends State<ChatList> {
                     text: TextSpan(
                       text: 'Chat GPT',
                       style: textTheme.bodyMedium!,
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: ' Korean Ver.',
-                          style: textTheme.bodySmall!.copyWith(
-                              color: lightTheme.colorScheme.onSurface),
-                        ),
-                      ],
                     ),
                   ),
                   subtitle: Text(
-                    '대화 내용 요약 들어갈 곳',
+                    '대화 내용 요약',
                     style: textTheme.bodyLarge!.copyWith(
                         color: lightTheme.colorScheme.onPrimaryContainer),
                   ),
@@ -70,7 +62,7 @@ class _ChatListState extends State<ChatList> {
                     Navigator.push(
                       context,
                       CupertinoPageRoute(
-                        builder: (_) => ChatScreen(),
+                        builder: (_) => GPT4OriScreen(),
                       ),
                     );
                   },
@@ -84,53 +76,43 @@ class _ChatListState extends State<ChatList> {
                   title: RichText(
                     text: TextSpan(
                       text: 'Dall-E',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                      ),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: ' Korean Ver.',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
+                      style: textTheme.bodyMedium!,
                     ),
                   ),
                   subtitle: Text(
-                    '영어로 번역해서 이미지를 생성해주는 AI 입니다.',
-                    style: TextStyle(fontSize: 12.0),
+                    '대화 내용 요약',
+                    style: textTheme.bodyLarge!.copyWith(
+                        color: lightTheme.colorScheme.onPrimaryContainer),
                   ),
                   onTap: () {
                     Navigator.push(
                       context,
                       CupertinoPageRoute(
-                        builder: (_) => ImageScreen(),
+                        builder: (_) => ImageScreenOri(),
                       ),
                     );
                   },
                 ),
                 ListTile(
                   leading: Image.asset(
-                    'assets/images/ChatGPT_logo.png',
+                    'assets/images/solar_logo.png',
                     width: 40,
                     height: 40,
                   ),
                   title: Text(
-                    'Code Helper',
-                    style: TextStyle(fontSize: 20.0),
+                    'SOLAR',
+                    style: textTheme.bodyMedium!,
                   ),
                   subtitle: Text(
-                    '코드를 작성해주는 AI 입니다.',
-                    style: TextStyle(fontSize: 12.0),
+                    '대화 내용 요약',
+                    style: textTheme.bodyLarge!.copyWith(
+                        color: lightTheme.colorScheme.onPrimaryContainer),
                   ),
                   onTap: () {
                     Navigator.push(
                       context,
                       CupertinoPageRoute(
-                        builder: (_) => CodeScreen(),
+                        builder: (_) => SOLARScreen(),
                       ),
                     );
                   },
