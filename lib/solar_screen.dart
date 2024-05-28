@@ -58,7 +58,13 @@ class _ChatScreenState extends State<SOLARScreen> {
                 )) {
               // Shift + Enter 눌렀을 때 줄넘김을 처리합니다.
               textController.text += '\n';
-            } else if (event.logicalKey == LogicalKeyboardKey.enter) {
+            } else if (event.physicalKey == PhysicalKeyboardKey.enter &&
+                !HardwareKeyboard.instance.physicalKeysPressed.any(
+                  (key) => <PhysicalKeyboardKey>{
+                    PhysicalKeyboardKey.shiftLeft,
+                    PhysicalKeyboardKey.shiftRight,
+                  }.contains(key),
+                )) {
               // Enter 키를 눌렀을 때 전송 동작을 수행합니다.
               _handleSubmitted(textController.text);
             }
@@ -258,7 +264,7 @@ class _ChatScreenState extends State<SOLARScreen> {
                       onKeyEvent: _handleRawKeyEvent,
                       child: TextField(
                         onSubmitted: (_) {},
-                        textInputAction: TextInputAction.send,
+                        textInputAction: TextInputAction.none,
                         keyboardType: TextInputType.multiline,
                         controller: textController,
                         decoration: InputDecoration(
