@@ -24,7 +24,7 @@ class _ChatScreenState extends State<GPT4OriScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final FocusNode _focusNode = FocusNode();
+    final FocusNode focusNode = FocusNode();
 
     if (_needScroll) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
@@ -53,16 +53,7 @@ class _ChatScreenState extends State<GPT4OriScreen> {
             ),
             title: const Center(
               child: Column(
-                children: [
-                  Text('GPT 4')
-                  // Text(
-                  //   "GPT Korean Ver.",
-                  //   style: TextStyle(
-                  //     color: Colors.black,
-                  //     fontSize: 24,
-                  //   ),
-                  // ),
-                ],
+                children: [Text('GPT 4')],
               ),
             ),
             actions: [
@@ -222,7 +213,7 @@ class _ChatScreenState extends State<GPT4OriScreen> {
                     color: Colors.white,
                     height: 45,
                     child: KeyboardListener(
-                      focusNode: _focusNode,
+                      focusNode: focusNode,
                       onKeyEvent: (value) {
                         final enterPressedWithshift = value is KeyDownEvent &&
                             value.physicalKey == PhysicalKeyboardKey.enter &&
@@ -242,6 +233,7 @@ class _ChatScreenState extends State<GPT4OriScreen> {
                               }.contains(key),
                             );
                         if (enterPressedWithshift) {
+                          print(messageList);
                         } else if (enterPressedWithoutshift) {
                           setState(() {
                             userMessage = textController.text;
@@ -249,26 +241,12 @@ class _ChatScreenState extends State<GPT4OriScreen> {
                             messageService.enterMessage(userMessage);
                             WidgetsBinding.instance
                                 .addPostFrameCallback((_) => _scrollToBottom());
-
                             messageService.enterMessage('');
                           });
                         }
                       },
                       child: TextField(
-                        textInputAction: TextInputAction.newline,
-                        // onSubmitted: (text) {
-                        //   if (text.trim().isNotEmpty) {
-                        //     setState(() {
-                        //       userMessage = textController.text.trim();
-                        //       messageService.enterMessage(userMessage);
-                        //       WidgetsBinding.instance.addPostFrameCallback(
-                        //           (_) => _scrollToBottom());
-
-                        //       messageService.enterMessage('');
-                        //       textController.clear();
-                        //     });
-                        //   }
-                        // },
+                        textInputAction: TextInputAction.none,
                         keyboardType: TextInputType.multiline,
                         controller: textController,
                         decoration: InputDecoration(
@@ -278,7 +256,7 @@ class _ChatScreenState extends State<GPT4OriScreen> {
                           suffixIcon: CupertinoButton(
                             padding: const EdgeInsets.only(right: 10),
                             onPressed: () async {
-                              userMessage = textController.text.trim();
+                              userMessage = textController.text;
                               textController.clear();
 
                               messageService.enterMessage(userMessage);

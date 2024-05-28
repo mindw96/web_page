@@ -24,7 +24,8 @@ class _ChatScreenState extends State<SOLARScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final FocusNode focusNode = FocusNode();
+
     if (_needScroll) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
       _needScroll = false;
@@ -219,40 +220,76 @@ class _ChatScreenState extends State<SOLARScreen> {
                   child: Container(
                     color: Colors.white,
                     height: 45,
-                    child: TextField(
-                      keyboardType: TextInputType.text,
-                      controller: textController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(38),
-                        ),
-                        suffixIcon: CupertinoButton(
-                          padding: const EdgeInsets.only(right: 10),
-                          onPressed: () async {
-                            userMessage = textController.text.trim();
+                    child: KeyboardListener(
+                      focusNode: focusNode,
+                      onKeyEvent: (value) {
+                        final enterPressedWithshift = value is KeyDownEvent &&
+                            value.physicalKey == PhysicalKeyboardKey.enter &&
+                            HardwareKeyboard.instance.physicalKeysPressed.any(
+                              (key) => <PhysicalKeyboardKey>{
+                                PhysicalKeyboardKey.shiftLeft,
+                                PhysicalKeyboardKey.shiftRight,
+                              }.contains(key),
+                            );
+                        final enterPressedWithoutshift = value
+                                is KeyDownEvent &&
+                            value.physicalKey == PhysicalKeyboardKey.enter &&
+                            !HardwareKeyboard.instance.physicalKeysPressed.any(
+                              (key) => <PhysicalKeyboardKey>{
+                                PhysicalKeyboardKey.shiftLeft,
+                                PhysicalKeyboardKey.shiftRight,
+                              }.contains(key),
+                            );
+                        if (enterPressedWithshift) {
+                          print(messageList);
+                        } else if (enterPressedWithoutshift) {
+                          setState(() {
+                            userMessage = textController.text;
                             textController.clear();
-
                             messageService.enterMessage(userMessage);
                             WidgetsBinding.instance
                                 .addPostFrameCallback((_) => _scrollToBottom());
-
                             messageService.enterMessage('');
-                          },
-                          child: const Icon(
-                            CupertinoIcons.arrow_up_circle_fill,
-                            size: 30,
+                          });
+                        }
+                      },
+                      child: TextField(
+                        textInputAction: TextInputAction.none,
+                        keyboardType: TextInputType.multiline,
+                        controller: textController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(38),
+                          ),
+                          suffixIcon: CupertinoButton(
+                            padding: const EdgeInsets.only(right: 10),
+                            onPressed: () async {
+                              userMessage = textController.text.trim();
+                              textController.clear();
+
+                              messageService.enterMessage(userMessage);
+                              WidgetsBinding.instance.addPostFrameCallback(
+                                  (_) => _scrollToBottom());
+
+                              messageService.enterMessage('');
+                            },
+                            child: const Icon(
+                              CupertinoIcons.arrow_up_circle_fill,
+                              size: 30,
+                            ),
+                          ),
+                          hintText: '내용을 입력하세요',
+                          isDense: false,
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(30, 1, 1, 1),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue),
+                            borderRadius: BorderRadius.circular(38),
                           ),
                         ),
-                        hintText: '내용을 입력하세요',
-                        isDense: false,
-                        contentPadding: const EdgeInsets.fromLTRB(30, 1, 1, 1),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(38),
-                        ),
+                        maxLines: 10,
+                        minLines: 1,
                       ),
-                      maxLines: 10,
-                      minLines: 1,
                     ),
                   ),
                 ),
