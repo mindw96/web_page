@@ -1,4 +1,4 @@
-name: iGPT
+name: Mimir
 on:
   push:
     branches:
@@ -17,7 +17,8 @@ jobs:
       
       - run: flutter pub get
       
-      - run: flutter build web --base-href "/" --web-renderer html --release
+      # - run: flutter build web --base-href "/" --web-renderer html --release
+      - run: flutter build web --base-href "/" --web-renderer canvaskit --release
       - run: pwd
       - run: cd ./build/web
       - run: echo "mindong.uk" > ./build/web/CNAME

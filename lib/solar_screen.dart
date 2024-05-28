@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -26,6 +28,14 @@ class _ChatScreenState extends State<SOLARScreen> {
   Widget build(BuildContext context) {
     final FocusNode focusNode = FocusNode();
 
+    @override
+    void dispose() {
+      focusNode.dispose();
+      textController.dispose();
+      _scrollController.dispose();
+      super.dispose();
+    }
+
     if (_needScroll) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
       _needScroll = false;
@@ -33,44 +43,6 @@ class _ChatScreenState extends State<SOLARScreen> {
 
     return Consumer<SOLARMessageService>(
       builder: (context, messageService, child) {
-        void _handleSubmitted(String text) {
-          // 여기에 전송 동작을 구현합니다.
-          print('Submitted: $text');
-          // 텍스트 필드를 비웁니다.
-          setState(() {
-            userMessage = textController.text;
-            textController.clear();
-            messageService.enterMessage(userMessage);
-            WidgetsBinding.instance
-                .addPostFrameCallback((_) => _scrollToBottom());
-            messageService.enterMessage('');
-          });
-        }
-
-        void _handleRawKeyEvent(KeyEvent event) {
-          if (event is KeyDownEvent) {
-            if (event.physicalKey == PhysicalKeyboardKey.enter &&
-                HardwareKeyboard.instance.physicalKeysPressed.any(
-                  (key) => <PhysicalKeyboardKey>{
-                    PhysicalKeyboardKey.shiftLeft,
-                    PhysicalKeyboardKey.shiftRight,
-                  }.contains(key),
-                )) {
-              // Shift + Enter 눌렀을 때 줄넘김을 처리합니다.
-              textController.text += '\n';
-            } else if (event.physicalKey == PhysicalKeyboardKey.enter &&
-                !HardwareKeyboard.instance.physicalKeysPressed.any(
-                  (key) => <PhysicalKeyboardKey>{
-                    PhysicalKeyboardKey.shiftLeft,
-                    PhysicalKeyboardKey.shiftRight,
-                  }.contains(key),
-                )) {
-              // Enter 키를 눌렀을 때 전송 동작을 수행합니다.
-              _handleSubmitted(textController.text);
-            }
-          }
-        }
-
         List<String> messageList = messageService.messageList;
         return Scaffold(
           backgroundColor: Colors.white,
@@ -261,7 +233,37 @@ class _ChatScreenState extends State<SOLARScreen> {
                     height: 45,
                     child: KeyboardListener(
                       focusNode: focusNode,
-                      onKeyEvent: _handleRawKeyEvent,
+                      onKeyEvent: (value) {
+                        final enterPressedWithshift = value is KeyDownEvent &&
+                            value.physicalKey == PhysicalKeyboardKey.enter &&
+                            HardwareKeyboard.instance.physicalKeysPressed.any(
+                              (key) => <PhysicalKeyboardKey>{
+                                PhysicalKeyboardKey.shiftLeft,
+                                PhysicalKeyboardKey.shiftRight,
+                              }.contains(key),
+                            );
+                        final enterPressedWithoutshift = value
+                                is KeyDownEvent &&
+                            value.physicalKey == PhysicalKeyboardKey.enter &&
+                            !HardwareKeyboard.instance.physicalKeysPressed.any(
+                              (key) => <PhysicalKeyboardKey>{
+                                PhysicalKeyboardKey.shiftLeft,
+                                PhysicalKeyboardKey.shiftRight,
+                              }.contains(key),
+                            );
+                        if (enterPressedWithshift) {
+                          print(messageList);
+                        } else if (enterPressedWithoutshift) {
+                          setState(() {
+                            userMessage = textController.text;
+                            textController.clear();
+                            messageService.enterMessage(userMessage);
+                            WidgetsBinding.instance
+                                .addPostFrameCallback((_) => _scrollToBottom());
+                            messageService.enterMessage('');
+                          });
+                        }
+                      },
                       child: TextField(
                         onSubmitted: (_) {},
                         textInputAction: TextInputAction.none,
