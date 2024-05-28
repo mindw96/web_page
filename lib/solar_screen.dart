@@ -33,6 +33,38 @@ class _ChatScreenState extends State<SOLARScreen> {
 
     return Consumer<SOLARMessageService>(
       builder: (context, messageService, child) {
+        void _handleSubmitted(String text) {
+          // 여기에 전송 동작을 구현합니다.
+          print('Submitted: $text');
+          // 텍스트 필드를 비웁니다.
+          setState(() {
+            userMessage = textController.text;
+            textController.clear();
+            messageService.enterMessage(userMessage);
+            WidgetsBinding.instance
+                .addPostFrameCallback((_) => _scrollToBottom());
+            messageService.enterMessage('');
+          });
+        }
+
+        void _handleRawKeyEvent(KeyEvent event) {
+          if (event is KeyDownEvent) {
+            if (event.physicalKey == PhysicalKeyboardKey.enter &&
+                HardwareKeyboard.instance.physicalKeysPressed.any(
+                  (key) => <PhysicalKeyboardKey>{
+                    PhysicalKeyboardKey.shiftLeft,
+                    PhysicalKeyboardKey.shiftRight,
+                  }.contains(key),
+                )) {
+              // Shift + Enter 눌렀을 때 줄넘김을 처리합니다.
+              textController.text += '\n';
+            } else if (event.logicalKey == LogicalKeyboardKey.enter) {
+              // Enter 키를 눌렀을 때 전송 동작을 수행합니다.
+              _handleSubmitted(textController.text);
+            }
+          }
+        }
+
         List<String> messageList = messageService.messageList;
         return Scaffold(
           backgroundColor: Colors.white,
@@ -46,12 +78,12 @@ class _ChatScreenState extends State<SOLARScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back_sharp,
                 color: Colors.black,
               ),
             ),
-            title: Center(
+            title: const Center(
               child: Column(
                 children: [
                   Text('SOLAR')
@@ -70,7 +102,7 @@ class _ChatScreenState extends State<SOLARScreen> {
                 onPressed: () {
                   messageService.clearMessageList();
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.refresh,
                   color: Colors.black,
                 ),
@@ -131,8 +163,9 @@ class _ChatScreenState extends State<SOLARScreen> {
                                               padding: const EdgeInsets.only(
                                                   left: 10),
                                               child: Container(
-                                                constraints: BoxConstraints(
-                                                    maxWidth: 50.0),
+                                                constraints:
+                                                    const BoxConstraints(
+                                                        maxWidth: 50.0),
                                                 margin:
                                                     const EdgeInsets.all(10),
                                                 decoration: const BoxDecoration(
@@ -222,39 +255,10 @@ class _ChatScreenState extends State<SOLARScreen> {
                     height: 45,
                     child: KeyboardListener(
                       focusNode: focusNode,
-                      onKeyEvent: (value) {
-                        final enterPressedWithshift = value is KeyDownEvent &&
-                            value.physicalKey == PhysicalKeyboardKey.enter &&
-                            HardwareKeyboard.instance.physicalKeysPressed.any(
-                              (key) => <PhysicalKeyboardKey>{
-                                PhysicalKeyboardKey.shiftLeft,
-                                PhysicalKeyboardKey.shiftRight,
-                              }.contains(key),
-                            );
-                        final enterPressedWithoutshift = value
-                                is KeyDownEvent &&
-                            value.physicalKey == PhysicalKeyboardKey.enter &&
-                            !HardwareKeyboard.instance.physicalKeysPressed.any(
-                              (key) => <PhysicalKeyboardKey>{
-                                PhysicalKeyboardKey.shiftLeft,
-                                PhysicalKeyboardKey.shiftRight,
-                              }.contains(key),
-                            );
-                        if (enterPressedWithshift) {
-                          print(messageList);
-                        } else if (enterPressedWithoutshift) {
-                          setState(() {
-                            userMessage = textController.text;
-                            textController.clear();
-                            messageService.enterMessage(userMessage);
-                            WidgetsBinding.instance
-                                .addPostFrameCallback((_) => _scrollToBottom());
-                            messageService.enterMessage('');
-                          });
-                        }
-                      },
+                      onKeyEvent: _handleRawKeyEvent,
                       child: TextField(
-                        textInputAction: TextInputAction.none,
+                        onSubmitted: (_) {},
+                        textInputAction: TextInputAction.send,
                         keyboardType: TextInputType.multiline,
                         controller: textController,
                         decoration: InputDecoration(
@@ -283,17 +287,17 @@ class _ChatScreenState extends State<SOLARScreen> {
                           contentPadding:
                               const EdgeInsets.fromLTRB(30, 1, 1, 1),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue),
+                            borderSide: const BorderSide(color: Colors.blue),
                             borderRadius: BorderRadius.circular(38),
                           ),
                         ),
-                        maxLines: 10,
+                        maxLines: null,
                         minLines: 1,
                       ),
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20.0,
                 ),
               ],

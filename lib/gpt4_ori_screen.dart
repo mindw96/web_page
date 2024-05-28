@@ -246,6 +246,7 @@ class _ChatScreenState extends State<GPT4OriScreen> {
                         }
                       },
                       child: TextField(
+                        onSubmitted: (_) {},
                         textInputAction: TextInputAction.none,
                         keyboardType: TextInputType.multiline,
                         controller: textController,
