@@ -19,10 +19,6 @@ class _ChatListState extends State<ChatList> {
       colorSchemeSeed: selectedColor,
       brightness: Brightness.light,
     );
-    ThemeData darkTheme = ThemeData(
-      colorSchemeSeed: selectedColor,
-      brightness: Brightness.dark,
-    );
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),

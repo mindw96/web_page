@@ -28,14 +28,6 @@ class _ChatScreenState extends State<SOLARScreen> {
   Widget build(BuildContext context) {
     final FocusNode focusNode = FocusNode();
 
-    @override
-    void dispose() {
-      focusNode.dispose();
-      textController.dispose();
-      _scrollController.dispose();
-      super.dispose();
-    }
-
     if (_needScroll) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
       _needScroll = false;
@@ -63,16 +55,7 @@ class _ChatScreenState extends State<SOLARScreen> {
             ),
             title: const Center(
               child: Column(
-                children: [
-                  Text('SOLAR')
-                  // Text(
-                  //   "GPT Korean Ver.",
-                  //   style: TextStyle(
-                  //     color: Colors.black,
-                  //     fontSize: 24,
-                  //   ),
-                  // ),
-                ],
+                children: [Text('SOLAR')],
               ),
             ),
             actions: [
@@ -234,7 +217,7 @@ class _ChatScreenState extends State<SOLARScreen> {
                     child: KeyboardListener(
                       focusNode: focusNode,
                       onKeyEvent: (value) {
-                        final enterPressedWithshift = value is KeyDownEvent &&
+                        final enterPressedWithshift = value is KeyRepeatEvent &&
                             value.physicalKey == PhysicalKeyboardKey.enter &&
                             HardwareKeyboard.instance.physicalKeysPressed.any(
                               (key) => <PhysicalKeyboardKey>{
@@ -252,21 +235,30 @@ class _ChatScreenState extends State<SOLARScreen> {
                               }.contains(key),
                             );
                         if (enterPressedWithshift) {
-                          print(messageList);
+                          print('shift enter');
+                          String newValue = '${textController.text}\n';
+                          textController.text = newValue;
                         } else if (enterPressedWithoutshift) {
-                          setState(() {
-                            userMessage = textController.text;
-                            textController.clear();
-                            messageService.enterMessage(userMessage);
-                            WidgetsBinding.instance
-                                .addPostFrameCallback((_) => _scrollToBottom());
-                            messageService.enterMessage('');
-                          });
+                          if (textController.value.composing.isValid) {
+                            print('composing');
+                            return;
+                          } else {
+                            print('enter pressed');
+                            setState(() {
+                              userMessage = textController.text;
+                              textController.clear();
+                              messageService.enterMessage(userMessage);
+                              WidgetsBinding.instance.addPostFrameCallback(
+                                  (_) => _scrollToBottom());
+                              messageService.enterMessage('');
+                            });
+                            return;
+                          }
                         }
                       },
                       child: TextField(
-                        onSubmitted: (_) {},
-                        textInputAction: TextInputAction.none,
+                        // onSubmitted: (_) {},
+                        // textInputAction: TextInputAction.none,
                         keyboardType: TextInputType.multiline,
                         controller: textController,
                         decoration: InputDecoration(

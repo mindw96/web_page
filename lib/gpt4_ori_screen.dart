@@ -215,7 +215,7 @@ class _ChatScreenState extends State<GPT4OriScreen> {
                     child: KeyboardListener(
                       focusNode: focusNode,
                       onKeyEvent: (value) {
-                        final enterPressedWithshift = value is KeyDownEvent &&
+                        final enterPressedWithshift = value is KeyRepeatEvent &&
                             value.physicalKey == PhysicalKeyboardKey.enter &&
                             HardwareKeyboard.instance.physicalKeysPressed.any(
                               (key) => <PhysicalKeyboardKey>{
@@ -233,21 +233,32 @@ class _ChatScreenState extends State<GPT4OriScreen> {
                               }.contains(key),
                             );
                         if (enterPressedWithshift) {
-                          print(messageList);
+                          print('shift enter');
+                          String newValue = '${textController.text}\n';
+                          textController.text = newValue;
                         } else if (enterPressedWithoutshift) {
-                          setState(() {
-                            userMessage = textController.text;
-                            textController.clear();
-                            messageService.enterMessage(userMessage);
-                            WidgetsBinding.instance
-                                .addPostFrameCallback((_) => _scrollToBottom());
-                            messageService.enterMessage('');
-                          });
+                          if (textController.value.composing.isValid) {
+                            print('composing');
+                            return;
+                          } else {
+                            print('enter pressed');
+                            setState(() {
+                              userMessage = textController.text;
+                              textController.clear();
+                              messageService.enterMessage(userMessage);
+                              WidgetsBinding.instance.addPostFrameCallback(
+                                  (_) => _scrollToBottom());
+                              messageService.enterMessage('');
+                            });
+                            return;
+                          }
                         }
                       },
                       child: TextField(
-                        onSubmitted: (_) {},
-                        textInputAction: TextInputAction.none,
+                        // onSubmitted: (_) {},
+                        // focusNode: focusNode,
+                        // textInputAction: TextInputAction.newline,
+                        // onEditingComplete: () {},
                         keyboardType: TextInputType.multiline,
                         controller: textController,
                         decoration: InputDecoration(
