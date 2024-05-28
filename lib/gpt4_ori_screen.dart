@@ -24,7 +24,8 @@ class _ChatScreenState extends State<GPT4OriScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final FocusNode _focusNode = FocusNode();
+
     if (_needScroll) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
       _needScroll = false;
@@ -45,12 +46,12 @@ class _ChatScreenState extends State<GPT4OriScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back_sharp,
                 color: Colors.black,
               ),
             ),
-            title: Center(
+            title: const Center(
               child: Column(
                 children: [
                   Text('GPT 4')
@@ -69,7 +70,7 @@ class _ChatScreenState extends State<GPT4OriScreen> {
                 onPressed: () {
                   messageService.clearMessageList();
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.refresh,
                   color: Colors.black,
                 ),
@@ -130,8 +131,9 @@ class _ChatScreenState extends State<GPT4OriScreen> {
                                               padding: const EdgeInsets.only(
                                                   left: 10),
                                               child: Container(
-                                                constraints: BoxConstraints(
-                                                    maxWidth: 50.0),
+                                                constraints:
+                                                    const BoxConstraints(
+                                                        maxWidth: 50.0),
                                                 margin:
                                                     const EdgeInsets.all(10),
                                                 decoration: const BoxDecoration(
@@ -219,44 +221,93 @@ class _ChatScreenState extends State<GPT4OriScreen> {
                   child: Container(
                     color: Colors.white,
                     height: 45,
-                    child: TextField(
-                      keyboardType: TextInputType.text,
-                      controller: textController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(38),
-                        ),
-                        suffixIcon: CupertinoButton(
-                          padding: const EdgeInsets.only(right: 10),
-                          onPressed: () async {
-                            userMessage = textController.text.trim();
+                    child: KeyboardListener(
+                      focusNode: _focusNode,
+                      onKeyEvent: (value) {
+                        final enterPressedWithshift = value is KeyDownEvent &&
+                            value.physicalKey == PhysicalKeyboardKey.enter &&
+                            HardwareKeyboard.instance.physicalKeysPressed.any(
+                              (key) => <PhysicalKeyboardKey>{
+                                PhysicalKeyboardKey.shiftLeft,
+                                PhysicalKeyboardKey.shiftRight,
+                              }.contains(key),
+                            );
+                        final enterPressedWithoutshift = value
+                                is KeyDownEvent &&
+                            value.physicalKey == PhysicalKeyboardKey.enter &&
+                            !HardwareKeyboard.instance.physicalKeysPressed.any(
+                              (key) => <PhysicalKeyboardKey>{
+                                PhysicalKeyboardKey.shiftLeft,
+                                PhysicalKeyboardKey.shiftRight,
+                              }.contains(key),
+                            );
+                        if (enterPressedWithshift) {
+                        } else if (enterPressedWithoutshift) {
+                          setState(() {
+                            userMessage = textController.text;
                             textController.clear();
-
                             messageService.enterMessage(userMessage);
                             WidgetsBinding.instance
                                 .addPostFrameCallback((_) => _scrollToBottom());
 
                             messageService.enterMessage('');
-                          },
-                          child: const Icon(
-                            CupertinoIcons.arrow_up_circle_fill,
-                            size: 30,
+                          });
+                        }
+                      },
+                      child: TextField(
+                        textInputAction: TextInputAction.newline,
+                        // onSubmitted: (text) {
+                        //   if (text.trim().isNotEmpty) {
+                        //     setState(() {
+                        //       userMessage = textController.text.trim();
+                        //       messageService.enterMessage(userMessage);
+                        //       WidgetsBinding.instance.addPostFrameCallback(
+                        //           (_) => _scrollToBottom());
+
+                        //       messageService.enterMessage('');
+                        //       textController.clear();
+                        //     });
+                        //   }
+                        // },
+                        keyboardType: TextInputType.multiline,
+                        controller: textController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(38),
+                          ),
+                          suffixIcon: CupertinoButton(
+                            padding: const EdgeInsets.only(right: 10),
+                            onPressed: () async {
+                              userMessage = textController.text.trim();
+                              textController.clear();
+
+                              messageService.enterMessage(userMessage);
+                              WidgetsBinding.instance.addPostFrameCallback(
+                                  (_) => _scrollToBottom());
+
+                              messageService.enterMessage('');
+                            },
+                            child: const Icon(
+                              CupertinoIcons.arrow_up_circle_fill,
+                              size: 30,
+                            ),
+                          ),
+                          hintText: '내용을 입력하세요',
+                          isDense: false,
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(30, 1, 1, 1),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.blue),
+                            borderRadius: BorderRadius.circular(38),
                           ),
                         ),
-                        hintText: '내용을 입력하세요',
-                        isDense: false,
-                        contentPadding: const EdgeInsets.fromLTRB(30, 1, 1, 1),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(38),
-                        ),
+                        maxLines: null,
+                        minLines: 1,
                       ),
-                      maxLines: 10,
-                      minLines: 1,
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20.0,
                 ),
               ],
