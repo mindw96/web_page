@@ -53,7 +53,7 @@ class _ChatScreenState extends State<GPT4OriScreen> {
             ),
             title: const Center(
               child: Column(
-                children: [Text('GPT 4')],
+                children: [Text('GPT 4o')],
               ),
             ),
             actions: [

@@ -6,7 +6,8 @@ import 'package:http/http.dart' as http;
 class ImageServiceOri extends ChangeNotifier {
   List<String> messageList = [];
 
-  String api = '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';
+  String api =
+      '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';
   String endpoint = 'https://api.openai.com/v1/images/generations';
 
   enterMessage(String message) {
