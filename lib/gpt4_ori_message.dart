@@ -7,7 +7,7 @@ class GPT4OriMessageService extends ChangeNotifier {
   List<String> messageList = [];
 
   String api =
-      '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';
+      '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';
   String endpoint = 'https://api.openai.com/v1/chat/completions';
 
   enterMessage(String message) {
