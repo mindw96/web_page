@@ -24,10 +24,6 @@ class _BotListState extends State<BotList> {
       colorSchemeSeed: selectedColor,
       brightness: Brightness.light,
     );
-    ThemeData darkTheme = ThemeData(
-      colorSchemeSeed: selectedColor,
-      brightness: Brightness.dark,
-    );
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
