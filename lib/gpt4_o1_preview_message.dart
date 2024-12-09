@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class GPT4OriMessageService extends ChangeNotifier {
+class GPT4_o1_preview_MessageService extends ChangeNotifier {
   List<String> messageList = [];
 
   String api =
-      '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';
+      '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';
   String endpoint = 'https://api.openai.com/v1/chat/completions';
 
   enterMessage(String message) {
@@ -24,7 +24,7 @@ class GPT4OriMessageService extends ChangeNotifier {
     };
 
     Map<String, dynamic> data = {
-      'model': 'gpt-4o-2024-11-20',
+      'model': 'o1-preview',
       // "temperature": 0.7,
     };
     List messages = [

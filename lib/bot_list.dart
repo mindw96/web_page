@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:Mimir/chat_screen.dart';
 import 'package:Mimir/code_screen.dart';
 import 'package:Mimir/gpt4_screen.dart';
+import 'package:Mimir/gpt4_o1_preview_screen.dart';
 import 'package:Mimir/gpt4_ori_screen.dart';
 import 'package:Mimir/image_screen.dart';
 import 'package:Mimir/image_ori_screen.dart';
@@ -175,6 +176,29 @@ class _BotListState extends State<BotList> {
                       context,
                       CupertinoPageRoute(
                         builder: (_) => GPT4OriScreen(),
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Image.asset(
+                    'assets/images/ChatGPT_logo.png',
+                    width: 40,
+                    height: 40,
+                  ),
+                  title: Text(
+                    'GPT o1 Preview',
+                  ),
+                  subtitle: Text(
+                    'ChatGPT o1 Preview 입니다.',
+                    style: textTheme.bodySmall!
+                        .copyWith(color: lightTheme.disabledColor),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (_) => GPT4_o1_Screen(),
                       ),
                     );
                   },
