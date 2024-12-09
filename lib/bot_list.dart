@@ -198,7 +198,7 @@ class _BotListState extends State<BotList> {
                     Navigator.push(
                       context,
                       CupertinoPageRoute(
-                        builder: (_) => GPT4_o1_Screen(),
+                        builder: (_) => GPT4o1Screen(),
                       ),
                     );
                   },

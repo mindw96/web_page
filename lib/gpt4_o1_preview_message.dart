@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class GPT4_o1_preview_MessageService extends ChangeNotifier {
+class GPT4o1PreviewMessageService extends ChangeNotifier {
   List<String> messageList = [];
 
   String api =

@@ -6,12 +6,12 @@ import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:Mimir/gpt4_o1_preview_message.dart';
 import 'package:provider/provider.dart';
 
-class GPT4_o1_Screen extends StatefulWidget {
+class GPT4o1Screen extends StatefulWidget {
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<GPT4_o1_Screen> {
+class _ChatScreenState extends State<GPT4o1Screen> {
   TextEditingController textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
@@ -31,7 +31,7 @@ class _ChatScreenState extends State<GPT4_o1_Screen> {
       _needScroll = false;
     }
 
-    return Consumer<GPT4_o1_preview_MessageService>(
+    return Consumer<GPT4o1PreviewMessageService>(
       builder: (context, messageService, child) {
         List<String> messageList = messageService.messageList;
         return Scaffold(
