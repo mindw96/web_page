@@ -6,7 +6,8 @@ import 'package:http/http.dart' as http;
 class GPT4MessageService extends ChangeNotifier {
   List<String> messageList = [];
 
-  String api = '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';
+  String api =
+      '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';
   String endpoint = 'https://api.openai.com/v1/chat/completions';
 
   enterMessage(String message) {

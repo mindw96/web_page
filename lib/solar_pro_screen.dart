@@ -5,15 +5,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
-import 'package:Mimir/solar_message.dart';
+import 'package:Mimir/solar_pro_message.dart';
 import 'package:provider/provider.dart';
 
-class SOLARScreen extends StatefulWidget {
+class SOLARPROScreen extends StatefulWidget {
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<SOLARScreen> {
+class _ChatScreenState extends State<SOLARPROScreen> {
   TextEditingController textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
@@ -33,7 +33,7 @@ class _ChatScreenState extends State<SOLARScreen> {
       _needScroll = false;
     }
 
-    return Consumer<SOLARMessageService>(
+    return Consumer<SOLARPROMessageService>(
       builder: (context, messageService, child) {
         List<String> messageList = messageService.messageList;
         return Scaffold(
@@ -55,7 +55,7 @@ class _ChatScreenState extends State<SOLARScreen> {
             ),
             title: const Center(
               child: Column(
-                children: [Text('SOLAR Mini')],
+                children: [Text('SOLAR Pro')],
               ),
             ),
             actions: [

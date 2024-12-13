@@ -7,7 +7,7 @@ class ImageServiceOri extends ChangeNotifier {
   List<String> messageList = [];
 
   String api =
-      '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';
+      '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';
   String endpoint = 'https://api.openai.com/v1/images/generations';
 
   enterMessage(String message) {

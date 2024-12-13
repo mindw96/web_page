@@ -8,6 +8,7 @@ import 'package:Mimir/gpt4_ori_screen.dart';
 import 'package:Mimir/image_screen.dart';
 import 'package:Mimir/image_ori_screen.dart';
 import 'package:Mimir/solar_screen.dart';
+import 'package:Mimir/solar_pro_screen.dart';
 
 class BotList extends StatefulWidget {
   const BotList({super.key});
@@ -233,10 +234,10 @@ class _BotListState extends State<BotList> {
                     height: 40,
                   ),
                   title: Text(
-                    'SoLAR',
+                    'SOLAR Mini',
                   ),
                   subtitle: Text(
-                    'Solar-1-mini-chat 입니다.',
+                    'Solar-Mini 입니다.',
                     style: textTheme.bodySmall!
                         .copyWith(color: lightTheme.disabledColor),
                   ),
@@ -245,6 +246,29 @@ class _BotListState extends State<BotList> {
                       context,
                       CupertinoPageRoute(
                         builder: (_) => SOLARScreen(),
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Image.asset(
+                    'assets/images/solar_logo.png',
+                    width: 40,
+                    height: 40,
+                  ),
+                  title: Text(
+                    'SOLAR Pro',
+                  ),
+                  subtitle: Text(
+                    'Solar-Pro 입니다.',
+                    style: textTheme.bodySmall!
+                        .copyWith(color: lightTheme.disabledColor),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (_) => SOLARPROScreen(),
                       ),
                     );
                   },

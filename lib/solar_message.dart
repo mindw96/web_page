@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 class SOLARMessageService extends ChangeNotifier {
   List<String> messageList = [];
 
-  String api = 'up_YBlqxTopLy9ySR0keAKupkbVQ2qzJ';
+  String api = 'up_oGANfwnEipwyN9094yq6zh9eW6Txz';
   String endpoint = 'https://api.upstage.ai/v1/solar/chat/completions';
 
   enterMessage(String message) {
@@ -23,7 +23,7 @@ class SOLARMessageService extends ChangeNotifier {
     };
 
     Map<String, dynamic> data = {
-      'model': 'solar-1-mini-chat',
+      'model': 'solar-mini',
       "temperature": 0.7,
     };
     List messages = [
