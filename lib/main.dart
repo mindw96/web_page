@@ -65,47 +65,57 @@ class LoginScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
-              controller: _idController,
-              decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue),
+            Center(
+              child: SizedBox(
+                width: 250,
+                child: TextField(
+                  controller: _idController,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue),
+                    ),
+                    label: Text(
+                      style: TextStyle(color: Colors.black),
+                      'ID',
+                    ),
+                    border: OutlineInputBorder(),
+                  ),
                 ),
-                label: Text(
-                  style: TextStyle(color: Colors.black),
-                  'ID',
-                ),
-                border: OutlineInputBorder(),
               ),
             ),
             SizedBox(height: 16),
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                label: Text(
-                  style: TextStyle(color: Colors.black),
-                  'Password',
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue),
-                ),
-                border: OutlineInputBorder(),
-              ),
-              onSubmitted: (value) {
-                String id = _idController.text;
-                String password = _passwordController.text;
-                // 여기에 로그인 처리 로직 추가
-                if (id == 'admin' && password == '8888') {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BotList(),
+            Center(
+              child: SizedBox(
+                width: 250,
+                child: TextField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    label: Text(
+                      style: TextStyle(color: Colors.black),
+                      'Password',
                     ),
-                  );
-                }
-                print('ID: $id, Password: $password');
-              },
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue),
+                    ),
+                    border: OutlineInputBorder(),
+                  ),
+                  onSubmitted: (value) {
+                    String id = _idController.text;
+                    String password = _passwordController.text;
+                    // 여기에 로그인 처리 로직 추가
+                    if (id == 'admin' && password == '8888') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BotList(),
+                        ),
+                      );
+                    }
+                    print('ID: $id, Password: $password');
+                  },
+                ),
+              ),
             ),
             SizedBox(height: 16),
             ElevatedButton(
