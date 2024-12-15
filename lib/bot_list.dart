@@ -1,14 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:Mimir/chat_screen.dart';
-import 'package:Mimir/code_screen.dart';
-import 'package:Mimir/gpt4_screen.dart';
-import 'package:Mimir/gpt4_o1_preview_screen.dart';
-import 'package:Mimir/gpt4_ori_screen.dart';
-import 'package:Mimir/image_screen.dart';
-import 'package:Mimir/image_ori_screen.dart';
-import 'package:Mimir/solar_screen.dart';
-import 'package:Mimir/solar_pro_screen.dart';
+import 'package:mimir/gpt4_o1_preview_screen.dart';
+import 'package:mimir/gpt4_ori_screen.dart';
+import 'package:mimir/image_ori_screen.dart';
+import 'package:mimir/solar_screen.dart';
+import 'package:mimir/solar_pro_screen.dart';
 
 class BotList extends StatefulWidget {
   const BotList({super.key});

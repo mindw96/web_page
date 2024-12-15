@@ -7,7 +7,7 @@ class GPT4o1PreviewMessageService extends ChangeNotifier {
   List<String> messageList = [];
 
   String api =
-      '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';
+      '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';
   String endpoint = 'https://api.openai.com/v1/chat/completions';
 
   enterMessage(String message) {
@@ -51,6 +51,7 @@ class GPT4o1PreviewMessageService extends ChangeNotifier {
       headers: headers,
       body: jsonEncode(data),
     );
+    // ignore: avoid_print
     print(response.statusCode);
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonResponse =

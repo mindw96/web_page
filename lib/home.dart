@@ -1,16 +1,6 @@
-import 'package:Mimir/bot_list.dart';
-import 'package:Mimir/code_message.dart';
-import 'package:Mimir/gpt4_message.dart';
-import 'package:Mimir/gpt4_ori_message.dart';
-import 'package:provider/provider.dart';
+import 'package:mimir/bot_list.dart';
 import 'package:flutter/material.dart';
-import 'package:Mimir/solar_message.dart';
-import 'package:Mimir/solar_pro_message.dart';
-import 'package:Mimir/gpt4_o1_preview_message.dart';
-import 'chat_message.dart';
 import 'chats.dart';
-import 'image_message.dart';
-import 'image_ori_message.dart';
 
 // class ChatApp extends StatelessWidget {
 //   @override
@@ -26,7 +16,7 @@ import 'image_ori_message.dart';
 // }
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();

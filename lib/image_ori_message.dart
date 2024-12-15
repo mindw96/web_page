@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -7,7 +9,7 @@ class ImageServiceOri extends ChangeNotifier {
   List<String> messageList = [];
 
   String api =
-      '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';
+      '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';
   String endpoint = 'https://api.openai.com/v1/images/generations';
 
   enterMessage(String message) {
@@ -39,7 +41,6 @@ class ImageServiceOri extends ChangeNotifier {
       body: jsonEncode(data),
     );
     print(response.statusCode);
-    print(response.body);
 
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonResponse =

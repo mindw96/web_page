@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
-import 'package:Mimir/code_message.dart';
+import 'package:mimir/code_message.dart';
 import 'package:provider/provider.dart';
 
 class CodeScreen extends StatefulWidget {
+  const CodeScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _CodeScreenState createState() => _CodeScreenState();
 }
 

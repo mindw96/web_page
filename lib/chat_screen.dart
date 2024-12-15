@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
-import 'package:Mimir/chat_message.dart';
+import 'package:mimir/chat_message.dart';
 import 'package:provider/provider.dart';
 
 class ChatScreen extends StatefulWidget {
+  const ChatScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _ChatScreenState createState() => _ChatScreenState();
 }
 

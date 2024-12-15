@@ -1,15 +1,18 @@
-import 'dart:ui';
+// ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
-import 'package:Mimir/solar_pro_message.dart';
+import 'package:mimir/solar_pro_message.dart';
 import 'package:provider/provider.dart';
 
 class SOLARPROScreen extends StatefulWidget {
+  const SOLARPROScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _ChatScreenState createState() => _ChatScreenState();
 }
 

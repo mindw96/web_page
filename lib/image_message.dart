@@ -1,7 +1,6 @@
-import 'dart:convert';
-import 'dart:math';
+// ignore_for_file: avoid_print
 
-import 'package:logging/logging.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -10,19 +9,19 @@ class ImageService extends ChangeNotifier {
   List<String> transList = [];
 
   String api =
-      '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';
+      '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';
   String endpoint = 'https://api.openai.com/v1/images/generations';
-  String trans_endpoint = 'https://api.openai.com/v1/chat/completions';
+  String transEndpoint = 'https://api.openai.com/v1/chat/completions';
 
   Future<String> translate(String message) async {
-    Map<String, String> trans_headers = {
+    Map<String, String> transHeaders = {
       // 'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization':
           'Bearer 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',
     };
 
-    Map<String, dynamic> trans_data = {
+    Map<String, dynamic> transData = {
       'model': 'gpt-4o',
       "temperature": 0,
       "messages": [
@@ -41,18 +40,18 @@ class ImageService extends ChangeNotifier {
       ]
     };
 
-    var trans_response = await http.post(
-      Uri.parse(trans_endpoint),
-      headers: trans_headers,
-      body: jsonEncode(trans_data),
+    var transResponse = await http.post(
+      Uri.parse(transEndpoint),
+      headers: transHeaders,
+      body: jsonEncode(transData),
     );
 
-    if (trans_response.statusCode == 200) {
-      Map<String, dynamic> trans_jsonResponse =
-          jsonDecode(utf8.decode(trans_response.bodyBytes));
-      String trans_reply =
-          trans_jsonResponse['choices'][0]['message']['content'].toString();
-      return trans_reply;
+    if (transResponse.statusCode == 200) {
+      Map<String, dynamic> transJsonResponse =
+          jsonDecode(utf8.decode(transResponse.bodyBytes));
+      String transReply =
+          transJsonResponse['choices'][0]['message']['content'].toString();
+      return transReply;
     } else {
       throw Exception('API request failed');
     }

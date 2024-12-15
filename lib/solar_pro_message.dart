@@ -50,6 +50,7 @@ class SOLARPROMessageService extends ChangeNotifier {
       headers: headers,
       body: jsonEncode(data),
     );
+    // ignore: avoid_print
     print(response.statusCode);
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonResponse =

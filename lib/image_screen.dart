@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
-import 'package:Mimir/image_message.dart';
+import 'package:mimir/image_message.dart';
 import 'package:provider/provider.dart';
 
 class ImageScreen extends StatefulWidget {
+  const ImageScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _ImageScreenState createState() => _ImageScreenState();
 }
 

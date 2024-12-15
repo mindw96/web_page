@@ -1,10 +1,12 @@
-import 'package:Mimir/gpt4_ori_screen.dart';
-import 'package:Mimir/image_ori_screen.dart';
-import 'package:Mimir/solar_screen.dart';
+import 'package:mimir/gpt4_ori_screen.dart';
+import 'package:mimir/image_ori_screen.dart';
+import 'package:mimir/solar_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ChatList extends StatefulWidget {
+  const ChatList({super.key});
+
   @override
   State<ChatList> createState() => _ChatListState();
 }

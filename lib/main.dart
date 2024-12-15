@@ -1,17 +1,14 @@
-import 'package:Mimir/home.dart';
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:Mimir/bot_list.dart';
-import 'package:Mimir/code_message.dart';
-import 'package:Mimir/gpt4_message.dart';
-import 'package:Mimir/gpt4_ori_message.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter/material.dart';
-import 'package:Mimir/solar_message.dart';
-import 'package:Mimir/solar_pro_message.dart';
-import 'package:Mimir/gpt4_o1_preview_message.dart';
+import 'package:mimir/bot_list.dart';
+import 'package:mimir/gpt4_message.dart';
+import 'package:mimir/gpt4_ori_message.dart';
+import 'package:mimir/solar_message.dart';
+import 'package:mimir/solar_pro_message.dart';
+import 'package:mimir/gpt4_o1_preview_message.dart';
 import 'chat_message.dart';
-import 'chats.dart';
 import 'image_message.dart';
 import 'image_ori_message.dart';
 
@@ -35,6 +32,8 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -47,7 +46,7 @@ class LoginScreen extends StatelessWidget {
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _login() {}
+  LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +110,24 @@ class LoginScreen extends StatelessWidget {
                           builder: (context) => BotList(),
                         ),
                       );
+                    } else {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('로그인 실패'),
+                              content: Text('ID 또는 비밀번호가 일치하지 않습니다.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('확인'),
+                                ),
+                              ],
+                            );
+                          });
+                      _passwordController.clear();
                     }
                     print('ID: $id, Password: $password');
                   },
@@ -130,6 +147,24 @@ class LoginScreen extends StatelessWidget {
                       builder: (context) => BotList(),
                     ),
                   );
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('로그인 실패'),
+                          content: Text('ID 또는 비밀번호가 일치하지 않습니다.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('확인'),
+                            ),
+                          ],
+                        );
+                      });
+                  _passwordController.clear();
                 }
                 print('ID: $id, Password: $password');
               },
@@ -140,9 +175,9 @@ class LoginScreen extends StatelessWidget {
                 shadowColor: Colors.blue,
                 elevation: 0,
               ).copyWith(
-                overlayColor: MaterialStateProperty.resolveWith((states) {
-                  if (states.contains(MaterialState.hovered)) {
-                    return Colors.blue.withOpacity(0.3);
+                overlayColor: WidgetStateProperty.resolveWith((states) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return Colors.blue.withValues(alpha: 0.3);
                   }
                   return null;
                 }),
