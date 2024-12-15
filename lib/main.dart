@@ -118,14 +118,21 @@ class LoginScreen extends StatelessWidget {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
+                              backgroundColor: Colors.white,
                               title: Text('로그인 실패'),
                               content: Text('ID 또는 비밀번호가 일치하지 않습니다.'),
                               actions: [
                                 TextButton(
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: Colors.white,
+                                      overlayColor: Colors.blue),
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Text('확인'),
+                                  child: Text(
+                                    '확인',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
                                 ),
                               ],
                             );
@@ -155,14 +162,21 @@ class LoginScreen extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
+                          backgroundColor: Colors.white,
                           title: Text('로그인 실패'),
                           content: Text('ID 또는 비밀번호가 일치하지 않습니다.'),
                           actions: [
                             TextButton(
+                              style: TextButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  overlayColor: Colors.blue),
                               onPressed: () {
-                                Navigator.of(context).pop();
+                                Navigator.pop(context);
                               },
-                              child: Text('확인'),
+                              child: Text(
+                                '확인',
+                                style: TextStyle(color: Colors.black),
+                              ),
                             ),
                           ],
                         );

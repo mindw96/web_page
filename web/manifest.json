@@ -1,6 +1,6 @@
 {
-    "name": "iGPT",
-    "short_name": "iGPT",
+    "name": "Mimir",
+    "short_name": "Mimir",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
