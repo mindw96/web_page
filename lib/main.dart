@@ -8,6 +8,7 @@ import 'package:mimir/gpt4_ori_message.dart';
 import 'package:mimir/solar_message.dart';
 import 'package:mimir/solar_pro_message.dart';
 import 'package:mimir/gpt4_o1_preview_message.dart';
+import 'package:mimir/gemini_1.5_flash_message.dart';
 import 'chat_message.dart';
 import 'image_message.dart';
 import 'image_ori_message.dart';
@@ -25,6 +26,8 @@ Future<void> main() async {
             create: (context) => GPT4o1PreviewMessageService()),
         ChangeNotifierProvider(create: (context) => SOLARMessageService()),
         ChangeNotifierProvider(create: (context) => SOLARPROMessageService()),
+        ChangeNotifierProvider(
+            create: (context) => GeminiFlashMessageService()),
       ],
       child: MyApp(),
     ),

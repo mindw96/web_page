@@ -5,6 +5,7 @@ import 'package:mimir/gpt4_ori_screen.dart';
 import 'package:mimir/image_ori_screen.dart';
 import 'package:mimir/solar_screen.dart';
 import 'package:mimir/solar_pro_screen.dart';
+import 'package:mimir/gemini_1.5_flash_screen.dart';
 
 class BotList extends StatefulWidget {
   const BotList({super.key});
@@ -30,130 +31,6 @@ class _BotListState extends State<BotList> {
           Expanded(
             child: ListView(
               children: [
-                // ListTile(
-                //   shape: Theme.of(context).listTileTheme.shape,
-                //   leading: Image.asset(
-                //     'assets/images/ChatGPT_logo.png',
-                //     width: 40,
-                //     height: 40,
-                //   ),
-                //   title: RichText(
-                //     text: TextSpan(
-                //       text: 'Chat GPT',
-                //       style: textTheme.bodyLarge!,
-                //       children: <TextSpan>[
-                //         TextSpan(
-                //           text: ' Korean Ver.',
-                //           style: textTheme.bodySmall!.copyWith(
-                //               color: lightTheme.colorScheme.onSurface),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                //   subtitle: Text(
-                //     '한국어로 대답하는 ChatGPT 입니다.',
-                //     style: textTheme.bodySmall!
-                //         .copyWith(color: lightTheme.disabledColor),
-                //   ),
-                //   onTap: () {
-                //     Navigator.push(
-                //       context,
-                //       CupertinoPageRoute(
-                //         builder: (_) => ChatScreen(),
-                //       ),
-                //     );
-                //   },
-                // ),
-                // ListTile(
-                //   leading: Image.asset(
-                //     'assets/images/ChatGPT_logo.png',
-                //     width: 40,
-                //     height: 40,
-                //   ),
-                //   title: RichText(
-                //     text: TextSpan(
-                //       text: 'Dall-E',
-                //       style: textTheme.bodyLarge!,
-                //       children: <TextSpan>[
-                //         TextSpan(
-                //           text: ' Korean Ver.',
-                //           style: textTheme.bodySmall!.copyWith(
-                //               color: lightTheme.colorScheme.onSurface),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                //   subtitle: Text(
-                //     '영어로 번역해서 이미지를 생성해주는 AI 입니다.',
-                //     style: textTheme.bodySmall!
-                //         .copyWith(color: lightTheme.disabledColor),
-                //   ),
-                //   onTap: () {
-                //     Navigator.push(
-                //       context,
-                //       CupertinoPageRoute(
-                //         builder: (_) => ImageScreen(),
-                //       ),
-                //     );
-                //   },
-                // ),
-                // ListTile(
-                //   leading: Image.asset(
-                //     'assets/images/ChatGPT_logo.png',
-                //     width: 40,
-                //     height: 40,
-                //   ),
-                //   title: Text(
-                //     'Code Helper',
-                //     style: textTheme.bodyLarge!,
-                //   ),
-                //   subtitle: Text(
-                //     '코드를 작성해주는 AI 입니다.',
-                //     style: textTheme.bodySmall!
-                //         .copyWith(color: lightTheme.disabledColor),
-                //   ),
-                //   onTap: () {
-                //     Navigator.push(
-                //       context,
-                //       CupertinoPageRoute(
-                //         builder: (_) => CodeScreen(),
-                //       ),
-                //     );
-                //   },
-                // ),
-                // ListTile(
-                //   leading: Image.asset(
-                //     'assets/images/ChatGPT_logo.png',
-                //     width: 40,
-                //     height: 40,
-                //   ),
-                //   title: RichText(
-                //     text: TextSpan(
-                //       text: 'GPT 4',
-                //       style: textTheme.bodyLarge!,
-                //       children: <TextSpan>[
-                //         TextSpan(
-                //           text: ' Korean Ver.',
-                //           style: textTheme.bodySmall!.copyWith(
-                //               color: lightTheme.colorScheme.onSurface),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                //   subtitle: Text(
-                //     '한국어로 대답하는 ChatGPT 4 입니다.',
-                //     style: textTheme.bodySmall!
-                //         .copyWith(color: lightTheme.disabledColor),
-                //   ),
-                //   onTap: () {
-                //     Navigator.push(
-                //       context,
-                //       CupertinoPageRoute(
-                //         builder: (_) => GPT4Screen(),
-                //       ),
-                //     );
-                //   },
-                // ),
                 ListTile(
                   leading: Image.asset(
                     'assets/images/ChatGPT_logo.png',
@@ -265,6 +142,29 @@ class _BotListState extends State<BotList> {
                       context,
                       CupertinoPageRoute(
                         builder: (_) => SOLARPROScreen(),
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Image.asset(
+                    'assets/images/gemini_logo.png',
+                    width: 40,
+                    height: 40,
+                  ),
+                  title: Text(
+                    'Gemini 1.5 Flash',
+                  ),
+                  subtitle: Text(
+                    'Gemini 1.5 Flash 입니다.',
+                    style: textTheme.bodySmall!
+                        .copyWith(color: lightTheme.disabledColor),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (_) => GeminiFlashScreen(),
                       ),
                     );
                   },
