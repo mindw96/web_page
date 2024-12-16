@@ -143,7 +143,7 @@ class _BotListState extends State<BotList> {
                     'Gemini 1.5 Flash',
                   ),
                   subtitle: Text(
-                    'Gemini 1.5 Flash 입니다.',
+                    'Gemini 1.5 Flash 입니다. (Only Single Turn)',
                     style: textTheme.bodySmall!
                         .copyWith(color: lightTheme.disabledColor),
                   ),

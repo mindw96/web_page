@@ -17,7 +17,6 @@ import 'package:mimir/solar_pro_message.dart';
 import 'package:mimir/gpt4_o1_preview_message.dart';
 import 'package:mimir/gemini_1.5_flash_message.dart';
 import 'package:mimir/sign_up.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'image_ori_message.dart';
 
 Future<void> main() async {
@@ -25,7 +24,6 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await dotenv.load(fileName: "assets/.env");
   runApp(
     MultiProvider(
       providers: [

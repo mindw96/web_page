@@ -1,13 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class SOLARMessageService extends ChangeNotifier {
   List<String> messageList = [];
 
-  String api = dotenv.env['UPSTAGE_API_KEY']!;
+  String api = 'up_StGH4M2qyAcJvSeXV9E0YHcgwlss2';
   String endpoint = 'https://api.upstage.ai/v1/solar/chat/completions';
 
   enterMessage(String message) {
