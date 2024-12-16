@@ -2,12 +2,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class GeminiFlashMessageService extends ChangeNotifier {
   List<String> messageList = [];
 
-  String api = 'AIzaSyD1-ZELGflXEEvhcQG-IroTYZQK1lPU868';
+  String api = dotenv.env['GEMINI_API_KEY']!;
   String endpoint =
       'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions';
 

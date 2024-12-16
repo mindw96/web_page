@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class GPT4OriMessageService extends ChangeNotifier {
   List<String> messageList = [];
 
-  String api =
-      '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';
+  String api = dotenv.env['OPENAI_API_KEY']!;
   String endpoint = 'https://api.openai.com/v1/chat/completions';
 
   enterMessage(String message) {

@@ -5,15 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:mimir/firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:mimir/bot_list.dart';
-import 'package:mimir/gpt4_message.dart';
 import 'package:mimir/gpt4_ori_message.dart';
 import 'package:mimir/solar_message.dart';
 import 'package:mimir/solar_pro_message.dart';
 import 'package:mimir/gpt4_o1_preview_message.dart';
 import 'package:mimir/gemini_1.5_flash_message.dart';
 import 'package:mimir/sign_up.dart';
-import 'chat_message.dart';
-import 'image_message.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'image_ori_message.dart';
 
 Future<void> main() async {
@@ -21,13 +19,11 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await dotenv.load(fileName: "assets/config/.env");
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => MessageService()),
-        ChangeNotifierProvider(create: (context) => ImageService()),
         ChangeNotifierProvider(create: (context) => ImageServiceOri()),
-        ChangeNotifierProvider(create: (context) => GPT4MessageService()),
         ChangeNotifierProvider(create: (context) => GPT4OriMessageService()),
         ChangeNotifierProvider(
             create: (context) => GPT4o1PreviewMessageService()),

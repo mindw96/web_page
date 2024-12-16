@@ -3,13 +3,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class ImageServiceOri extends ChangeNotifier {
   List<String> messageList = [];
 
-  String api =
-      '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';
+  String api = dotenv.env['OPENAI_API_KEY']!;
   String endpoint = 'https://api.openai.com/v1/images/generations';
 
   enterMessage(String message) {
