@@ -1,0 +1,6 @@
+Platform  Firebase App Id
+web       1:400645385268:web:1afa1d3ec4427867b5ae61
+android   1:400645385268:android:f966c1b7d5d9d8e0b5ae61
+ios       1:400645385268:ios:9e6d46c058a48fc9b5ae61
+macos     1:400645385268:ios:9e6d46c058a48fc9b5ae61
+windows   1:400645385268:web:dd31dfc48467ca3cb5ae61

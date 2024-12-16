@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print
-
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mimir/firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:mimir/bot_list.dart';
 import 'package:mimir/gpt4_message.dart';
@@ -9,11 +11,16 @@ import 'package:mimir/solar_message.dart';
 import 'package:mimir/solar_pro_message.dart';
 import 'package:mimir/gpt4_o1_preview_message.dart';
 import 'package:mimir/gemini_1.5_flash_message.dart';
+import 'package:mimir/sign_up.dart';
 import 'chat_message.dart';
 import 'image_message.dart';
 import 'image_ori_message.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
     MultiProvider(
       providers: [
@@ -29,7 +36,7 @@ Future<void> main() async {
         ChangeNotifierProvider(
             create: (context) => GeminiFlashMessageService()),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
@@ -40,172 +47,279 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LoginScreen(),
+      initialRoute: '/login',
+      routes: {
+        '/login': (context) => LoginScreen(),
+        '/bot_list': (context) => BotList(),
+        '/signup': (context) => const SignupPage(),
+      },
     );
   }
 }
 
-class LoginScreen extends StatelessWidget {
-  final TextEditingController _idController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
-  LoginScreen({super.key});
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _key = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Text(
-          'Mimir',
-          textAlign: TextAlign.center,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text(
+            'Mimir',
+            textAlign: TextAlign.center,
+          ),
+        ),
+        body: Container(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: Form(
+                key: _key,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    emailInput(),
+                    const SizedBox(height: 16),
+                    passwordInput(),
+                    const SizedBox(height: 16),
+                    loginButton(),
+                    const SizedBox(height: 16),
+                    TextButton(
+                      style: ButtonStyle(
+                        overlayColor: WidgetStateProperty.resolveWith(
+                            (states) => Colors.blue.withAlpha(30)),
+                      ),
+                      onPressed: () => Navigator.pushNamed(context, '/signup'),
+                      child: const Text(
+                        style: TextStyle(color: Colors.black),
+                        "Sign Up",
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: SizedBox(
-                width: 250,
-                child: TextField(
-                  controller: _idController,
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                    ),
-                    label: Text(
-                      style: TextStyle(color: Colors.black),
-                      'ID',
-                    ),
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 16),
-            Center(
-              child: SizedBox(
-                width: 250,
-                child: TextField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    label: Text(
-                      style: TextStyle(color: Colors.black),
-                      'Password',
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                    ),
-                    border: OutlineInputBorder(),
-                  ),
-                  onSubmitted: (value) {
-                    String id = _idController.text;
-                    String password = _passwordController.text;
-                    // 여기에 로그인 처리 로직 추가
-                    if (id == 'admin' && password == '8888') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BotList(),
+    );
+  }
+
+  ElevatedButton loginButton() {
+    return ElevatedButton(
+      onPressed: () async {
+        try {
+          await FirebaseAuth.instance
+              .signInWithEmailAndPassword(
+                  email: _emailController.text,
+                  password: _passwordController.text)
+              // ignore: use_build_context_synchronously
+              .then((_) => Navigator.pushNamed(context, "/bot_list"));
+          debugPrint('Login success.');
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'user-not-found') {
+            debugPrint('No user found for that email.');
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    backgroundColor: Colors.white,
+                    title: Text('로그인 실패'),
+                    content: Text('ID 또는 비밀번호가 일치하지 않습니다.'),
+                    actions: [
+                      TextButton(
+                        style: TextButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            overlayColor: Colors.blue),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          '확인',
+                          style: TextStyle(color: Colors.black),
                         ),
-                      );
-                    } else {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              backgroundColor: Colors.white,
-                              title: Text('로그인 실패'),
-                              content: Text('ID 또는 비밀번호가 일치하지 않습니다.'),
-                              actions: [
-                                TextButton(
-                                  style: TextButton.styleFrom(
-                                      backgroundColor: Colors.white,
-                                      overlayColor: Colors.blue),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(
-                                    '확인',
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                              ],
-                            );
-                          });
-                      _passwordController.clear();
-                    }
-                    print('ID: $id, Password: $password');
-                  },
-                ),
-              ),
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                String id = _idController.text;
-                String password = _passwordController.text;
-                // 여기에 로그인 처리 로직 추가
-                if (id == 'admin' && password == '8888') {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BotList(),
-                    ),
+                      ),
+                    ],
                   );
-                } else {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          backgroundColor: Colors.white,
-                          title: Text('로그인 실패'),
-                          content: Text('ID 또는 비밀번호가 일치하지 않습니다.'),
-                          actions: [
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  overlayColor: Colors.blue),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                '확인',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ),
-                          ],
-                        );
-                      });
-                  _passwordController.clear();
-                }
-                print('ID: $id, Password: $password');
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                side: BorderSide(color: Colors.black, width: 1),
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                shadowColor: Colors.blue,
-                elevation: 0,
-              ).copyWith(
-                overlayColor: WidgetStateProperty.resolveWith((states) {
-                  if (states.contains(WidgetState.hovered)) {
-                    return Colors.blue.withValues(alpha: 0.3);
-                  }
-                  return null;
-                }),
-              ),
-              child: Text(
-                'Login',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-          ],
+                });
+            _emailController.clear();
+            _passwordController.clear();
+          } else if (e.code == 'wrong-password') {
+            debugPrint('Wrong password provided for that user.');
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    backgroundColor: Colors.white,
+                    title: Text('로그인 실패'),
+                    content: Text('ID 또는 비밀번호가 일치하지 않습니다.'),
+                    actions: [
+                      TextButton(
+                        style: TextButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            overlayColor: Colors.blue),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          '확인',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  );
+                });
+            _passwordController.clear();
+          } else if (e.code == 'invalid-email') {
+            debugPrint('The email address is badly formatted.');
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    backgroundColor: Colors.white,
+                    title: Text('로그인 실패'),
+                    content: Text('Email 형식이 잘못되었습니다.'),
+                    actions: [
+                      TextButton(
+                        style: TextButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            overlayColor: Colors.blue),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          '확인',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  );
+                });
+            _emailController.clear();
+            _passwordController.clear();
+          } else if (e.code == 'invalid-credential') {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    backgroundColor: Colors.white,
+                    title: Text('로그인 실패'),
+                    content: Text('옳바르지 않은 Password 입니다.'),
+                    actions: [
+                      TextButton(
+                        style: TextButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            overlayColor: Colors.blue),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          '확인',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  );
+                });
+            _passwordController.clear();
+          } else {
+            debugPrint('Error: ${e.code}, ${e.message}');
+          }
+        }
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white,
+        side: BorderSide(color: Colors.black, width: 1),
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        shadowColor: Colors.blue,
+        elevation: 0,
+      ).copyWith(
+        overlayColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.hovered)) {
+            return Colors.blue.withValues(alpha: 0.3);
+          }
+          return null;
+        }),
+      ),
+      child: Text(
+        'Login',
+        style: TextStyle(color: Colors.black),
+      ),
+    );
+  }
+
+  TextFormField passwordInput() {
+    return TextFormField(
+      onEditingComplete: () {
+        FocusScope.of(context).unfocus(); // 포커스 제거
+      },
+      controller: _passwordController,
+      obscureText: true,
+      autofocus: true,
+      validator: (val) {
+        if (val!.isEmpty) {
+          return 'The input is empty.';
+        } else {
+          return null;
+        }
+      },
+      decoration: InputDecoration(
+        label: Text(
+          style: TextStyle(color: Colors.black),
+          'Password',
         ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue),
+        ),
+        border: OutlineInputBorder(),
+      ),
+      onFieldSubmitted: (value) {
+        String email = _emailController.text;
+        String password = _passwordController.text;
+        // 여기에 로그인 처리 로직 추가
+        print('ID: $email, Password: $password');
+      },
+    );
+  }
+
+  TextFormField emailInput() {
+    return TextFormField(
+      onEditingComplete: () {
+        FocusScope.of(context).unfocus(); // 포커스 제거
+      },
+      autofocus: true,
+      controller: _emailController,
+      validator: (val) {
+        if (val!.isEmpty) {
+          return 'The input is empty.';
+        } else {
+          return null;
+        }
+      },
+      decoration: InputDecoration(
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue),
+        ),
+        label: Text(
+          style: TextStyle(color: Colors.black),
+          'Email',
+        ),
+        border: OutlineInputBorder(),
       ),
     );
   }
