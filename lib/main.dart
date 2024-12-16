@@ -112,16 +112,21 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  emailInput(),
+                  SizedBox(
+                    width: 300,
+                    child: emailInput(),
+                  ),
                   const SizedBox(height: 16),
-                  passwordInput(),
+                  SizedBox(
+                    width: 300,
+                    child: passwordInput(),
+                  ),
                   const SizedBox(height: 16),
                   loginButton(),
                   const SizedBox(height: 16),
                   TextButton(
-                    style: ButtonStyle(
-                      overlayColor: WidgetStateProperty.resolveWith(
-                          (states) => Colors.blue.withAlpha(30)),
+                    style: TextButton.styleFrom(
+                      overlayColor: Colors.blue.withAlpha(30),
                     ),
                     onPressed: () => Navigator.push(
                       context,
@@ -143,31 +148,11 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> saveRefreshToken(String refreshToken) async {
-    try {
-      print('[SECURE_STORAGE] saveRefreshToken: $refreshToken');
-      await _storage.write(key: 'REFRESH_TOKEN', value: refreshToken);
-    } catch (e) {
-      print("[ERR] RefreshToken 저장 실패: $e");
-    }
-  }
-
-  // 리프레시 토큰 불러오기
-  Future<String?> readRefreshToken() async {
-    try {
-      final refreshToken = await _storage.read(key: 'REFRESH_TOKEN');
-      print('[SECURE_STORAGE] readRefreshToken: $refreshToken');
-      return refreshToken;
-    } catch (e) {
-      print("[ERR] RefreshToken 불러오기 실패: $e");
-      return null;
-    }
-  }
-
   ElevatedButton loginButton() {
     return ElevatedButton(
       onPressed: _login,
       style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
         backgroundColor: Colors.white,
         side: BorderSide(color: Colors.black, width: 1),
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -369,6 +354,7 @@ class _LoginScreenState extends State<LoginScreen> {
           return null;
         }
       },
+      style: TextStyle(color: Colors.black),
       decoration: InputDecoration(
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.blue),
