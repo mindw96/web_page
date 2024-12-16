@@ -46,11 +46,9 @@ class _BotListState extends State<BotList> {
                         .copyWith(color: lightTheme.disabledColor),
                   ),
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushNamed(
                       context,
-                      CupertinoPageRoute(
-                        builder: (_) => GPT4OriScreen(),
-                      ),
+                      '/gpt4o',
                     );
                   },
                 ),
@@ -69,11 +67,9 @@ class _BotListState extends State<BotList> {
                         .copyWith(color: lightTheme.disabledColor),
                   ),
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushNamed(
                       context,
-                      CupertinoPageRoute(
-                        builder: (_) => GPT4o1Screen(),
-                      ),
+                      '/gpt-o1-preview',
                     );
                   },
                 ),
@@ -92,12 +88,7 @@ class _BotListState extends State<BotList> {
                         .copyWith(color: lightTheme.disabledColor),
                   ),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (_) => ImageScreenOri(),
-                      ),
-                    );
+                    Navigator.pushNamed(context, '/dall-e3');
                   },
                 ),
                 ListTile(
@@ -115,11 +106,9 @@ class _BotListState extends State<BotList> {
                         .copyWith(color: lightTheme.disabledColor),
                   ),
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushNamed(
                       context,
-                      CupertinoPageRoute(
-                        builder: (_) => SOLARScreen(),
-                      ),
+                      '/solar',
                     );
                   },
                 ),
@@ -138,11 +127,9 @@ class _BotListState extends State<BotList> {
                         .copyWith(color: lightTheme.disabledColor),
                   ),
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushNamed(
                       context,
-                      CupertinoPageRoute(
-                        builder: (_) => SOLARPROScreen(),
-                      ),
+                      '/solarpro',
                     );
                   },
                 ),
@@ -161,11 +148,9 @@ class _BotListState extends State<BotList> {
                         .copyWith(color: lightTheme.disabledColor),
                   ),
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushNamed(
                       context,
-                      CupertinoPageRoute(
-                        builder: (_) => GeminiFlashScreen(),
-                      ),
+                      '/gemini-1_5-flash',
                     );
                   },
                 )

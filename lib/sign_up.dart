@@ -96,108 +96,15 @@ class _SignupPageState extends State<SignupPage> {
         ),
         border: OutlineInputBorder(),
       ),
+      onFieldSubmitted: (value) {
+        _signup();
+      },
     );
   }
 
   ElevatedButton submitButton() {
     return ElevatedButton(
-      onPressed: () async {
-        // 여기에 작성
-        try {
-          final _ = await FirebaseAuth.instance
-              .createUserWithEmailAndPassword(
-                email: _emailController.text,
-                password: _passwordController.text,
-              )
-              // ignore: use_build_context_synchronously
-              .then((_) => Navigator.pushNamed(context, "/login"));
-        } on FirebaseAuthException catch (e) {
-          if (e.code == 'weak-password') {
-            if (mounted) {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      backgroundColor: Colors.white,
-                      title: Text('회원가입 실패'),
-                      content: Text('비밀번호는 6자리 이상 입력해주세요.'),
-                      actions: [
-                        TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              overlayColor: Colors.blue),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            '확인',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ],
-                    );
-                  });
-            }
-            _passwordController.clear();
-          } else if (e.code == 'email-already-in-use') {
-            if (mounted) {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      backgroundColor: Colors.white,
-                      title: Text('회원가입입 실패'),
-                      content: Text('이미 사용중인 Email입니다.'),
-                      actions: [
-                        TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              overlayColor: Colors.blue),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            '확인',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ],
-                    );
-                  });
-            }
-            _emailController.clear();
-            _passwordController.clear();
-          } else if (e.code == 'invalid-email') {
-            if (mounted) {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      backgroundColor: Colors.white,
-                      title: Text('회원가입 실패'),
-                      content: Text('옳바른 Email 형식을 사용해주세요.'),
-                      actions: [
-                        TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              overlayColor: Colors.blue),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            '확인',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ],
-                    );
-                  });
-            }
-            _emailController.clear();
-            _passwordController.clear();
-          }
-        }
-      },
+      onPressed: _signup,
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.white,
         side: BorderSide(color: Colors.black, width: 1),
@@ -217,5 +124,103 @@ class _SignupPageState extends State<SignupPage> {
         style: TextStyle(color: Colors.black),
       ),
     );
+  }
+
+  void _signup() async {
+    // 여기에 작성
+    try {
+      final _ = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: _emailController.text,
+            password: _passwordController.text,
+          )
+          // ignore: use_build_context_synchronously
+          .then((_) => Navigator.pushNamed(context, "/login"));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        if (mounted) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  backgroundColor: Colors.white,
+                  title: Text('회원가입 실패'),
+                  content: Text('비밀번호는 6자리 이상 입력해주세요.'),
+                  actions: [
+                    TextButton(
+                      style: TextButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          overlayColor: Colors.blue),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        '확인',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ],
+                );
+              });
+        }
+        _passwordController.clear();
+      } else if (e.code == 'email-already-in-use') {
+        if (mounted) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  backgroundColor: Colors.white,
+                  title: Text('회원가입입 실패'),
+                  content: Text('이미 사용중인 Email입니다.'),
+                  actions: [
+                    TextButton(
+                      style: TextButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          overlayColor: Colors.blue),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        '확인',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ],
+                );
+              });
+        }
+        _emailController.clear();
+        _passwordController.clear();
+      } else if (e.code == 'invalid-email') {
+        if (mounted) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  backgroundColor: Colors.white,
+                  title: Text('회원가입 실패'),
+                  content: Text('옳바른 Email 형식을 사용해주세요.'),
+                  actions: [
+                    TextButton(
+                      style: TextButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          overlayColor: Colors.blue),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        '확인',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ],
+                );
+              });
+        }
+        _emailController.clear();
+        _passwordController.clear();
+      }
+    }
   }
 }
