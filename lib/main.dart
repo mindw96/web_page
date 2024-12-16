@@ -19,12 +19,14 @@ import 'package:mimir/gemini_1.5_flash_message.dart';
 import 'package:mimir/sign_up.dart';
 import 'image_ori_message.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(
     MultiProvider(
       providers: [
@@ -49,6 +51,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      home: StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.active) {
+              User? user = snapshot.data;
+              print('User: $user');
+              if (user == null) {
+                return const LoginScreen();
+              } else {
+                return const BotList();
+              }
+            }
+            return const CircularProgressIndicator();
+          }),
       initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginScreen(),
