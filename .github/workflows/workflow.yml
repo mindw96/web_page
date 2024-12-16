@@ -19,9 +19,9 @@ jobs:
       - run: flutter pub get
 
       - run: |
-          echo "OPENAI_API_KEY=${{secrets.OPENAI_API_KEY}}" >> .env
-          echo "UPSTAGE_API_KEY=${{secrets.UPSTAGE_API_KEY}}" >> .env
-          echo "GEMINI_API_KEY=${{secrets.GEMINI_API_KEY}}" >> .env
+          echo "OPENAI_API_KEY=${{secrets.OPENAI_API_KEY}}" >> assets/.env
+          echo "UPSTAGE_API_KEY=${{secrets.UPSTAGE_API_KEY}}" >> assets/.env
+          echo "GEMINI_API_KEY=${{secrets.GEMINI_API_KEY}}" >> assets/.env
       
       # - run: flutter build web --base-href "/" --web-renderer html --release
       - run: flutter build web --base-href "/" --web-renderer canvaskit --release
