@@ -8,15 +8,15 @@ import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:mimir/gpt4_o1_preview_message.dart';
 import 'package:provider/provider.dart';
 
-class GPT4o1Screen extends StatefulWidget {
-  const GPT4o1Screen({super.key});
+class GPTo1Screen extends StatefulWidget {
+  const GPTo1Screen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
   _ChatScreenState createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<GPT4o1Screen> {
+class _ChatScreenState extends State<GPTo1Screen> {
   TextEditingController textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 

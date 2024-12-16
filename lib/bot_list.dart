@@ -1,4 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mimir/gemini_1.5_flash_screen.dart';
+import 'package:mimir/gpt4_o1_preview_screen.dart';
+import 'package:mimir/gpt4_ori_screen.dart';
+import 'package:mimir/image_ori_screen.dart';
+import 'package:mimir/solar_pro_screen.dart';
+import 'package:mimir/solar_screen.dart';
 
 class BotList extends StatefulWidget {
   const BotList({super.key});
@@ -11,11 +18,6 @@ class _BotListState extends State<BotList> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    Color selectedColor = Theme.of(context).primaryColor;
-    ThemeData lightTheme = ThemeData(
-      colorSchemeSeed: selectedColor,
-      brightness: Brightness.light,
-    );
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
@@ -35,13 +37,12 @@ class _BotListState extends State<BotList> {
                   ),
                   subtitle: Text(
                     'ChatGPT 4o 입니다.',
-                    style: textTheme.bodySmall!
-                        .copyWith(color: lightTheme.disabledColor),
+                    style: textTheme.bodySmall!,
                   ),
                   onTap: () {
-                    Navigator.pushNamed(
+                    Navigator.push(
                       context,
-                      '/gpt4o',
+                      CupertinoPageRoute(builder: (_) => GPT4OriScreen()),
                     );
                   },
                 ),
@@ -56,13 +57,12 @@ class _BotListState extends State<BotList> {
                   ),
                   subtitle: Text(
                     'ChatGPT o1 Preview 입니다.',
-                    style: textTheme.bodySmall!
-                        .copyWith(color: lightTheme.disabledColor),
+                    style: textTheme.bodySmall!,
                   ),
                   onTap: () {
-                    Navigator.pushNamed(
+                    Navigator.push(
                       context,
-                      '/gpt-o1-preview',
+                      CupertinoPageRoute(builder: (_) => GPTo1Screen()),
                     );
                   },
                 ),
@@ -77,11 +77,11 @@ class _BotListState extends State<BotList> {
                   ),
                   subtitle: Text(
                     'DALL-E 3 입니다.',
-                    style: textTheme.bodySmall!
-                        .copyWith(color: lightTheme.disabledColor),
+                    style: textTheme.bodySmall!,
                   ),
                   onTap: () {
-                    Navigator.pushNamed(context, '/dall-e3');
+                    Navigator.push(context,
+                        CupertinoPageRoute(builder: (_) => ImageScreenOri()));
                   },
                 ),
                 ListTile(
@@ -95,13 +95,12 @@ class _BotListState extends State<BotList> {
                   ),
                   subtitle: Text(
                     'Solar-Mini 입니다.',
-                    style: textTheme.bodySmall!
-                        .copyWith(color: lightTheme.disabledColor),
+                    style: textTheme.bodySmall!,
                   ),
                   onTap: () {
-                    Navigator.pushNamed(
+                    Navigator.push(
                       context,
-                      '/solar',
+                      CupertinoPageRoute(builder: (_) => SOLARScreen()),
                     );
                   },
                 ),
@@ -116,13 +115,12 @@ class _BotListState extends State<BotList> {
                   ),
                   subtitle: Text(
                     'Solar-Pro 입니다.',
-                    style: textTheme.bodySmall!
-                        .copyWith(color: lightTheme.disabledColor),
+                    style: textTheme.bodySmall!,
                   ),
                   onTap: () {
-                    Navigator.pushNamed(
+                    Navigator.push(
                       context,
-                      '/solarpro',
+                      CupertinoPageRoute(builder: (_) => SOLARPROScreen()),
                     );
                   },
                 ),
@@ -137,13 +135,12 @@ class _BotListState extends State<BotList> {
                   ),
                   subtitle: Text(
                     'Gemini 1.5 Flash 입니다. (Only Single Turn)',
-                    style: textTheme.bodySmall!
-                        .copyWith(color: lightTheme.disabledColor),
+                    style: textTheme.bodySmall!,
                   ),
                   onTap: () {
-                    Navigator.pushNamed(
+                    Navigator.push(
                       context,
-                      '/gemini-1_5-flash',
+                      CupertinoPageRoute(builder: (_) => GeminiFlashScreen()),
                     );
                   },
                 )

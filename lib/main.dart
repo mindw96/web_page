@@ -1,14 +1,10 @@
 // ignore_for_file: avoid_print
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mimir/firebase_options.dart';
-import 'package:mimir/gemini_1.5_flash_screen.dart';
-import 'package:mimir/gpt4_o1_preview_screen.dart';
-import 'package:mimir/gpt4_ori_screen.dart';
-import 'package:mimir/image_ori_screen.dart';
-import 'package:mimir/solar_pro_screen.dart';
-import 'package:mimir/solar_screen.dart';
+
 import 'package:provider/provider.dart';
 import 'package:mimir/bot_list.dart';
 import 'package:mimir/gpt4_ori_message.dart';
@@ -65,17 +61,17 @@ class MyApp extends StatelessWidget {
             }
             return const CircularProgressIndicator();
           }),
-      initialRoute: '/login',
+      initialRoute: '/home',
       routes: {
-        '/login': (context) => const LoginScreen(),
-        '/bot_list': (context) => const BotList(),
-        '/signup': (context) => const SignupPage(),
-        '/gpt4o': (context) => const GPT4OriScreen(),
-        '/gpt-o1-preview': (context) => const GPT4o1Screen(),
-        '/dall-e3': (context) => const ImageScreenOri(),
-        '/solar': (context) => const SOLARScreen(),
-        '/solarpro': (context) => const SOLARPROScreen(),
-        '/gemini-1_5-flash': (context) => const GeminiFlashScreen(),
+        '/home': (context) => const LoginScreen(),
+        // '/bot_list': (context) => const BotList(),
+        // '/signup': (context) => const SignupPage(),
+        // '/gpt4o': (context) => const GPT4OriScreen(),
+        // '/gpt-o1-preview': (context) => const GPT4o1Screen(),
+        // '/dall-e3': (context) => const ImageScreenOri(),
+        // '/solar': (context) => const SOLARScreen(),
+        // '/solarpro': (context) => const SOLARPROScreen(),
+        // '/gemini-1_5-flash': (context) => const GeminiFlashScreen(),
       },
     );
   }
@@ -127,7 +123,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       overlayColor: WidgetStateProperty.resolveWith(
                           (states) => Colors.blue.withAlpha(30)),
                     ),
-                    onPressed: () => Navigator.pushNamed(context, '/signup'),
+                    onPressed: () => Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (_) => SignupPage(),
+                      ),
+                    ),
                     child: const Text(
                       style: TextStyle(color: Colors.black),
                       "Sign Up",
@@ -172,7 +173,11 @@ class _LoginScreenState extends State<LoginScreen> {
           .signInWithEmailAndPassword(
               email: _emailController.text, password: _passwordController.text)
           // ignore: use_build_context_synchronously
-          .then((_) => Navigator.pushNamed(context, "/bot_list"));
+          .then((_) => Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (_) => BotList(),
+              )));
       debugPrint('Login success.');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
