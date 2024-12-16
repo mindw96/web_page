@@ -19,7 +19,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await dotenv.load(fileName: "assets/config/.env");
+  await dotenv.load(fileName: ".env");
   runApp(
     MultiProvider(
       providers: [
@@ -45,8 +45,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/login',
       routes: {
-        '/login': (context) => LoginScreen(),
-        '/bot_list': (context) => BotList(),
+        '/login': (context) => const LoginScreen(),
+        '/bot_list': (context) => const BotList(),
         '/signup': (context) => const SignupPage(),
       },
     );
@@ -80,34 +80,32 @@ class _LoginScreenState extends State<LoginScreen> {
             textAlign: TextAlign.center,
           ),
         ),
-        body: Container(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Center(
-              child: Form(
-                key: _key,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    emailInput(),
-                    const SizedBox(height: 16),
-                    passwordInput(),
-                    const SizedBox(height: 16),
-                    loginButton(),
-                    const SizedBox(height: 16),
-                    TextButton(
-                      style: ButtonStyle(
-                        overlayColor: WidgetStateProperty.resolveWith(
-                            (states) => Colors.blue.withAlpha(30)),
-                      ),
-                      onPressed: () => Navigator.pushNamed(context, '/signup'),
-                      child: const Text(
-                        style: TextStyle(color: Colors.black),
-                        "Sign Up",
-                      ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: Form(
+              key: _key,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  emailInput(),
+                  const SizedBox(height: 16),
+                  passwordInput(),
+                  const SizedBox(height: 16),
+                  loginButton(),
+                  const SizedBox(height: 16),
+                  TextButton(
+                    style: ButtonStyle(
+                      overlayColor: WidgetStateProperty.resolveWith(
+                          (states) => Colors.blue.withAlpha(30)),
                     ),
-                  ],
-                ),
+                    onPressed: () => Navigator.pushNamed(context, '/signup'),
+                    child: const Text(
+                      style: TextStyle(color: Colors.black),
+                      "Sign Up",
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -130,111 +128,120 @@ class _LoginScreenState extends State<LoginScreen> {
         } on FirebaseAuthException catch (e) {
           if (e.code == 'user-not-found') {
             debugPrint('No user found for that email.');
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    backgroundColor: Colors.white,
-                    title: Text('로그인 실패'),
-                    content: Text('ID 또는 비밀번호가 일치하지 않습니다.'),
-                    actions: [
-                      TextButton(
-                        style: TextButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            overlayColor: Colors.blue),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          '확인',
-                          style: TextStyle(color: Colors.black),
+            if (mounted) {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      backgroundColor: Colors.white,
+                      title: Text('로그인 실패'),
+                      content: Text('ID 또는 비밀번호가 일치하지 않습니다.'),
+                      actions: [
+                        TextButton(
+                          style: TextButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              overlayColor: Colors.blue),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            '확인',
+                            style: TextStyle(color: Colors.black),
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                });
+                      ],
+                    );
+                  });
+            }
+
             _emailController.clear();
             _passwordController.clear();
           } else if (e.code == 'wrong-password') {
             debugPrint('Wrong password provided for that user.');
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    backgroundColor: Colors.white,
-                    title: Text('로그인 실패'),
-                    content: Text('ID 또는 비밀번호가 일치하지 않습니다.'),
-                    actions: [
-                      TextButton(
-                        style: TextButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            overlayColor: Colors.blue),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          '확인',
-                          style: TextStyle(color: Colors.black),
+            if (mounted) {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      backgroundColor: Colors.white,
+                      title: Text('로그인 실패'),
+                      content: Text('ID 또는 비밀번호가 일치하지 않습니다.'),
+                      actions: [
+                        TextButton(
+                          style: TextButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              overlayColor: Colors.blue),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            '확인',
+                            style: TextStyle(color: Colors.black),
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                });
+                      ],
+                    );
+                  });
+            }
             _passwordController.clear();
           } else if (e.code == 'invalid-email') {
             debugPrint('The email address is badly formatted.');
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    backgroundColor: Colors.white,
-                    title: Text('로그인 실패'),
-                    content: Text('Email 형식이 잘못되었습니다.'),
-                    actions: [
-                      TextButton(
-                        style: TextButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            overlayColor: Colors.blue),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          '확인',
-                          style: TextStyle(color: Colors.black),
+            if (mounted) {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      backgroundColor: Colors.white,
+                      title: Text('로그인 실패'),
+                      content: Text('Email 형식이 잘못되었습니다.'),
+                      actions: [
+                        TextButton(
+                          style: TextButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              overlayColor: Colors.blue),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            '확인',
+                            style: TextStyle(color: Colors.black),
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                });
+                      ],
+                    );
+                  });
+            }
             _emailController.clear();
             _passwordController.clear();
           } else if (e.code == 'invalid-credential') {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    backgroundColor: Colors.white,
-                    title: Text('로그인 실패'),
-                    content: Text('옳바르지 않은 Password 입니다.'),
-                    actions: [
-                      TextButton(
-                        style: TextButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            overlayColor: Colors.blue),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          '확인',
-                          style: TextStyle(color: Colors.black),
+            if (mounted) {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      backgroundColor: Colors.white,
+                      title: Text('로그인 실패'),
+                      content: Text('옳바르지 않은 Password 입니다.'),
+                      actions: [
+                        TextButton(
+                          style: TextButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              overlayColor: Colors.blue),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            '확인',
+                            style: TextStyle(color: Colors.black),
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                });
-            _passwordController.clear();
-          } else {
-            debugPrint('Error: ${e.code}, ${e.message}');
+                      ],
+                    );
+                  });
+              _passwordController.clear();
+            } else {
+              debugPrint('Error: ${e.code}, ${e.message}');
+            }
           }
         }
       },

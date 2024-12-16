@@ -104,96 +104,98 @@ class _SignupPageState extends State<SignupPage> {
       onPressed: () async {
         // 여기에 작성
         try {
-          final credential = await FirebaseAuth.instance
+          final _ = await FirebaseAuth.instance
               .createUserWithEmailAndPassword(
                 email: _emailController.text,
                 password: _passwordController.text,
               )
+              // ignore: use_build_context_synchronously
               .then((_) => Navigator.pushNamed(context, "/login"));
         } on FirebaseAuthException catch (e) {
           if (e.code == 'weak-password') {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    backgroundColor: Colors.white,
-                    title: Text('회원가입 실패'),
-                    content: Text('비밀번호는 6자리 이상 입력해주세요.'),
-                    actions: [
-                      TextButton(
-                        style: TextButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            overlayColor: Colors.blue),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          '확인',
-                          style: TextStyle(color: Colors.black),
+            if (mounted) {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      backgroundColor: Colors.white,
+                      title: Text('회원가입 실패'),
+                      content: Text('비밀번호는 6자리 이상 입력해주세요.'),
+                      actions: [
+                        TextButton(
+                          style: TextButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              overlayColor: Colors.blue),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            '확인',
+                            style: TextStyle(color: Colors.black),
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                });
+                      ],
+                    );
+                  });
+            }
             _passwordController.clear();
           } else if (e.code == 'email-already-in-use') {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    backgroundColor: Colors.white,
-                    title: Text('회원가입입 실패'),
-                    content: Text('이미 사용중인 Email입니다.'),
-                    actions: [
-                      TextButton(
-                        style: TextButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            overlayColor: Colors.blue),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          '확인',
-                          style: TextStyle(color: Colors.black),
+            if (mounted) {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      backgroundColor: Colors.white,
+                      title: Text('회원가입입 실패'),
+                      content: Text('이미 사용중인 Email입니다.'),
+                      actions: [
+                        TextButton(
+                          style: TextButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              overlayColor: Colors.blue),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            '확인',
+                            style: TextStyle(color: Colors.black),
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                });
+                      ],
+                    );
+                  });
+            }
             _emailController.clear();
             _passwordController.clear();
           } else if (e.code == 'invalid-email') {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    backgroundColor: Colors.white,
-                    title: Text('회원가입 실패'),
-                    content: Text('옳바른 Email 형식을 사용해주세요.'),
-                    actions: [
-                      TextButton(
-                        style: TextButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            overlayColor: Colors.blue),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          '확인',
-                          style: TextStyle(color: Colors.black),
+            if (mounted) {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      backgroundColor: Colors.white,
+                      title: Text('회원가입 실패'),
+                      content: Text('옳바른 Email 형식을 사용해주세요.'),
+                      actions: [
+                        TextButton(
+                          style: TextButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              overlayColor: Colors.blue),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            '확인',
+                            style: TextStyle(color: Colors.black),
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                });
+                      ],
+                    );
+                  });
+            }
             _emailController.clear();
             _passwordController.clear();
-          } else {
-            print(e.code.toString());
-            print(e.toString());
           }
-        } catch (e) {
-          print(e.toString());
         }
       },
       style: ElevatedButton.styleFrom(
