@@ -18,6 +18,7 @@ import 'package:mimir/gpt4_o1_preview_message.dart';
 import 'package:mimir/gemini_1.5_flash_message.dart';
 import 'package:mimir/sign_up.dart';
 import 'image_ori_message.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +40,7 @@ Future<void> main() async {
       child: const MyApp(),
     ),
   );
+  setUrlStrategy(PathUrlStrategy());
 }
 
 class MyApp extends StatelessWidget {
