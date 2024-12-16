@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -47,32 +47,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.active) {
-              User? user = snapshot.data;
-              print('User: $user');
-              if (user == null) {
-                return const LoginScreen();
-              } else {
-                return const BotList();
-              }
-            }
-            return const CircularProgressIndicator();
-          }),
-      initialRoute: '/home',
-      routes: {
-        '/home': (context) => const LoginScreen(),
-        // '/bot_list': (context) => const BotList(),
-        // '/signup': (context) => const SignupPage(),
-        // '/gpt4o': (context) => const GPT4OriScreen(),
-        // '/gpt-o1-preview': (context) => const GPT4o1Screen(),
-        // '/dall-e3': (context) => const ImageScreenOri(),
-        // '/solar': (context) => const SOLARScreen(),
-        // '/solarpro': (context) => const SOLARPROScreen(),
-        // '/gemini-1_5-flash': (context) => const GeminiFlashScreen(),
-      },
+      home: LoginScreen(),
     );
   }
 }
@@ -85,9 +60,34 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  static const _storage = FlutterSecureStorage();
+  dynamic userInfo = '';
   final _key = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 비동기로 flutter secure storage 정보를 불러오는 작업
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _asyncMethod();
+    });
+  }
+
+  _asyncMethod() async {
+    // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
+    // 데이터가 없을때는 null을 반환
+    userInfo = await _storage.read(key: 'login');
+
+    // user의 정보가 있다면 로그인 후 들어가는 첫 페이지로 넘어가게 합니다.
+    if (userInfo != null) {
+      Navigator.push(context, CupertinoPageRoute(builder: (_) => BotList()));
+    } else {
+      print('로그인이 필요합니다');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -143,6 +143,27 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  Future<void> saveRefreshToken(String refreshToken) async {
+    try {
+      print('[SECURE_STORAGE] saveRefreshToken: $refreshToken');
+      await _storage.write(key: 'REFRESH_TOKEN', value: refreshToken);
+    } catch (e) {
+      print("[ERR] RefreshToken 저장 실패: $e");
+    }
+  }
+
+  // 리프레시 토큰 불러오기
+  Future<String?> readRefreshToken() async {
+    try {
+      final refreshToken = await _storage.read(key: 'REFRESH_TOKEN');
+      print('[SECURE_STORAGE] readRefreshToken: $refreshToken');
+      return refreshToken;
+    } catch (e) {
+      print("[ERR] RefreshToken 불러오기 실패: $e");
+      return null;
+    }
+  }
+
   ElevatedButton loginButton() {
     return ElevatedButton(
       onPressed: _login,
@@ -172,12 +193,15 @@ class _LoginScreenState extends State<LoginScreen> {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(
               email: _emailController.text, password: _passwordController.text)
-          // ignore: use_build_context_synchronously
           .then((_) => Navigator.push(
               context,
               CupertinoPageRoute(
                 builder: (_) => BotList(),
               )));
+      await _storage.write(
+        key: 'login',
+        value: 'login',
+      );
       debugPrint('Login success.');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
