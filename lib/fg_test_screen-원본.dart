@@ -3,22 +3,21 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
-import 'package:mimir/gemini_1.5_flash_message.dart';
-import 'package:mimir/main.dart';
+import 'package:mimir/fb_test_message.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:collection';
 
-class GeminiFlashScreen extends StatefulWidget {
-  const GeminiFlashScreen({super.key});
+class TestScreen extends StatefulWidget {
+  const TestScreen({super.key});
 
   @override
   ChatScreenState createState() => ChatScreenState();
 }
 
-class ChatScreenState extends State<GeminiFlashScreen> {
+class ChatScreenState extends State<TestScreen> {
   late DatabaseReference _database;
   late TextEditingController textController;
   final ScrollController _scrollController = ScrollController();
@@ -34,27 +33,42 @@ class ChatScreenState extends State<GeminiFlashScreen> {
   }
 
   Future<void> _initializeFirebase() async {
+    // await Firebase.initializeApp();
     uid = FirebaseAuth.instance.currentUser?.uid;
 
     if (uid != null) {
       _database = FirebaseDatabase.instanceFor(
         app: Firebase.app(),
         databaseURL: 'https://mimir-1a487-default-rtdb.firebaseio.com/',
-      ).ref('users').child(uid!).child('gemini-1_5-flash');
+      ).ref('users').child(uid!).child('test');
 
       DataSnapshot snapshot = await _database.get();
       if (snapshot.value == null) {
+        // await _database.set('test');
+        // DataSnapshot snapshot = await _database.get();
+        // print('snapshot.value: ${snapshot.value}');
+        // List<dynamic> value = snapshot.value as List<dynamic>;
+        // print('value: ${value}');
+        // print('value: ${value.length}');
         indexingNum = 0;
       } else {
+        print('snapshot.value: ${snapshot.value}');
         List<dynamic> value = snapshot.value as List<dynamic>;
+        print('value: ${value}');
+        print('value: ${value.length}');
         indexingNum = value.length;
       }
     } else {
       // Firebase Auth에 로그인하지 않은 경우 처리
       debugPrint('User is not logged in');
       // Firebase Database 참조를 null로 설정하거나 적절한 기본값을 설정
-      Navigator.push(
-          context, CupertinoPageRoute(builder: (_) => LoginScreen()));
+      _database = FirebaseDatabase.instanceFor(
+        app: Firebase.app(),
+        databaseURL: 'https://mimir-1a487-default-rtdb.firebaseio.com/',
+      ).ref(); // 적절한 위치로 수정
+      DataSnapshot snapshot = await _database.get();
+      List<Object?> value = snapshot.value as List<Object?>;
+      indexingNum = value.length;
     }
 
     setState(() {}); // 상태 업데이트
@@ -80,7 +94,7 @@ class ChatScreenState extends State<GeminiFlashScreen> {
       _needScroll = false;
     }
 
-    return Consumer<GeminiFlashMessageService>(
+    return Consumer<TestMessageService>(
       builder: (context, messageService, child) {
         return GestureDetector(
           child: Scaffold(
@@ -100,7 +114,7 @@ class ChatScreenState extends State<GeminiFlashScreen> {
                 ),
               ),
               title: Center(
-                child: Text('Gemini 1.5 Flash'),
+                child: Text(uid ?? 'Not Logged In'),
               ),
               actions: [
                 IconButton(
@@ -159,6 +173,10 @@ class ChatScreenState extends State<GeminiFlashScreen> {
                             chatList2.add(value['content']);
                           }
                         }
+
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((_) => _scrollToBottom());
+                        _needScroll = false;
 
                         return ListView.builder(
                           controller: _scrollController,

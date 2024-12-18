@@ -1,8 +1,11 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
+import 'package:dart_openai/dart_openai.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mimir/env.dart';
+import 'package:mimir/fb_test_message.dart';
 import 'package:mimir/firebase_options.dart';
 
 import 'package:provider/provider.dart';
@@ -10,7 +13,7 @@ import 'package:mimir/bot_list.dart';
 import 'package:mimir/gpt4_ori_message.dart';
 import 'package:mimir/solar_message.dart';
 import 'package:mimir/solar_pro_message.dart';
-import 'package:mimir/gpt4_o1_preview_message.dart';
+import 'package:mimir/gpt_o1_message.dart';
 import 'package:mimir/gemini_1.5_flash_message.dart';
 import 'package:mimir/sign_up.dart';
 import 'image_ori_message.dart';
@@ -18,6 +21,8 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 Future<void> main() async {
+  OpenAI.apiKey = Env.openAiApiKey;
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -26,10 +31,10 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => TestMessageService()),
         ChangeNotifierProvider(create: (context) => ImageServiceOri()),
         ChangeNotifierProvider(create: (context) => GPT4OriMessageService()),
-        ChangeNotifierProvider(
-            create: (context) => GPT4o1PreviewMessageService()),
+        ChangeNotifierProvider(create: (context) => GPTo1MessageService()),
         ChangeNotifierProvider(create: (context) => SOLARMessageService()),
         ChangeNotifierProvider(create: (context) => SOLARPROMessageService()),
         ChangeNotifierProvider(
@@ -66,24 +71,28 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    // FocusNode는 반드시 해제해줘야 합니다.
+    _focusNode.dispose();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
-
-    // 비동기로 flutter secure storage 정보를 불러오는 작업
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _asyncMethod();
-    });
+    _asyncMethod();
   }
 
   _asyncMethod() async {
-    // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
-    // 데이터가 없을때는 null을 반환
     userInfo = await _storage.read(key: 'login');
 
-    // user의 정보가 있다면 로그인 후 들어가는 첫 페이지로 넘어가게 합니다.
     if (userInfo != null) {
-      Navigator.push(context, CupertinoPageRoute(builder: (_) => BotList()));
+      if (mounted) {
+        Navigator.push(context, CupertinoPageRoute(builder: (_) => BotList()));
+      }
     } else {
       print('로그인이 필요합니다');
     }
@@ -91,56 +100,51 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
-      },
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          title: Text(
-            'Mimir',
-            textAlign: TextAlign.center,
-          ),
+        title: Text(
+          'Mimir',
+          textAlign: TextAlign.center,
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Center(
-            child: Form(
-              key: _key,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 300,
-                    child: emailInput(),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: Form(
+            key: _key,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 300,
+                  child: emailInput(),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: 300,
+                  child: passwordInput(),
+                ),
+                const SizedBox(height: 16),
+                loginButton(),
+                const SizedBox(height: 16),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    overlayColor: Colors.blue.withAlpha(30),
                   ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: 300,
-                    child: passwordInput(),
-                  ),
-                  const SizedBox(height: 16),
-                  loginButton(),
-                  const SizedBox(height: 16),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      overlayColor: Colors.blue.withAlpha(30),
-                    ),
-                    onPressed: () => Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (_) => SignupPage(),
-                      ),
-                    ),
-                    child: const Text(
-                      style: TextStyle(color: Colors.black),
-                      "Sign Up",
+                  onPressed: () => Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (_) => SignupPage(),
                     ),
                   ),
-                ],
-              ),
+                  child: const Text(
+                    style: TextStyle(color: Colors.black),
+                    "Sign Up",
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -311,12 +315,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextFormField passwordInput() {
     return TextFormField(
-      onEditingComplete: () {
-        FocusScope.of(context).unfocus(); // 포커스 제거
-      },
       controller: _passwordController,
       obscureText: true,
-      autofocus: true,
       validator: (val) {
         if (val!.isEmpty) {
           return 'The input is empty.';
@@ -342,10 +342,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextFormField emailInput() {
     return TextFormField(
-      onEditingComplete: () {
-        FocusScope.of(context).unfocus(); // 포커스 제거
-      },
-      autofocus: true,
       controller: _emailController,
       validator: (val) {
         if (val!.isEmpty) {

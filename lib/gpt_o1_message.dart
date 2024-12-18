@@ -7,7 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:mimir/env.dart';
 
-class GeminiFlashMessageService extends ChangeNotifier {
+class GPTo1MessageService extends ChangeNotifier {
   final FirebaseDatabase _realtime = FirebaseDatabase.instanceFor(
       app: Firebase.app(),
       databaseURL: 'https://mimir-1a487-default-rtdb.firebaseio.com/');
@@ -16,15 +16,14 @@ class GeminiFlashMessageService extends ChangeNotifier {
   // List<String> messageList = [];
   List<String> messageList = [];
 
-  String api = Env.geminiApiKey;
-  String endpoint =
-      'https://generativelanguage.googleapis.com/v1beta/chat/completions';
+  String api = Env.openAiApiKey;
+  String endpoint = 'https://api.openai.com/v1/chat/completions';
 
   enterMessage(String message, int indexingNum) async {
     await _realtime
         .ref('users')
         .child(uid!)
-        .child('gemini-1_5-flash')
+        .child('gpt-o1')
         .child('$indexingNum')
         .update({'role': 'user', 'content': message});
 
@@ -32,11 +31,8 @@ class GeminiFlashMessageService extends ChangeNotifier {
   }
 
   Future<void> getResponseFromOpenAI(String userInput, int indexingNum) async {
-    DataSnapshot snapshot = await _realtime
-        .ref("users")
-        .child(uid!)
-        .child('gemini-1_5-flash')
-        .get();
+    DataSnapshot snapshot =
+        await _realtime.ref("users").child(uid!).child('gpt-o1').get();
     List<dynamic> value = snapshot.value as List<dynamic>;
 
     int cnt = value.length;
@@ -67,7 +63,7 @@ class GeminiFlashMessageService extends ChangeNotifier {
         'Authorization': 'Bearer $api',
       })
       ..body = jsonEncode({
-        'model': 'gemini-1.5-flash',
+        'model': 'o1-preview',
         'messages': messages,
         'stream': true, // 스트림 활성화
       });
@@ -95,7 +91,7 @@ class GeminiFlashMessageService extends ChangeNotifier {
             await _realtime
                 .ref('users')
                 .child(uid!)
-                .child('gemini-1_5-flash')
+                .child('gpt-o1')
                 .child('$indexingNum')
                 .update({'role': 'assistant', 'content': responseText});
           }
@@ -107,11 +103,11 @@ class GeminiFlashMessageService extends ChangeNotifier {
       debugPrint(
           'Failed to connect to OpenAI API Code: ${streamedResponse.statusCode}');
       debugPrint(
-          'Failed to connect to OpenAI API: ${streamedResponse.reasonPhrase}');
+          'Failed to connect to OpenAI API: ${streamedResponse.toString()}');
     }
   }
 
   clearMessageList() {
-    _realtime.ref("users").child(uid!).child('gemini-1_5-flash').remove();
+    _realtime.ref("users").child(uid!).child('gpt-o1').remove();
   }
 }

@@ -7,7 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:mimir/env.dart';
 
-class GeminiFlashMessageService extends ChangeNotifier {
+class TestMessageService extends ChangeNotifier {
   final FirebaseDatabase _realtime = FirebaseDatabase.instanceFor(
       app: Firebase.app(),
       databaseURL: 'https://mimir-1a487-default-rtdb.firebaseio.com/');
@@ -16,27 +16,81 @@ class GeminiFlashMessageService extends ChangeNotifier {
   // List<String> messageList = [];
   List<String> messageList = [];
 
-  String api = Env.geminiApiKey;
-  String endpoint =
-      'https://generativelanguage.googleapis.com/v1beta/chat/completions';
+  String api = Env.openAiApiKey;
+  String endpoint = 'https://api.openai.com/v1/chat/completions';
 
   enterMessage(String message, int indexingNum) async {
     await _realtime
         .ref('users')
         .child(uid!)
-        .child('gemini-1_5-flash')
+        .child('test')
         .child('$indexingNum')
         .update({'role': 'user', 'content': message});
 
     notifyListeners();
   }
 
+  // Future<String> getRespone(String message) async {
+  //   Map<String, String> headers = {
+  //     // 'Accept': 'application/json',
+  //     'Content-Type': 'application/json',
+  //     'Authorization': 'Bearer $api',
+  //   };
+
+  //   Map<String, dynamic> data = {
+  //     'model': 'gpt-4o-mini',
+  //     'stream': true,
+  //     // "temperature": 0.7,
+  //   };
+  //   DataSnapshot snapshot =
+  //       await _realtime.ref("users").child(uid!).child('test').get();
+  //   Map<dynamic, dynamic> value = snapshot.value as Map<dynamic, dynamic>;
+
+  //   int cnt = 0;
+  //   for (var _ in value.keys) {
+  //     cnt++;
+  //   }
+  //   List messages = [
+  //     {
+  //       'role': 'system',
+  //       'content': 'You are very kind, intelligent, and perceptive',
+  //     },
+  //   ];
+
+  //   if (cnt >= 3) {
+  //     for (var value in value.values) {
+  //       messages.add(value[0]);
+  //     }
+  //     messages.add({'role': 'user', 'content': message});
+  //   } else {
+  //     messages.add({'role': 'user', 'content': message});
+  //   }
+
+  //   data['messages'] = messages;
+  //   var response = await http.post(
+  //     Uri.parse(endpoint),
+  //     headers: headers,
+  //     body: jsonEncode(data),
+  //   );
+  //   // ignore: avoid_print
+  //   if (response.statusCode == 200) {
+  //     Map<String, dynamic> jsonResponse =
+  //         jsonDecode(utf8.decode(response.bodyBytes));
+  //     String reply =
+  //         jsonResponse['choices'][0]['message']['content'].toString();
+  //     await _realtime.ref('users').child(uid!).child('test').push().set({
+  //       {'role': 'assistant', 'content': reply}
+  //     });
+  //     notifyListeners();
+  //     return reply;
+  //   } else {
+  //     throw Exception('API request failed');
+  //   }
+  // }
+
   Future<void> getResponseFromOpenAI(String userInput, int indexingNum) async {
-    DataSnapshot snapshot = await _realtime
-        .ref("users")
-        .child(uid!)
-        .child('gemini-1_5-flash')
-        .get();
+    DataSnapshot snapshot =
+        await _realtime.ref("users").child(uid!).child('test').get();
     List<dynamic> value = snapshot.value as List<dynamic>;
 
     int cnt = value.length;
@@ -67,7 +121,7 @@ class GeminiFlashMessageService extends ChangeNotifier {
         'Authorization': 'Bearer $api',
       })
       ..body = jsonEncode({
-        'model': 'gemini-1.5-flash',
+        'model': 'gpt-4o-mini',
         'messages': messages,
         'stream': true, // 스트림 활성화
       });
@@ -95,7 +149,7 @@ class GeminiFlashMessageService extends ChangeNotifier {
             await _realtime
                 .ref('users')
                 .child(uid!)
-                .child('gemini-1_5-flash')
+                .child('test')
                 .child('$indexingNum')
                 .update({'role': 'assistant', 'content': responseText});
           }
@@ -105,13 +159,11 @@ class GeminiFlashMessageService extends ChangeNotifier {
       }
     } else {
       debugPrint(
-          'Failed to connect to OpenAI API Code: ${streamedResponse.statusCode}');
-      debugPrint(
           'Failed to connect to OpenAI API: ${streamedResponse.reasonPhrase}');
     }
   }
 
   clearMessageList() {
-    _realtime.ref("users").child(uid!).child('gemini-1_5-flash').remove();
+    _realtime.ref("users").child(uid!).child('test').remove();
   }
 }

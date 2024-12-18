@@ -2,18 +2,29 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 
-class GPT4o1PreviewMessageService extends ChangeNotifier {
+class GPT4OriMessageService extends ChangeNotifier {
+  final FirebaseDatabase _realtime = FirebaseDatabase.instanceFor(
+      app: Firebase.app(),
+      databaseURL: 'https://mimir-1a487-default-rtdb.firebaseio.com/');
+  final String? uid = FirebaseAuth.instance.currentUser?.uid;
+
   List<String> messageList = [];
 
   String api =
       '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';
   String endpoint = 'https://api.openai.com/v1/chat/completions';
 
-  enterMessage(String message) {
+  enterMessage(String message) async {
     String userMessage = message;
     messageList.add(userMessage);
     notifyListeners();
+    await _realtime.ref('users').child(uid!).child('chats').set({
+      {'role': 'user', 'content': message}
+    });
   }
 
   Future<String> getRespone(String message) async {
@@ -24,7 +35,7 @@ class GPT4o1PreviewMessageService extends ChangeNotifier {
     };
 
     Map<String, dynamic> data = {
-      'model': 'o1-preview',
+      'model': 'gpt-4o-2024-11-20',
       // "temperature": 0.7,
     };
     List messages = [

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
-import 'package:mimir/gemini_1.5_flash_message.dart';
+import 'package:mimir/gpt_o1_message.dart';
 import 'package:mimir/main.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,14 +11,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:collection';
 
-class GeminiFlashScreen extends StatefulWidget {
-  const GeminiFlashScreen({super.key});
+class GPTo1Screen extends StatefulWidget {
+  const GPTo1Screen({super.key});
 
   @override
   ChatScreenState createState() => ChatScreenState();
 }
 
-class ChatScreenState extends State<GeminiFlashScreen> {
+class ChatScreenState extends State<GPTo1Screen> {
   late DatabaseReference _database;
   late TextEditingController textController;
   final ScrollController _scrollController = ScrollController();
@@ -40,7 +40,7 @@ class ChatScreenState extends State<GeminiFlashScreen> {
       _database = FirebaseDatabase.instanceFor(
         app: Firebase.app(),
         databaseURL: 'https://mimir-1a487-default-rtdb.firebaseio.com/',
-      ).ref('users').child(uid!).child('gemini-1_5-flash');
+      ).ref('users').child(uid!).child('gpt-o1');
 
       DataSnapshot snapshot = await _database.get();
       if (snapshot.value == null) {
@@ -80,7 +80,7 @@ class ChatScreenState extends State<GeminiFlashScreen> {
       _needScroll = false;
     }
 
-    return Consumer<GeminiFlashMessageService>(
+    return Consumer<GPTo1MessageService>(
       builder: (context, messageService, child) {
         return GestureDetector(
           child: Scaffold(
@@ -100,7 +100,7 @@ class ChatScreenState extends State<GeminiFlashScreen> {
                 ),
               ),
               title: Center(
-                child: Text('Gemini 1.5 Flash'),
+                child: Text('GPT o1'),
               ),
               actions: [
                 IconButton(

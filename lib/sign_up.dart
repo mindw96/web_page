@@ -1,5 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:mimir/main.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -12,6 +16,10 @@ class _SignupPageState extends State<SignupPage> {
   final _key = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final FirebaseDatabase _realtime = FirebaseDatabase.instanceFor(
+      app: Firebase.app(),
+      databaseURL: 'https://mimir-1a487-default-rtdb.firebaseio.com/');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,13 +137,21 @@ class _SignupPageState extends State<SignupPage> {
   void _signup() async {
     // 여기에 작성
     try {
+      String? uid = FirebaseAuth.instance.currentUser?.uid;
       final _ = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
             email: _emailController.text,
             password: _passwordController.text,
           )
           // ignore: use_build_context_synchronously
-          .then((_) => Navigator.pushNamed(context, "/login"));
+          .then((_) => {
+                _realtime.ref('users').child(uid!).push().set({}),
+                if (mounted)
+                  {
+                    Navigator.push(context,
+                        CupertinoPageRoute(builder: (_) => const LoginScreen()))
+                  }
+              });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         if (mounted) {
