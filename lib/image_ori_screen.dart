@@ -86,29 +86,27 @@ class ImageScreenState extends State<ImageScreenOri> {
     anchor.remove();
   }
 
-  Future<void> saveImageUsingDio(String imageUrl) async {
+  Future<void> downloadImage(String imageUrl) async {
+    // final String proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    final String proxyUrl = 'https://cors.bridged.cc/';
+    final String proxiedImageUrl = '$proxyUrl$imageUrl';
+    final Dio dio = Dio();
     try {
-      // Dio로 이미지 데이터를 다운로드
-      Dio dio = Dio();
-      Response<Uint8List> response = await dio.get<Uint8List>(
-        imageUrl,
+      final Response<Uint8List> response = await dio.get<Uint8List>(
+        proxiedImageUrl,
         options: Options(responseType: ResponseType.bytes),
       );
 
-      // Uint8List 데이터를 Blob으로 변환
       final blob = html.Blob([response.data!]);
       final url = html.Url.createObjectUrlFromBlob(blob);
 
-      // 파일 다운로드
       final anchor = html.AnchorElement(href: url)
-        ..target = 'blank'
-        ..download = 'downloaded_image.jpg'; // 다운로드될 파일 이름
-      anchor.click();
+        ..download = 'downloaded_image.jpg'
+        ..click();
 
-      // URL 해제
       html.Url.revokeObjectUrl(url);
     } catch (e) {
-      print('Error downloading image: $e');
+      print('Failed to download image: $e');
     }
   }
 
@@ -285,7 +283,7 @@ class ImageScreenState extends State<ImageScreenOri> {
                                             IconButton(
                                               icon: Icon(Icons.save_alt),
                                               onPressed: () {
-                                                saveImageUsingDio(chat);
+                                                downloadImage(chat);
                                               },
                                             ),
                                           ],
