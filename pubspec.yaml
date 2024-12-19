@@ -58,6 +58,8 @@ dependencies:
   image_downloader: ^0.31.0
   path_provider: ^2.1.5
   dio: ^5.7.0
+  cached_network_image: ^3.4.1
+  extended_image: ^9.0.7
 
 dev_dependencies:
   flutter_test:

@@ -24,21 +24,16 @@ class _BotListState extends State<BotList> {
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.only(top: 20, bottom: 10, left: 30),
-            child: Align(
-              alignment: Alignment.centerLeft, // 왼쪽 정렬
-              child: Text(
-                'Chats',
-                textAlign: TextAlign.left, // 추가적인 왼쪽 정렬
-              ),
-            ),
-          ),
           Expanded(
             child: ListView(
               shrinkWrap: true,
               padding: EdgeInsets.zero, // ListView의 기본 패딩 제거
               children: [
+                ListTile(
+                  title: Text(
+                    'Chats',
+                  ),
+                ),
                 // ListTile(
                 //   leading: Image.asset(
                 //     'assets/images/ChatGPT_logo.png',
@@ -158,44 +153,33 @@ class _BotListState extends State<BotList> {
                       CupertinoPageRoute(builder: (_) => GeminiFlashScreen()),
                     );
                   },
-                )
+                ),
+                ListTile(
+                  title: Text(
+                    'Image',
+                  ),
+                ),
+                ListTile(
+                  leading: Image.asset(
+                    'assets/images/ChatGPT_logo.png',
+                    width: 40,
+                    height: 40,
+                  ),
+                  title: Text(
+                    'DALL-E 3',
+                  ),
+                  subtitle: Text(
+                    'DALL-E 3 입니다.',
+                    style: textTheme.bodySmall!,
+                  ),
+                  onTap: () {
+                    Navigator.push(context,
+                        CupertinoPageRoute(builder: (_) => ImageScreenOri()));
+                  },
+                ),
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.only(top: 0, bottom: 10, left: 30),
-            child: Align(
-              alignment: Alignment.centerLeft, // 왼쪽 정렬
-              child: Text(
-                'Image',
-                textAlign: TextAlign.left, // 추가적인 왼쪽 정렬
-              ),
-            ),
-          ),
-          Expanded(
-            child: ListView(
-                padding: EdgeInsets.zero, // ListView의 기본 패딩 제거
-                children: [
-                  ListTile(
-                    leading: Image.asset(
-                      'assets/images/ChatGPT_logo.png',
-                      width: 40,
-                      height: 40,
-                    ),
-                    title: Text(
-                      'DALL-E 3',
-                    ),
-                    subtitle: Text(
-                      'DALL-E 3 입니다.',
-                      style: textTheme.bodySmall!,
-                    ),
-                    onTap: () {
-                      Navigator.push(context,
-                          CupertinoPageRoute(builder: (_) => ImageScreenOri()));
-                    },
-                  ),
-                ]),
-          )
         ],
       ),
     );

@@ -25,6 +25,7 @@ class ChatScreenState extends State<GPT4OriScreen> {
   late int indexingNum;
   String? uid;
   bool _needScroll = false;
+  final _focusNode = FocusNode();
 
   @override
   void initState() {
@@ -62,7 +63,11 @@ class ChatScreenState extends State<GPT4OriScreen> {
 
   void _scrollToBottom() {
     if (_scrollController.hasClients) {
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
     }
   }
 
@@ -84,6 +89,7 @@ class ChatScreenState extends State<GPT4OriScreen> {
       builder: (context, messageService, child) {
         return GestureDetector(
           child: Scaffold(
+            resizeToAvoidBottomInset: true,
             backgroundColor: Colors.white,
             appBar: AppBar(
               centerTitle: true,
@@ -116,6 +122,9 @@ class ChatScreenState extends State<GPT4OriScreen> {
               ],
             ),
             body: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
               child: Column(
                 children: [
                   Expanded(
@@ -153,48 +162,38 @@ class ChatScreenState extends State<GPT4OriScreen> {
                         }
 
                         for (var value in chatList1) {
+                          debugPrint(value.toString());
                           if (value is List) {
                             chatList2.add(value[0]['content']);
                           } else {
                             chatList2.add(value['content']);
                           }
                         }
-
-                        return ListView.builder(
-                          controller: _scrollController,
-                          itemCount: chatList2.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            var chat = chatList2[index];
-                            bool isSender = (index + 1) % 2 != 0;
-                            return ListTile(
-                              title: Align(
-                                alignment: isSender
-                                    ? Alignment.centerRight
-                                    : Alignment.centerLeft,
-                                child: BubbleSpecialThree(
-                                  text: chat,
-                                  color: isSender
-                                      ? const Color.fromARGB(255, 34, 148, 251)
-                                      : const Color.fromARGB(
-                                          255, 180, 180, 188),
-                                  tail: true,
-                                  isSender: isSender ? true : false,
-                                  textStyle: TextStyle(
-                                    color:
-                                        isSender ? Colors.white : Colors.black,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
+                        // chatList2 = chatList2.reversed.toList();
+                        return Align(
+                          alignment: Alignment.topCenter,
+                          child: ListView.separated(
+                            shrinkWrap: true,
+                            // reverse: true,
+                            controller: _scrollController,
+                            itemCount: chatList2.length,
+                            separatorBuilder: (_, __) => const SizedBox(
+                              height: 12,
+                            ),
+                            itemBuilder: (BuildContext context, int index) {
+                              var chat = chatList2[index];
+                              bool isSender = (index + 1) % 2 != 0;
+                              return Messages(isSender: isSender, chat: chat);
+                            },
+                          ),
                         );
                       },
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 1.0, 8.0, 0.0),
+                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
                     child: TextField(
+                      focusNode: _focusNode,
                       onSubmitted: (String userMessage) {
                         if (userMessage.trim().isNotEmpty) {
                           textController.clear();
@@ -204,6 +203,7 @@ class ChatScreenState extends State<GPT4OriScreen> {
                           messageService.getResponseFromOpenAI(
                               userMessage, indexingNum);
                           indexingNum++;
+                          _scrollToBottom();
                         }
                       },
                       textInputAction: TextInputAction.done,
@@ -226,6 +226,7 @@ class ChatScreenState extends State<GPT4OriScreen> {
                               messageService.getResponseFromOpenAI(
                                   userMessage, indexingNum);
                               indexingNum++;
+                              _scrollToBottom();
                             }
                           },
                           child: const Icon(
@@ -251,6 +252,36 @@ class ChatScreenState extends State<GPT4OriScreen> {
           ),
         );
       },
+    );
+  }
+}
+
+class Messages extends StatelessWidget {
+  const Messages({
+    super.key,
+    required this.isSender,
+    required this.chat,
+  });
+
+  final bool isSender;
+  final String chat;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
+      child: BubbleSpecialThree(
+        text: chat,
+        color: isSender
+            ? const Color.fromARGB(255, 34, 148, 251)
+            : const Color.fromARGB(255, 180, 180, 188),
+        tail: true,
+        isSender: isSender ? true : false,
+        textStyle: TextStyle(
+          color: isSender ? Colors.white : Colors.black,
+          fontSize: 16,
+        ),
+      ),
     );
   }
 }

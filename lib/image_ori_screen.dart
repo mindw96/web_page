@@ -1,20 +1,20 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:html' as html;
 import 'dart:typed_data';
 
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
-import 'package:image_downloader/image_downloader.dart';
-import 'package:mimir/image_ori_message.dart';
-import 'package:mimir/main.dart';
-import 'package:provider/provider.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:image_network/image_network.dart';
-import 'dart:collection';
+import 'package:provider/provider.dart';
+
+import 'package:mimir/image_ori_message.dart';
+import 'package:mimir/main.dart';
 
 class ImageScreenOri extends StatefulWidget {
   const ImageScreenOri({super.key});
@@ -203,94 +203,33 @@ class ImageScreenState extends State<ImageScreenOri> {
                           itemBuilder: (BuildContext context, int index) {
                             var chat = chatList2[index];
                             bool isSender = (index + 1) % 2 != 0;
-                            return ListTile(
-                              title: isSender
-                                  ? BubbleSpecialThree(
-                                      text: chat,
-                                      color: const Color.fromARGB(
-                                          255, 34, 148, 251),
-                                      tail: true,
-                                      isSender: true,
-                                      textStyle: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                      ),
-                                    )
-                                  : Row(
-                                      children: [
-                                        ImageNetwork(
-                                          image: chat,
+                            if (isSender) {
+                              return UserMessage(chat: chat);
+                            } else {
+                              return Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ImageMessage(
+                                      indexingNum: indexingNum, chat: chat),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              0.3,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.3,
-                                          fitWeb: BoxFitWeb.cover,
-                                          onPointer: true,
-                                          onLoading:
-                                              const CircularProgressIndicator(
-                                            color: Colors.indigoAccent,
-                                          ),
-                                          onTap: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return Container(
-                                                  width: double.infinity,
-                                                  height: double.infinity,
-                                                  child: Dialog(
-                                                    backgroundColor:
-                                                        Colors.white,
-                                                    child: ImageNetwork(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              18),
-                                                      image: chat,
-                                                      height:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.5,
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.5,
-                                                      // fullScreen: true,
-                                                      onPointer: true,
-                                                      onTap: () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                      onLoading:
-                                                          const CircularProgressIndicator(
-                                                        color:
-                                                            Colors.indigoAccent,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
-                                        ),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            IconButton(
-                                              icon: Icon(Icons.save_alt),
-                                              onPressed: () {
-                                                downloadImage(chat);
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                            );
+                                              0.35),
+                                      IconButton(
+                                        icon: Icon(Icons.save_alt),
+                                        onPressed: () {
+                                          downloadImage(chat);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            }
                           },
                         );
                       },
@@ -355,6 +294,88 @@ class ImageScreenState extends State<ImageScreenOri> {
           ),
         );
       },
+    );
+  }
+}
+
+class ImageMessage extends StatelessWidget {
+  const ImageMessage({
+    super.key,
+    required this.indexingNum,
+    required this.chat,
+  });
+
+  final int indexingNum;
+  final String chat;
+
+  @override
+  Widget build(BuildContext context) {
+    return BubbleNormalImage(
+      id: '$indexingNum',
+      bubbleRadius: BUBBLE_RADIUS_IMAGE,
+      image: ImageNetwork(
+        image: chat,
+        height: MediaQuery.of(context).size.width * 0.5,
+        width: MediaQuery.of(context).size.width * 0.5,
+        fitWeb: BoxFitWeb.cover,
+        fullScreen: true,
+        onPointer: true,
+        onError: const Icon(Icons.error),
+        onLoading: const CircularProgressIndicator(
+          color: Colors.indigoAccent,
+        ),
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return Dialog(
+                backgroundColor: Colors.transparent,
+                child: ImageNetwork(
+                  borderRadius: BorderRadius.circular(18),
+                  image: chat,
+                  height: MediaQuery.of(context).size.width * 0.8,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  // fullScreen: true,
+                  onPointer: true,
+                  fullScreen: true,
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  onLoading: const CircularProgressIndicator(
+                    color: Colors.indigoAccent,
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
+      color: Colors.transparent,
+      isSender: false,
+      tail: true,
+    );
+  }
+}
+
+class UserMessage extends StatelessWidget {
+  const UserMessage({
+    super.key,
+    required this.chat,
+  });
+
+  final String chat;
+
+  @override
+  Widget build(BuildContext context) {
+    return BubbleSpecialThree(
+      text: chat,
+      color: const Color.fromARGB(255, 34, 148, 251),
+      tail: true,
+      isSender: true,
+      textStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 16,
+      ),
     );
   }
 }

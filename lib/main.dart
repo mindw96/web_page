@@ -101,53 +101,70 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color.fromARGB(255, 27, 26, 50),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         title: Text(
           'Mimir',
           textAlign: TextAlign.center,
+          style: TextStyle(
+              color: Color.fromARGB(255, 245, 240, 183), fontSize: 24.0),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Form(
-            key: _key,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 300,
-                  child: emailInput(),
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: 300,
-                  child: passwordInput(),
-                ),
-                const SizedBox(height: 16),
-                loginButton(),
-                const SizedBox(height: 16),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    overlayColor: Colors.blue.withAlpha(30),
-                  ),
-                  onPressed: () => Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (_) => SignupPage(),
-                    ),
-                  ),
-                  child: const Text(
-                    style: TextStyle(color: Colors.black),
-                    "Sign Up",
-                  ),
-                ),
-              ],
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0), // 이미지와 상단 간격 조정
+            child: Center(
+              child: Image.asset(
+                'assets/images/main_logo-removebg.png', // 원하는 이미지 경로
+                width: 300, // 이미지 너비
+                height: 300, // 이미지 높이
+              ),
             ),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: Form(
+                key: _key,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 300,
+                      child: emailInput(),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: 300,
+                      child: passwordInput(),
+                    ),
+                    const SizedBox(height: 16),
+                    loginButton(),
+                    const SizedBox(height: 16),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        overlayColor: Color.fromARGB(255, 245, 240, 183),
+                      ),
+                      onPressed: () => Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (_) => SignupPage(),
+                        ),
+                      ),
+                      child: const Text(
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 245, 240, 183)),
+                        "Sign Up",
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -157,8 +174,8 @@ class _LoginScreenState extends State<LoginScreen> {
       onPressed: _login,
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-        backgroundColor: Colors.white,
-        side: BorderSide(color: Colors.black, width: 1),
+        backgroundColor: Colors.transparent,
+        side: BorderSide(color: Colors.transparent, width: 1),
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         shadowColor: Colors.blue,
         elevation: 0,
@@ -172,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       child: Text(
         'Login',
-        style: TextStyle(color: Colors.black),
+        style: TextStyle(color: Color.fromARGB(255, 245, 240, 183)),
       ),
     );
   }
@@ -315,8 +332,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextFormField passwordInput() {
     return TextFormField(
+      cursorColor: Color.fromARGB(255, 245, 240, 183),
       controller: _passwordController,
       obscureText: true,
+      style: TextStyle(color: Color.fromARGB(255, 245, 240, 183)),
       validator: (val) {
         if (val!.isEmpty) {
           return 'The input is empty.';
@@ -326,11 +345,11 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       decoration: InputDecoration(
         label: Text(
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Color.fromARGB(255, 245, 240, 183)),
           'Password',
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue),
+          borderSide: BorderSide(color: Color.fromARGB(255, 245, 240, 183)),
         ),
         border: OutlineInputBorder(),
       ),
@@ -342,6 +361,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextFormField emailInput() {
     return TextFormField(
+      cursorColor: Color.fromARGB(255, 245, 240, 183),
       controller: _emailController,
       validator: (val) {
         if (val!.isEmpty) {
@@ -350,13 +370,13 @@ class _LoginScreenState extends State<LoginScreen> {
           return null;
         }
       },
-      style: TextStyle(color: Colors.black),
+      style: TextStyle(color: Color.fromARGB(255, 245, 240, 183)),
       decoration: InputDecoration(
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue),
+          borderSide: BorderSide(color: Color.fromARGB(255, 245, 240, 183)),
         ),
         label: Text(
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Color.fromARGB(255, 245, 240, 183)),
           'Email',
         ),
         border: OutlineInputBorder(),
