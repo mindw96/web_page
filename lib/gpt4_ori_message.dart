@@ -60,7 +60,7 @@ class GPT4OriMessageService extends ChangeNotifier {
         'Authorization': 'Bearer $api',
       })
       ..body = jsonEncode({
-        'model': 'gpt-4o',
+        'model': 'gpt-4o-2024-11-20',
         'messages': messages,
         'stream': true, // 스트림 활성화
       });
