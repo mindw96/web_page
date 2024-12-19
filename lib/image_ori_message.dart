@@ -4,28 +4,70 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:mimir/env.dart';
 
 class ImageServiceOri extends ChangeNotifier {
+  final FirebaseDatabase _realtime = FirebaseDatabase.instanceFor(
+      app: Firebase.app(),
+      databaseURL: 'https://mimir-1a487-default-rtdb.firebaseio.com/');
+  final String? uid = FirebaseAuth.instance.currentUser?.uid;
+
   List<String> messageList = [];
 
-  String api =
-      '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';
+  String api = Env.openAiApiKey;
   String endpoint = 'https://api.openai.com/v1/images/generations';
 
-  enterMessage(String message) {
-    String userMessage = message;
-    messageList.add(userMessage);
+  enterMessage(String message, int indexingNum) async {
+    await _realtime
+        .ref('users')
+        .child(uid!)
+        .child('dall-e-3')
+        .child('$indexingNum')
+        .update({'role': 'user', 'content': message});
     notifyListeners();
   }
 
-  Future<String> getRespone(String message) async {
+  Future<void> getResponseFromOpenAI(String userInput, int indexingNum) async {
+    DataSnapshot snapshot =
+        await _realtime.ref("users").child(uid!).child('dall-e-3').get();
+    List<dynamic> value = snapshot.value as List<dynamic>;
+    int cnt = value.length;
+
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $api',
     };
 
+    List messages = [];
+
+    if (cnt >= 2) {
+      for (var item in value) {
+        if (item == null) {
+          continue;
+        } else if (item is List) {
+          messages.add(item[0]);
+        } else if (item is Map) {
+          messages.add(item);
+        }
+      }
+    } else {
+      messages.add({
+        'prompt': userInput,
+        'model': 'dall-e-3',
+        "n": 1,
+        // "size": "256x256"
+        // "size": "512x512"
+        "size": "1024x1024",
+        "style": "natural",
+        "quality": "hd",
+      });
+    }
+
     Map<String, dynamic> data = {
-      'prompt': message,
+      'prompt': userInput,
       'model': 'dall-e-3',
       "n": 1,
       // "size": "256x256"
@@ -48,19 +90,24 @@ class ImageServiceOri extends ChangeNotifier {
 
       String reply = jsonResponse['data'][0]['url'].toString();
       print(reply);
-      return reply;
+      await _realtime
+          .ref('users')
+          .child(uid!)
+          .child('dall-e-3')
+          .child('$indexingNum')
+          .update({'role': 'assistant', 'content': reply});
     } else {
-      throw Exception('API request failed');
+      await _realtime
+          .ref('users')
+          .child(uid!)
+          .child('dall-e-3')
+          .child('$indexingNum')
+          .update({'role': 'assistant', 'content': '${response.statusCode}'});
     }
   }
 
   clearMessageList() {
-    messageList.clear();
-    notifyListeners();
-  }
-
-  deleteLast() {
-    messageList.removeLast();
+    _realtime.ref("users").child(uid!).child('dall-e-3').remove();
     notifyListeners();
   }
 }

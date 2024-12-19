@@ -5,6 +5,7 @@
 *.swp
 *.env
 *.env.dev
+env.g.dart
 .DS_Store
 .atom/
 .buildlog/

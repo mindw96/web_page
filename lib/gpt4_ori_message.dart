@@ -13,9 +13,6 @@ class GPT4OriMessageService extends ChangeNotifier {
       databaseURL: 'https://mimir-1a487-default-rtdb.firebaseio.com/');
   final String? uid = FirebaseAuth.instance.currentUser?.uid;
 
-  // List<String> messageList = [];
-  List<String> messageList = [];
-
   String api = Env.openAiApiKey;
   String endpoint = 'https://api.openai.com/v1/chat/completions';
 
