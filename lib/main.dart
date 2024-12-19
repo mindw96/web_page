@@ -106,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: Colors.transparent,
         title: Text(
           'Mimir',
-          textAlign: TextAlign.center,
+          textAlign: TextAlign.left,
           style: TextStyle(
               color: Color.fromARGB(255, 245, 240, 183), fontSize: 24.0),
         ),
