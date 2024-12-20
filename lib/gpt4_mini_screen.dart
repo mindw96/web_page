@@ -3,22 +3,22 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
+import 'package:mimir/gpt4_mini_message.dart';
 import 'package:mimir/main.dart';
-import 'package:mimir/solar_pro_message.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:collection';
 
-class SOLARPROScreen extends StatefulWidget {
-  const SOLARPROScreen({super.key});
+class GPT4MiniScreen extends StatefulWidget {
+  const GPT4MiniScreen({super.key});
 
   @override
   ChatScreenState createState() => ChatScreenState();
 }
 
-class ChatScreenState extends State<SOLARPROScreen> {
+class ChatScreenState extends State<GPT4MiniScreen> {
   late DatabaseReference _database;
   late TextEditingController textController;
   final ScrollController _scrollController = ScrollController();
@@ -40,7 +40,7 @@ class ChatScreenState extends State<SOLARPROScreen> {
       _database = FirebaseDatabase.instanceFor(
         app: Firebase.app(),
         databaseURL: 'https://mimir-1a487-default-rtdb.firebaseio.com/',
-      ).ref('users').child(uid!).child('solar-pro');
+      ).ref('users').child(uid!).child('gpt-4o-mini');
 
       _database.onValue.listen(
         (DatabaseEvent event) {
@@ -110,7 +110,7 @@ class ChatScreenState extends State<SOLARPROScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<SOLARPROMessageService>(
+    return Consumer<GPT4MiniMessageService>(
       builder: (context, messageService, child) {
         return Scaffold(
           resizeToAvoidBottomInset: true,
@@ -230,7 +230,7 @@ class ChatScreenState extends State<SOLARPROScreen> {
     );
   }
 
-  void _sendMessage(SOLARPROMessageService messageService, String userMessage) {
+  void _sendMessage(GPT4MiniMessageService messageService, String userMessage) {
     textController.clear();
     messageService.enterMessage(userMessage, _chatList.length);
     // indexingNum++;

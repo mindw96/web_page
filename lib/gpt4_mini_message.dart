@@ -7,7 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:mimir/env.dart';
 
-class TestMessageService extends ChangeNotifier {
+class GPT4MiniMessageService extends ChangeNotifier {
   final FirebaseDatabase _realtime = FirebaseDatabase.instanceFor(
       app: Firebase.app(),
       databaseURL: 'https://mimir-1a487-default-rtdb.firebaseio.com/');
@@ -20,7 +20,7 @@ class TestMessageService extends ChangeNotifier {
     await _realtime
         .ref('users')
         .child(uid!)
-        .child('test')
+        .child('gpt-4o-mini')
         .child('$indexingNum')
         .update({'role': 'user', 'content': message});
 
@@ -29,7 +29,7 @@ class TestMessageService extends ChangeNotifier {
 
   Future<void> getResponseFromOpenAI(String userInput, int indexingNum) async {
     DataSnapshot snapshot =
-        await _realtime.ref("users").child(uid!).child('test').get();
+        await _realtime.ref("users").child(uid!).child('gpt-4o-mini').get();
     List<dynamic> value = snapshot.value as List<dynamic>;
 
     int cnt = value.length;
@@ -88,10 +88,9 @@ class TestMessageService extends ChangeNotifier {
             await _realtime
                 .ref('users')
                 .child(uid!)
-                .child('test')
+                .child('gpt-4o-mini')
                 .child('$indexingNum')
                 .update({'role': 'assistant', 'content': responseText});
-            notifyListeners();
           }
         } catch (e) {
           debugPrint('Error parsing JSON: $e');
@@ -99,13 +98,11 @@ class TestMessageService extends ChangeNotifier {
       }
     } else {
       debugPrint(
-          'Failed to connect to OpenAI API Error Code: ${streamedResponse.statusCode}');
-      debugPrint(
           'Failed to connect to OpenAI API: ${streamedResponse.reasonPhrase}');
     }
   }
 
   clearMessageList() {
-    _realtime.ref("users").child(uid!).child('test').remove();
+    _realtime.ref("users").child(uid!).child('gpt-4o-mini').remove();
   }
 }

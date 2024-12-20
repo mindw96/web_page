@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:mimir/env.dart';
 import 'package:mimir/fb_test_message.dart';
 import 'package:mimir/firebase_options.dart';
+import 'package:mimir/gpt4_mini_message.dart';
 
 import 'package:provider/provider.dart';
 import 'package:mimir/bot_list.dart';
@@ -34,6 +35,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (context) => TestMessageService()),
         ChangeNotifierProvider(create: (context) => ImageServiceOri()),
         ChangeNotifierProvider(create: (context) => GPT4OriMessageService()),
+        ChangeNotifierProvider(create: (context) => GPT4MiniMessageService()),
         ChangeNotifierProvider(create: (context) => GPTo1MessageService()),
         ChangeNotifierProvider(create: (context) => SOLARMessageService()),
         ChangeNotifierProvider(create: (context) => SOLARPROMessageService()),
@@ -101,6 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Color.fromARGB(255, 27, 26, 50),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -111,60 +114,76 @@ class _LoginScreenState extends State<LoginScreen> {
               color: Color.fromARGB(255, 245, 240, 183), fontSize: 24.0),
         ),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 20.0), // 이미지와 상단 간격 조정
-            child: Center(
-              child: Image.asset(
-                'assets/images/main_logo-removebg.png', // 원하는 이미지 경로
-                width: 300, // 이미지 너비
-                height: 300, // 이미지 높이
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Center(
-              child: Form(
-                key: _key,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 300,
-                      child: emailInput(),
-                    ),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      width: 300,
-                      child: passwordInput(),
-                    ),
-                    const SizedBox(height: 16),
-                    loginButton(),
-                    const SizedBox(height: 16),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        overlayColor: Color.fromARGB(255, 245, 240, 183),
-                      ),
-                      onPressed: () => Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (_) => SignupPage(),
-                        ),
-                      ),
-                      child: const Text(
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 245, 240, 183)),
-                        "Sign Up",
-                      ),
-                    ),
-                  ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0), // 이미지와 상단 간격 조정
+              child: Center(
+                child: Image.asset(
+                  'assets/images/main_logo-removebg.png', // 원하는 이미지 경로
+                  width: 300, // 이미지 너비
+                  height: 300, // 이미지 높이
                 ),
               ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Center(
+                child: Form(
+                  key: _key,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 300,
+                        child: emailInput(),
+                      ),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        width: 300,
+                        child: passwordInput(),
+                      ),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        width: 300,
+                        child: loginButton(),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Don\'t have an account?',
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 245, 240, 183)
+                                    .withValues(alpha: .8)),
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              overlayColor: Color.fromARGB(255, 245, 240, 183),
+                            ),
+                            onPressed: () => Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (_) => SignupPage(),
+                              ),
+                            ),
+                            child: const Text(
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 245, 240, 183)),
+                              "Sign Up",
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -177,18 +196,18 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: Colors.transparent,
         side: BorderSide(color: Colors.transparent, width: 1),
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        shadowColor: Colors.blue,
+        shadowColor: Color.fromARGB(255, 245, 240, 183),
         elevation: 0,
       ).copyWith(
         overlayColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.hovered)) {
-            return Colors.blue.withValues(alpha: 0.3);
+            return Color.fromARGB(255, 245, 240, 183).withValues(alpha: 0.3);
           }
           return null;
         }),
       ),
       child: Text(
-        'Login',
+        'Sign In',
         style: TextStyle(color: Color.fromARGB(255, 245, 240, 183)),
       ),
     );

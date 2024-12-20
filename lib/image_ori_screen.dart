@@ -121,7 +121,7 @@ class ImageScreenState extends State<ImageScreenOri> {
       builder: (context, messageService, child) {
         return GestureDetector(
           child: Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: Color.fromARGB(255, 27, 26, 50),
             appBar: AppBar(
               centerTitle: true,
               toolbarHeight: 50.0,
@@ -133,11 +133,15 @@ class ImageScreenState extends State<ImageScreenOri> {
                 },
                 icon: const Icon(
                   Icons.arrow_back_sharp,
-                  color: Colors.black,
+                  color: Color.fromARGB(255, 245, 240, 183),
                 ),
               ),
               title: Center(
-                child: Text('Dall E 3'),
+                child: Text(
+                  'Dall E 3',
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 245, 240, 183), fontSize: 18),
+                ),
               ),
               actions: [
                 IconButton(
@@ -147,7 +151,7 @@ class ImageScreenState extends State<ImageScreenOri> {
                   },
                   icon: const Icon(
                     Icons.refresh,
-                    color: Colors.black,
+                    color: Color.fromARGB(255, 245, 240, 183),
                   ),
                 )
               ],
@@ -220,7 +224,11 @@ class ImageScreenState extends State<ImageScreenOri> {
                                                   .width *
                                               0.35),
                                       IconButton(
-                                        icon: Icon(Icons.save_alt),
+                                        icon: Icon(
+                                          Icons.save_alt,
+                                          color: Color.fromARGB(
+                                              255, 245, 240, 183),
+                                        ),
                                         onPressed: () {
                                           downloadImage(chat);
                                         },
@@ -238,6 +246,9 @@ class ImageScreenState extends State<ImageScreenOri> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 1.0, 8.0, 0.0),
                     child: TextField(
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 245, 240, 183),
+                      ),
                       onSubmitted: (String userMessage) {
                         if (userMessage.trim().isNotEmpty) {
                           textController.clear();
@@ -274,12 +285,17 @@ class ImageScreenState extends State<ImageScreenOri> {
                           child: const Icon(
                             CupertinoIcons.arrow_up_circle_fill,
                             size: 30,
+                            color: Color.fromARGB(255, 245, 240, 183),
                           ),
                         ),
                         hintText: '내용을 입력하세요',
+                        hintStyle: TextStyle(
+                          color: Color.fromARGB(255, 245, 240, 183),
+                        ),
                         contentPadding: const EdgeInsets.fromLTRB(30, 1, 1, 1),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.blue),
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 245, 240, 183)),
                           borderRadius: BorderRadius.circular(38),
                         ),
                       ),
@@ -320,9 +336,10 @@ class ImageMessage extends StatelessWidget {
         fitWeb: BoxFitWeb.cover,
         fullScreen: true,
         onPointer: true,
-        onError: const Icon(Icons.error),
+        onError:
+            const Icon(Icons.error, color: Color.fromARGB(255, 245, 240, 183)),
         onLoading: const CircularProgressIndicator(
-          color: Colors.indigoAccent,
+          color: Color.fromARGB(255, 245, 240, 183),
         ),
         onTap: () {
           showDialog(
@@ -342,7 +359,7 @@ class ImageMessage extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   onLoading: const CircularProgressIndicator(
-                    color: Colors.indigoAccent,
+                    color: Color.fromARGB(255, 245, 240, 183),
                   ),
                 ),
               );
@@ -369,11 +386,11 @@ class UserMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BubbleSpecialThree(
       text: chat,
-      color: const Color.fromARGB(255, 34, 148, 251),
+      color: Color.fromARGB(255, 110, 134, 158),
       tail: true,
       isSender: true,
       textStyle: TextStyle(
-        color: Colors.white,
+        color: Color.fromARGB(255, 245, 240, 183),
         fontSize: 16,
       ),
     );
