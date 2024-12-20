@@ -1,1 +1,3 @@
-# Mimir
+# Mimir  
+  
+https://chat.mindong.uk
