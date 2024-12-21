@@ -61,6 +61,9 @@ dependencies:
   cached_network_image: ^3.4.1
   extended_image: ^9.0.7
   flutter_native_splash: ^2.4.3
+  flutter_chat_bubble: ^2.0.2
+  markdown_widget: ^2.3.2+6
+  gpt_markdown: ^1.0.0
 
 dev_dependencies:
   flutter_test:

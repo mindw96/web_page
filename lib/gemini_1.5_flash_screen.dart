@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
+import 'package:flutter_chat_bubble/chat_bubble.dart';
+import 'package:gpt_markdown/gpt_markdown.dart';
 import 'package:mimir/gemini_1.5_flash_message.dart';
 import 'package:mimir/main.dart';
 import 'package:provider/provider.dart';
@@ -256,21 +258,41 @@ class Messages extends StatelessWidget {
     return ListTile(
       title: Align(
         alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
-        child: BubbleSpecialThree(
-          text: chat,
-          color: isSender
-              ? const Color.fromARGB(255, 110, 134, 158)
-              : const Color.fromARGB(255, 113, 119, 123),
-          tail: true,
-          isSender: isSender ? true : false,
-          textStyle: TextStyle(
-            color: isSender
-                ? Color.fromARGB(255, 245, 240, 183)
-                : Color.fromARGB(255, 245, 240, 183),
-            fontSize: 16,
-          ),
-        ),
+        child: isSender
+            ? BubbleSpecialThree(
+                text: chat,
+                color: const Color.fromARGB(255, 110, 134, 158),
+                tail: true,
+                isSender: isSender ? true : false,
+                textStyle: TextStyle(
+                  color: Color.fromARGB(255, 245, 240, 183),
+                  fontSize: 16,
+                ),
+              )
+            : Container(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.75,
+                ),
+                child: getReceiverView(
+                    ChatBubbleClipper3(type: BubbleType.receiverBubble),
+                    context,
+                    chat),
+              ),
       ),
     );
   }
 }
+
+getReceiverView(CustomClipper clipper, BuildContext context, chat) =>
+    SelectionArea(
+      child: ChatBubble(
+        clipper: clipper,
+        backGroundColor: const Color.fromARGB(255, 113, 119, 123),
+        margin: EdgeInsets.only(top: 1, bottom: 1),
+        child: GptMarkdown(
+          chat,
+          style: TextStyle(
+              color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
+        ),
+      ),
+    );

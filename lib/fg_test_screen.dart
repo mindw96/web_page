@@ -3,12 +3,20 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_chat_bubble/bubble_type.dart';
+import 'package:flutter_chat_bubble/chat_bubble.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_3.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:mimir/fb_test_message.dart';
 import 'package:mimir/main.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:markdown/markdown.dart' as md;
+import 'package:markdown_widget/markdown_widget.dart';
+import 'package:gpt_markdown/gpt_markdown.dart';
 import 'dart:collection';
 
 class TestScreen extends StatefulWidget {
@@ -25,12 +33,37 @@ class ChatScreenState extends State<TestScreen> {
   late int indexingNum;
   final List<String> _chatList = [];
   String? uid;
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     textController = TextEditingController();
     _initializeFirebase();
+
+    _focusNode.onKeyEvent = (node, event) {
+      if (event is KeyDownEvent) {
+        final isShiftPressed = HardwareKeyboard.instance.logicalKeysPressed
+            .contains(LogicalKeyboardKey.shiftLeft);
+
+        if (event.logicalKey == LogicalKeyboardKey.enter && isShiftPressed) {
+          // 줄바꿈 처리
+          final text = textController.text;
+          final selection = textController.selection;
+          final newText =
+              text.replaceRange(selection.start, selection.end, '\n');
+          textController.value = TextEditingValue(
+            text: newText,
+            selection: TextSelection.collapsed(
+              offset: selection.start + 1,
+            ),
+          );
+          debugPrint('Shift + Enter pressed');
+          return KeyEventResult.handled;
+        }
+      }
+      return KeyEventResult.ignored;
+    };
   }
 
   Future<void> _initializeFirebase() async {
@@ -105,6 +138,7 @@ class ChatScreenState extends State<TestScreen> {
   void dispose() {
     textController.dispose();
     _scrollController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -181,11 +215,13 @@ class ChatScreenState extends State<TestScreen> {
                   onSubmitted: (String userMessage) {
                     if (userMessage.trim().isNotEmpty) {
                       _sendMessage(messageService, userMessage);
+                      _scrollToBottom();
                     }
                   },
-                  textInputAction: TextInputAction.done,
-                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.none,
+                  keyboardType: TextInputType.multiline,
                   controller: textController,
+                  focusNode: _focusNode,
                   style: TextStyle(
                     color: Color.fromARGB(255, 245, 240, 183),
                   ),
@@ -199,6 +235,7 @@ class ChatScreenState extends State<TestScreen> {
                         String userMessage = textController.text.trim();
                         if (userMessage.isNotEmpty) {
                           _sendMessage(messageService, userMessage);
+                          _scrollToBottom();
                         }
                       },
                       child: const Icon(
@@ -240,6 +277,41 @@ class ChatScreenState extends State<TestScreen> {
   }
 }
 
+class CodeElementBuilder extends MarkdownElementBuilder {
+  bool isCodeBlock(md.Element element) {
+    if (element.attributes['class'] != null) {
+      return true;
+    } else if (element.textContent.contains("\n")) {
+      return true;
+    }
+    return false;
+  }
+
+  @override
+  Widget? visitElementAfter(md.Element element, TextStyle? preferredStyle) {
+    if (!isCodeBlock(element)) {
+      return Container(
+        padding: const EdgeInsets.all(2),
+        child: Text(
+          element.textContent,
+          style: TextStyle(
+              fontSize: 16,
+              fontStyle: FontStyle.italic,
+              color: preferredStyle!.color),
+        ),
+      );
+    } else {
+      return Container(
+        margin: const EdgeInsets.all(10),
+        child: Text(
+          element.textContent,
+          style: const TextStyle(fontSize: 16, color: Colors.white),
+        ),
+      );
+    }
+  }
+}
+
 class Messages extends StatelessWidget {
   const Messages({
     super.key,
@@ -255,21 +327,119 @@ class Messages extends StatelessWidget {
     return ListTile(
       title: Align(
         alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
-        child: BubbleSpecialThree(
-          text: chat,
-          color: isSender
-              ? const Color.fromARGB(255, 110, 134, 158)
-              : const Color.fromARGB(255, 113, 119, 123),
-          tail: true,
-          isSender: isSender ? true : false,
-          textStyle: TextStyle(
-            color: isSender
-                ? Color.fromARGB(255, 245, 240, 183)
-                : Color.fromARGB(255, 245, 240, 183),
-            fontSize: 16,
-          ),
-        ),
+        child: isSender
+            ? BubbleSpecialThree(
+                text: chat,
+                color: const Color.fromARGB(255, 110, 134, 158),
+                tail: true,
+                isSender: isSender ? true : false,
+                textStyle: TextStyle(
+                  color: Color.fromARGB(255, 245, 240, 183),
+                  fontSize: 16,
+                ),
+              )
+            : Container(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.75,
+                ),
+                child: getReceiverView(
+                    ChatBubbleClipper3(type: BubbleType.receiverBubble),
+                    context,
+                    chat),
+              ),
       ),
     );
   }
 }
+
+getReceiverView(CustomClipper clipper, BuildContext context, chat) =>
+    SelectionArea(
+      child: ChatBubble(
+          clipper: clipper,
+          backGroundColor: const Color.fromARGB(255, 113, 119, 123),
+          margin: EdgeInsets.only(top: 1, bottom: 1),
+          child: GptMarkdown(
+            chat,
+            style: TextStyle(
+                color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
+          )
+          // Markdown(
+          //   builders: {
+          //     'code': CodeElementBuilder(),
+          //   },
+          //   padding: EdgeInsets.all(1),
+          //   selectable: true,
+          //   data: chat,
+          //   shrinkWrap: true,
+          //   extensionSet: md.ExtensionSet(
+          //     md.ExtensionSet.gitHubFlavored.blockSyntaxes,
+          //     <md.InlineSyntax>[
+          //       md.EmojiSyntax(),
+          //       ...md.ExtensionSet.gitHubFlavored.inlineSyntaxes
+          //     ],
+          //   ),
+          //   styleSheet: MarkdownStyleSheet(
+          //     em: const TextStyle(fontStyle: FontStyle.italic),
+          //     strong: const TextStyle(fontWeight: FontWeight.bold),
+          //     del: const TextStyle(decoration: TextDecoration.lineThrough),
+          //     a: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
+          //     p: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
+          //     h1: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 28),
+          //     h2: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 26),
+          //     h3: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 24),
+          //     h4: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 22),
+          //     h5: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 20),
+          //     h6: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 18),
+          //     code: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183),
+          //         fontSize: 16,
+          //         fontFamily: 'monospace'),
+          //     checkbox: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
+          //     blockquote: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 12),
+          //     tableBody: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
+          //     tableHead: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
+          //     // blockSpacing: 10,
+          //     listBullet: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
+          //     textScaler: TextScaler.linear(1.0),
+          //     codeblockDecoration: BoxDecoration(
+          //       color: const Color(0xFF414358),
+          //       borderRadius: BorderRadius.circular(5),
+          //     ),
+          //     blockquoteDecoration: BoxDecoration(
+          //       color: const Color.fromARGB(255, 113, 119, 123),
+          //       borderRadius: BorderRadius.circular(5),
+          //     ),
+          //     horizontalRuleDecoration: BoxDecoration(
+          //       border: Border(
+          //         top: BorderSide(
+          //           width: 3.0,
+          //           color: Color.fromARGB(255, 245, 240, 183),
+          //         ),
+          //       ),
+          //     ),
+          //     tableCellsDecoration: BoxDecoration(
+          //       color: const Color.fromARGB(125, 113, 119, 123),
+          //       border: Border(
+          //         top: BorderSide(
+          //           width: 1.0,
+          //           color: Color.fromARGB(255, 245, 240, 183),
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          ),
+    );
