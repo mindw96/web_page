@@ -4,18 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_chat_bubble/bubble_type.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
-import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_3.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:mimir/fb_test_message.dart';
 import 'package:mimir/main.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:markdown/markdown.dart' as md;
-import 'package:markdown_widget/markdown_widget.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
 import 'dart:collection';
 
@@ -274,41 +269,6 @@ class ChatScreenState extends State<TestScreen> {
     // _scrollToBottom();
     messageService.getResponseFromOpenAI(userMessage, _chatList.length + 1);
     // indexingNum++;
-  }
-}
-
-class CodeElementBuilder extends MarkdownElementBuilder {
-  bool isCodeBlock(md.Element element) {
-    if (element.attributes['class'] != null) {
-      return true;
-    } else if (element.textContent.contains("\n")) {
-      return true;
-    }
-    return false;
-  }
-
-  @override
-  Widget? visitElementAfter(md.Element element, TextStyle? preferredStyle) {
-    if (!isCodeBlock(element)) {
-      return Container(
-        padding: const EdgeInsets.all(2),
-        child: Text(
-          element.textContent,
-          style: TextStyle(
-              fontSize: 16,
-              fontStyle: FontStyle.italic,
-              color: preferredStyle!.color),
-        ),
-      );
-    } else {
-      return Container(
-        margin: const EdgeInsets.all(10),
-        child: Text(
-          element.textContent,
-          style: const TextStyle(fontSize: 16, color: Colors.white),
-        ),
-      );
-    }
   }
 }
 

@@ -3,14 +3,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
-import 'package:gpt_markdown/gpt_markdown.dart';
 import 'package:mimir/gpt_o1_message.dart';
 import 'package:mimir/main.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:gpt_markdown/gpt_markdown.dart';
 import 'dart:collection';
 
 class GPTo1Screen extends StatefulWidget {
@@ -27,12 +28,37 @@ class ChatScreenState extends State<GPTo1Screen> {
   late int indexingNum;
   final List<String> _chatList = [];
   String? uid;
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     textController = TextEditingController();
     _initializeFirebase();
+
+    _focusNode.onKeyEvent = (node, event) {
+      if (event is KeyDownEvent) {
+        final isShiftPressed = HardwareKeyboard.instance.logicalKeysPressed
+            .contains(LogicalKeyboardKey.shiftLeft);
+
+        if (event.logicalKey == LogicalKeyboardKey.enter && isShiftPressed) {
+          // 줄바꿈 처리
+          final text = textController.text;
+          final selection = textController.selection;
+          final newText =
+              text.replaceRange(selection.start, selection.end, '\n');
+          textController.value = TextEditingValue(
+            text: newText,
+            selection: TextSelection.collapsed(
+              offset: selection.start + 1,
+            ),
+          );
+          debugPrint('Shift + Enter pressed');
+          return KeyEventResult.handled;
+        }
+      }
+      return KeyEventResult.ignored;
+    };
   }
 
   Future<void> _initializeFirebase() async {
@@ -107,6 +133,7 @@ class ChatScreenState extends State<GPTo1Screen> {
   void dispose() {
     textController.dispose();
     _scrollController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -133,7 +160,7 @@ class ChatScreenState extends State<GPTo1Screen> {
             ),
             title: Center(
               child: Text(
-                'Test',
+                'GPT o1',
                 style: TextStyle(
                   color: Color.fromARGB(255, 245, 240, 183),
                   fontSize: 18,
@@ -183,11 +210,13 @@ class ChatScreenState extends State<GPTo1Screen> {
                   onSubmitted: (String userMessage) {
                     if (userMessage.trim().isNotEmpty) {
                       _sendMessage(messageService, userMessage);
+                      _scrollToBottom();
                     }
                   },
-                  textInputAction: TextInputAction.done,
-                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.none,
+                  keyboardType: TextInputType.multiline,
                   controller: textController,
+                  focusNode: _focusNode,
                   style: TextStyle(
                     color: Color.fromARGB(255, 245, 240, 183),
                   ),
@@ -201,6 +230,7 @@ class ChatScreenState extends State<GPTo1Screen> {
                         String userMessage = textController.text.trim();
                         if (userMessage.isNotEmpty) {
                           _sendMessage(messageService, userMessage);
+                          _scrollToBottom();
                         }
                       },
                       child: const Icon(
@@ -285,13 +315,91 @@ class Messages extends StatelessWidget {
 getReceiverView(CustomClipper clipper, BuildContext context, chat) =>
     SelectionArea(
       child: ChatBubble(
-        clipper: clipper,
-        backGroundColor: const Color.fromARGB(255, 113, 119, 123),
-        margin: EdgeInsets.only(top: 1, bottom: 1),
-        child: GptMarkdown(
-          chat,
-          style: TextStyle(
-              color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
-        ),
-      ),
+          clipper: clipper,
+          backGroundColor: const Color.fromARGB(255, 113, 119, 123),
+          margin: EdgeInsets.only(top: 1, bottom: 1),
+          child: GptMarkdown(
+            chat,
+            style: TextStyle(
+                color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
+          )
+          // Markdown(
+          //   builders: {
+          //     'code': CodeElementBuilder(),
+          //   },
+          //   padding: EdgeInsets.all(1),
+          //   selectable: true,
+          //   data: chat,
+          //   shrinkWrap: true,
+          //   extensionSet: md.ExtensionSet(
+          //     md.ExtensionSet.gitHubFlavored.blockSyntaxes,
+          //     <md.InlineSyntax>[
+          //       md.EmojiSyntax(),
+          //       ...md.ExtensionSet.gitHubFlavored.inlineSyntaxes
+          //     ],
+          //   ),
+          //   styleSheet: MarkdownStyleSheet(
+          //     em: const TextStyle(fontStyle: FontStyle.italic),
+          //     strong: const TextStyle(fontWeight: FontWeight.bold),
+          //     del: const TextStyle(decoration: TextDecoration.lineThrough),
+          //     a: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
+          //     p: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
+          //     h1: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 28),
+          //     h2: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 26),
+          //     h3: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 24),
+          //     h4: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 22),
+          //     h5: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 20),
+          //     h6: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 18),
+          //     code: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183),
+          //         fontSize: 16,
+          //         fontFamily: 'monospace'),
+          //     checkbox: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
+          //     blockquote: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 12),
+          //     tableBody: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
+          //     tableHead: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
+          //     // blockSpacing: 10,
+          //     listBullet: const TextStyle(
+          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
+          //     textScaler: TextScaler.linear(1.0),
+          //     codeblockDecoration: BoxDecoration(
+          //       color: const Color(0xFF414358),
+          //       borderRadius: BorderRadius.circular(5),
+          //     ),
+          //     blockquoteDecoration: BoxDecoration(
+          //       color: const Color.fromARGB(255, 113, 119, 123),
+          //       borderRadius: BorderRadius.circular(5),
+          //     ),
+          //     horizontalRuleDecoration: BoxDecoration(
+          //       border: Border(
+          //         top: BorderSide(
+          //           width: 3.0,
+          //           color: Color.fromARGB(255, 245, 240, 183),
+          //         ),
+          //       ),
+          //     ),
+          //     tableCellsDecoration: BoxDecoration(
+          //       color: const Color.fromARGB(125, 113, 119, 123),
+          //       border: Border(
+          //         top: BorderSide(
+          //           width: 1.0,
+          //           color: Color.fromARGB(255, 245, 240, 183),
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          ),
     );

@@ -209,7 +209,7 @@ class _BotListState extends State<BotList> {
                     ),
                   ),
                   subtitle: Text(
-                    'Gemini 1.5 Flash 입니다. (Only Single Turn)',
+                    'Gemini 1.5 Flash 입니다.',
                     style: TextStyle(
                       color: Color.fromARGB(255, 245, 240, 183),
                       fontSize: 12,
