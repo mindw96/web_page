@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
+import 'package:mimir/fb_test_message.dart';
 import 'package:mimir/main.dart';
 import 'package:mimir/solar_pro_message.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'dart:collection';
 
 class SOLARPROScreen extends StatefulWidget {
@@ -29,6 +31,7 @@ class ChatScreenState extends State<SOLARPROScreen> {
   final List<String> _chatList = [];
   String? uid;
   final FocusNode _focusNode = FocusNode();
+  bool _isWaitingResponse = false;
 
   @override
   void initState() {
@@ -86,7 +89,12 @@ class ChatScreenState extends State<SOLARPROScreen> {
                 updatedChatList.add(value['content']);
               }
             }
-
+            if (_isWaitingResponse &&
+                updatedChatList.length > _chatList.length) {
+              setState(() {
+                _isWaitingResponse = false;
+              });
+            }
             setState(
               () {
                 _chatList.clear();
@@ -160,7 +168,7 @@ class ChatScreenState extends State<SOLARPROScreen> {
             ),
             title: Center(
               child: Text(
-                'Solar Pro',
+                'SOLAR Pro',
                 style: TextStyle(
                   color: Color.fromARGB(255, 245, 240, 183),
                   fontSize: 18,
@@ -200,7 +208,14 @@ class ChatScreenState extends State<SOLARPROScreen> {
                         itemBuilder: (BuildContext context, int index) {
                           var chat = _chatList[index];
                           bool isSender = (index + 1) % 2 != 0;
-                          return Messages(isSender: isSender, chat: chat);
+                          debugPrint(
+                              'isSender: $isSender _isWaitingResponse: $_isWaitingResponse');
+                          return Messages(
+                              isSender: isSender,
+                              chat: chat,
+                              isLoading: !isSender &&
+                                  index == _chatList.length - 1 &&
+                                  _isWaitingResponse);
                         },
                       ),
               ),
@@ -262,13 +277,23 @@ class ChatScreenState extends State<SOLARPROScreen> {
     );
   }
 
-  void _sendMessage(SOLARPROMessageService messageService, String userMessage) {
+  void _sendMessage(
+      SOLARPROMessageService messageService, String userMessage) async {
+    setState(() {
+      _isWaitingResponse = true;
+    });
+    debugPrint('message send: _isWaitingResponse: $_isWaitingResponse');
     textController.clear();
     messageService.enterMessage(userMessage, _chatList.length);
-    // indexingNum++;
-    // _scrollToBottom();
-    messageService.getResponseFromOpenAI(userMessage, _chatList.length + 1);
-    // indexingNum++;
+
+    try {
+      await messageService.getResponseFromOpenAI(
+          userMessage, _chatList.length + 1);
+    } catch (e) {
+      setState(() {
+        _isWaitingResponse = false;
+      });
+    }
   }
 }
 
@@ -277,13 +302,17 @@ class Messages extends StatelessWidget {
     super.key,
     required this.isSender,
     required this.chat,
+    this.isLoading = false,
   });
 
   final bool isSender;
   final String chat;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(
+        'Messages build - isSender: $isSender, isLoading: $isLoading'); // 디버그 로그 추가
     return ListTile(
       title: Align(
         alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
@@ -298,15 +327,23 @@ class Messages extends StatelessWidget {
                   fontSize: 16,
                 ),
               )
-            : Container(
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * 0.75,
-                ),
-                child: getReceiverView(
-                    ChatBubbleClipper3(type: BubbleType.receiverBubble),
-                    context,
-                    chat),
-              ),
+            : isLoading
+                ? Container(
+                    constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * 0.3),
+                    child: getLoading(
+                        ChatBubbleClipper3(type: BubbleType.receiverBubble),
+                        context),
+                  )
+                : Container(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.75,
+                    ),
+                    child: getReceiverView(
+                        ChatBubbleClipper3(type: BubbleType.receiverBubble),
+                        context,
+                        chat),
+                  ),
       ),
     );
   }
@@ -315,91 +352,27 @@ class Messages extends StatelessWidget {
 getReceiverView(CustomClipper clipper, BuildContext context, chat) =>
     SelectionArea(
       child: ChatBubble(
-          clipper: clipper,
-          backGroundColor: const Color.fromARGB(255, 113, 119, 123),
-          margin: EdgeInsets.only(top: 1, bottom: 1),
-          child: GptMarkdown(
-            chat,
-            style: TextStyle(
-                color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
-          )
-          // Markdown(
-          //   builders: {
-          //     'code': CodeElementBuilder(),
-          //   },
-          //   padding: EdgeInsets.all(1),
-          //   selectable: true,
-          //   data: chat,
-          //   shrinkWrap: true,
-          //   extensionSet: md.ExtensionSet(
-          //     md.ExtensionSet.gitHubFlavored.blockSyntaxes,
-          //     <md.InlineSyntax>[
-          //       md.EmojiSyntax(),
-          //       ...md.ExtensionSet.gitHubFlavored.inlineSyntaxes
-          //     ],
-          //   ),
-          //   styleSheet: MarkdownStyleSheet(
-          //     em: const TextStyle(fontStyle: FontStyle.italic),
-          //     strong: const TextStyle(fontWeight: FontWeight.bold),
-          //     del: const TextStyle(decoration: TextDecoration.lineThrough),
-          //     a: const TextStyle(
-          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
-          //     p: const TextStyle(
-          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
-          //     h1: const TextStyle(
-          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 28),
-          //     h2: const TextStyle(
-          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 26),
-          //     h3: const TextStyle(
-          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 24),
-          //     h4: const TextStyle(
-          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 22),
-          //     h5: const TextStyle(
-          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 20),
-          //     h6: const TextStyle(
-          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 18),
-          //     code: const TextStyle(
-          //         color: Color.fromARGB(255, 245, 240, 183),
-          //         fontSize: 16,
-          //         fontFamily: 'monospace'),
-          //     checkbox: const TextStyle(
-          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
-          //     blockquote: const TextStyle(
-          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 12),
-          //     tableBody: const TextStyle(
-          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
-          //     tableHead: const TextStyle(
-          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
-          //     // blockSpacing: 10,
-          //     listBullet: const TextStyle(
-          //         color: Color.fromARGB(255, 245, 240, 183), fontSize: 16),
-          //     textScaler: TextScaler.linear(1.0),
-          //     codeblockDecoration: BoxDecoration(
-          //       color: const Color(0xFF414358),
-          //       borderRadius: BorderRadius.circular(5),
-          //     ),
-          //     blockquoteDecoration: BoxDecoration(
-          //       color: const Color.fromARGB(255, 113, 119, 123),
-          //       borderRadius: BorderRadius.circular(5),
-          //     ),
-          //     horizontalRuleDecoration: BoxDecoration(
-          //       border: Border(
-          //         top: BorderSide(
-          //           width: 3.0,
-          //           color: Color.fromARGB(255, 245, 240, 183),
-          //         ),
-          //       ),
-          //     ),
-          //     tableCellsDecoration: BoxDecoration(
-          //       color: const Color.fromARGB(125, 113, 119, 123),
-          //       border: Border(
-          //         top: BorderSide(
-          //           width: 1.0,
-          //           color: Color.fromARGB(255, 245, 240, 183),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
+        clipper: clipper,
+        backGroundColor: const Color.fromARGB(255, 113, 119, 123),
+        margin: EdgeInsets.only(top: 1, bottom: 1),
+        child: GptMarkdown(
+          chat,
+          style: TextStyle(
+            color: Color.fromARGB(255, 245, 240, 183),
+            fontSize: 16,
           ),
+        ),
+      ),
+    );
+
+getLoading(CustomClipper clipper, BuildContext context) => SelectionArea(
+      child: ChatBubble(
+        clipper: clipper,
+        backGroundColor: const Color.fromARGB(255, 113, 119, 123),
+        margin: EdgeInsets.only(top: 1, bottom: 1),
+        child: SpinKitThreeBounce(
+          color: Color.fromARGB(255, 245, 240, 183),
+          size: 16,
+        ),
+      ),
     );

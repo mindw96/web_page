@@ -56,14 +56,13 @@ class GPTo1MessageService extends ChangeNotifier {
     } else {
       messages.add({'role': 'user', 'content': userInput});
     }
-    print('messages: $messages');
     final request = http.Request('POST', Uri.parse(endpoint))
       ..headers.addAll({
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $api',
       })
       ..body = jsonEncode({
-        'model': 'o1-preview',
+        'model': 'o1-mini',
         'messages': messages,
         'stream': true, // 스트림 활성화
       });

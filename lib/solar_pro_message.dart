@@ -56,7 +56,6 @@ class SOLARPROMessageService extends ChangeNotifier {
     } else {
       messages.add({'role': 'user', 'content': userInput});
     }
-    print('messages: $messages');
     final request = http.Request('POST', Uri.parse(endpoint))
       ..headers.addAll({
         'Content-Type': 'application/json',

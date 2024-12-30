@@ -19,8 +19,6 @@ class BotList extends StatefulWidget {
 class _BotListState extends State<BotList> {
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 27, 26, 50),
       body: Column(
@@ -120,7 +118,6 @@ class _BotListState extends State<BotList> {
                     );
                   },
                 ),
-
                 // ListTile(
                 //   leading: Image.asset(
                 //     'assets/images/ChatGPT_logo.png',
@@ -132,7 +129,10 @@ class _BotListState extends State<BotList> {
                 //   ),
                 //   subtitle: Text(
                 //     'ChatGPT o1 입니다.',
-                //     style: textTheme.bodySmall!,
+                //     style: TextStyle(
+                //       color: Color.fromARGB(255, 245, 240, 183),
+                //       fontSize: 12,
+                //     ),
                 //   ),
                 //   onTap: () {
                 //     Navigator.push(

@@ -106,7 +106,7 @@ class ImageScreenState extends State<ImageScreenOri> {
 
       html.Url.revokeObjectUrl(url);
     } catch (e) {
-      print('Failed to download image: $e');
+      debugPrint('Failed to download image: $e');
     }
   }
 
