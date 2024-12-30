@@ -70,7 +70,7 @@ class ChatScreenState extends State<GeminiFlashScreen> {
       _database = FirebaseDatabase.instanceFor(
         app: Firebase.app(),
         databaseURL: 'https://mimir-1a487-default-rtdb.firebaseio.com/',
-      ).ref('users').child(uid!).child('gemini-1.5-flash');
+      ).ref('users').child(uid!).child('gemini-1_5-flash');
 
       _database.onValue.listen(
         (DatabaseEvent event) {
